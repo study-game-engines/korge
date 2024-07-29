@@ -1,5 +1,4 @@
 pluginManagement {
-//    Eval.xy(this, it, file('../gradle/repositories.settings.gradle').text)
     repositories {
         mavenLocal()
         mavenCentral()

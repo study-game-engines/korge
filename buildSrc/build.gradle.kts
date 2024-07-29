@@ -1,10 +1,9 @@
-
-import org.jetbrains.kotlin.gradle.tasks.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.StringReader
 import java.util.*
 
 var File.text
-    get() = this.readText();
+    get() = readText()
     set(value) {
         this.also { it.parentFile.mkdirs() }.writeText(value)
     }
@@ -16,18 +15,11 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version libs.versions.kotlin
 }
 
-val isJava8or9 =
-    System.getProperty("java.version").startsWith("1.8") || System.getProperty("java.version")
-        .startsWith("9")
-
-if (isJava8or9) {
-    throw Exception("At least Java 11 is required")
-}
+check(System.getProperty("java.version").startsWith("1.8") || System.getProperty("java.version").startsWith("9"))
 
 dependencies {
     implementation(libs.kover)
     implementation(libs.dokka)
-    //implementation(libs.jsplainobjects)
     implementation(libs.proguard.gradle)
     implementation(libs.gson)
     implementation(libs.gradle.publish.plugin)
@@ -36,7 +28,6 @@ dependencies {
     testImplementation(libs.junit)
 }
 
-//Eval.xy(this, this, file("../gradle/repositories.settings.gradle").text)
 repositories {
     mavenLocal()
     mavenCentral()
@@ -61,106 +52,35 @@ tasks.withType(KotlinCompile::class).configureEach {
 }
 
 java {
-    val jversion = JavaVersion.VERSION_11
-    sourceCompatibility = jversion
-    targetCompatibility = jversion
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     sourceSets.getByName("main").java {
-        srcDir("src/main/kotlinGen")
+        srcDir("src/main/gen")
     }
 }
 
-
-// Build versions
-
-var gitVersion = "unset"
-try {
-    gitVersion = file("../.git/ORIG_HEAD").text.trim()
-} catch (e: Throwable) {
-}
-
-if (System.getenv("FORCED_VERSION") != null) {
-    try {
-        gitVersion = Runtime.getRuntime().exec(
-            "git describe --abbrev=8 --tags --dirty",
-            arrayOf(),
-            rootDir
-        ).inputStream.readBytes().toString().trim()
-    } catch (e: Throwable) {
-        System.err.println(e.message)
-    }
-}
-
-val props = Properties()
-props.load(StringReader(file("../gradle.properties").text))
-
-var projectVersion = System.getenv("FORCED_VERSION")
-    ?.replaceFirst(Regex("^refs/tags/"), "")
-    ?.replaceFirst(Regex("^v"), "")
-    ?.replaceFirst(Regex("^w"), "")
-    ?.replaceFirst(Regex("^z"), "")
-    ?: props.getProperty("version")
-
-if (projectVersion.contains("-only-gradle-plugin-")) {
-    val parts = projectVersion.split("-only-gradle-plugin-")
-    projectVersion = parts.last()
-}
-
-if (System.getenv("FORCED_VERSION") != null) {
-    println(":: FORCED_VERSION=${System.getenv("FORCED_VERSION")}")
-    println(":: projectVersion=$projectVersion")
-    if (projectVersion.contains("/")) error("Invalid projectVersion=$projectVersion")
-}
-
-val realKotlinVersion = System.getenv("FORCED_KOTLIN_VERSION")
-    ?: libs.versions.kotlin.get()
-
-val buildVersionsString = """
-package korlibs.korge.gradle
-
-object BuildVersions {
-    const val GIT = "---"
-    const val KOTLIN = "${realKotlinVersion}"
-    const val NODE_JS = "${libs.versions.node.get()}"
-    const val JNA = "${libs.versions.jna.get()}"
-    const val COROUTINES = "${libs.versions.kotlinx.coroutines.get()}"
-    const val ANDROID_BUILD = "${libs.versions.android.build.gradle.get()}"
-    const val KOTLIN_SERIALIZATION = "${libs.versions.kotlinx.serialization.get()}"
-    const val KORGE = "$projectVersion"
-
-    val ALL_PROPERTIES by lazy { listOf(
-        ::GIT, ::KOTLIN, ::NODE_JS, ::JNA, ::COROUTINES, 
-        ::ANDROID_BUILD, ::KOTLIN_SERIALIZATION, ::KORGE
-    ) }
-    val ALL by lazy { ALL_PROPERTIES.associate { it.name to it.get() } }
-}
-""".trim()
-
-val buildVersionsStringForBuildSrc = buildVersionsString
-val buildVersionsStringForPlugin = buildVersionsString.replace(
-    "const val GIT = \"---\"",
-    "const val GIT = \"${gitVersion}\""
-)
-val buildVersionsStringForPlugin2 = buildVersionsStringForPlugin.replace(
-    "package korlibs.korge.gradle",
-    "package korlibs.korge.gradle.common"
-)
-
-val buildsVersionBuildSrcFile =
-    file("../buildSrc/src/main/kotlinGen/korlibs/korge/gradle/BuildVersions.kt")
-val buildsVersionFilePlugin =
-    file("../korge-gradle-plugin/build/srcgen/korlibs/korge/gradle/BuildVersions.kt")
-val buildsVersionFilePlugin2 =
-    file("../korge-gradle-plugin-common/build/srcgen/korlibs/korge/gradle/common/BuildVersions.kt")
-
-if (!buildsVersionBuildSrcFile.exists() || buildsVersionBuildSrcFile.text != buildVersionsStringForBuildSrc) {
+val properties: Properties = Properties().apply { load(StringReader(file("../gradle.properties").text)) }
+val buildsVersionBuildSrcFile: File = file("../buildSrc/src/main/gen/korlibs/korge/gradle/BuildVersions.kt")
+if (!buildsVersionBuildSrcFile.exists()) {
     buildsVersionBuildSrcFile.parentFile.mkdirs()
-    buildsVersionBuildSrcFile.text = buildVersionsStringForBuildSrc
-}
-if (!buildsVersionFilePlugin.exists() || buildsVersionFilePlugin.text != buildVersionsStringForPlugin) {
-    buildsVersionFilePlugin.parentFile.mkdirs()
-    buildsVersionFilePlugin.text = buildVersionsStringForPlugin
-}
-if (!buildsVersionFilePlugin2.exists() || buildsVersionFilePlugin2.text != buildVersionsStringForPlugin2) {
-    buildsVersionFilePlugin2.parentFile.mkdirs()
-    buildsVersionFilePlugin2.text = buildVersionsStringForPlugin2
+    buildsVersionBuildSrcFile.text = """
+    package korlibs.korge.gradle
+    
+    object BuildVersions {
+        const val GIT = "---"
+        const val KOTLIN = "${libs.versions.kotlin.get()}"
+        const val NODE_JS = "${libs.versions.node.get()}"
+        const val JNA = "${libs.versions.jna.get()}"
+        const val COROUTINES = "${libs.versions.kotlinx.coroutines.get()}"
+        const val ANDROID_BUILD = "${libs.versions.android.build.gradle.get()}"
+        const val KOTLIN_SERIALIZATION = "${libs.versions.kotlinx.serialization.get()}"
+        const val KORGE = "${properties.getProperty("version")}"
+    
+        val ALL_PROPERTIES by lazy { listOf(
+            ::GIT, ::KOTLIN, ::NODE_JS, ::JNA, ::COROUTINES, 
+            ::ANDROID_BUILD, ::KOTLIN_SERIALIZATION, ::KORGE
+        ) }
+        val ALL by lazy { ALL_PROPERTIES.associate { it.name to it.get() } }
+    }
+    """.trim()
 }

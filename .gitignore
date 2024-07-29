@@ -28,3 +28,5 @@ kotlin-js-store/
 /java_*.hprof
 /local.properties
 $catalog.json
+/out
+/bin
