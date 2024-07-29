@@ -60,10 +60,10 @@ java {
 }
 
 val properties: Properties = Properties().apply { load(StringReader(file("../gradle.properties").text)) }
-val buildsVersionBuildSrcFile: File = file("../buildSrc/src/main/gen/korlibs/korge/gradle/BuildVersions.kt")
-if (!buildsVersionBuildSrcFile.exists()) {
-    buildsVersionBuildSrcFile.parentFile.mkdirs()
-    buildsVersionBuildSrcFile.text = """
+val buildsVersionFile: File = file("../buildSrc/src/main/gen/korlibs/korge/gradle/BuildVersions.kt")
+if (!buildsVersionFile.exists()) {
+    buildsVersionFile.parentFile.mkdirs()
+    buildsVersionFile.text = """
     package korlibs.korge.gradle
     
     object BuildVersions {

@@ -23,8 +23,4 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
-    //implementation(libs.korlibs.all)
-    //implementation(libs.korlibs.datastructure.core)
-    //implementation(libs.korlibs.io.stream)
-    testImplementation(libs.bundles.kotlin.test)
 }
