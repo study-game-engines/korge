@@ -1,0 +1,12 @@
+#if (${PACKAGE_NAME} && ${PACKAGE_NAME} != "")package ${PACKAGE_NAME}
+
+#end
+import korlibs.korge.scene.*
+import korlibs.korge.view.*
+
+#parse("File Header.java")
+class ${NAME}() : Scene() {
+	override suspend fun SContainer.sceneMain() {
+		// @TODO: Main scene code here (after sceneInit)
+	}
+}
