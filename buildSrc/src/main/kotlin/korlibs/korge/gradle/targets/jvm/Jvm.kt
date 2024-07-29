@@ -84,33 +84,11 @@ fun Project.configureJvmRunJvm(isRootKorlibs: Boolean) {
 
     fun generateEntryPoint(entry: KorgeExtension.Entrypoint) {
         val capitalizedEntryName = entry.name.capitalize()
-        project.tasks.createThis<KorgeJavaExec>("runJvm${capitalizedEntryName}") {
-            group = GROUP_KORGE_RUN
-            dependsOn("jvmMainClasses")
-            project.afterEvaluate {
-                mainClass.set(entry.jvmMainClassName())
-                val beforeJava9 = JvmAddOpens.beforeJava9
-                if (!beforeJava9) jvmArgs(project.korge.javaAddOpens)
-            }
-        }
         //for (enableRedefinition in listOf(false, true)) {
         for (enableRedefinition in listOf(false)) {
             val taskName = when (enableRedefinition) {
                 false -> "runJvm${capitalizedEntryName}Autoreload"
                 true -> "runJvm${capitalizedEntryName}AutoreloadWithRedefinition"
-            }
-            project.tasks.createThis<KorgeJavaExecWithAutoreload>(taskName) {
-                this.enableRedefinition = enableRedefinition
-                group = GROUP_KORGE_RUN
-                dependsOn("jvmMainClasses", "compileKotlinJvm")
-                project.afterEvaluate {
-                    if (isRootKorlibs) {
-                        dependsOn(":korge-reload-agent:jar")
-                    }
-                    val beforeJava9 = JvmAddOpens.beforeJava9
-                    if (!beforeJava9) jvmArgs(project.korge.javaAddOpens)
-                    mainClass.set(korge.jvmMainClassName)
-                }
             }
         }
     }

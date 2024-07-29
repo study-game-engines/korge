@@ -6,7 +6,6 @@
 *.ipr
 *.iws
 /build
-#build
 hs_err_*.log
 local.properties
 local.*.properties
@@ -21,6 +20,11 @@ err.txt
 *.xcuserstate
 xcuserdata
 kotlin-js-store/
-.kotlin
 /stagedRepositoryId
 /*/build
+/.gradle
+/.kotlin
+/.idea
+/java_*.hprof
+/local.properties
+$catalog.json

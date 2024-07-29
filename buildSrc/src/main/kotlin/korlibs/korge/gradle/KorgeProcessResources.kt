@@ -83,8 +83,6 @@ fun Project.addGenResourcesTasks() {
         //println("Task $this")
     }
 
-    val korgeClassPath = project.getKorgeClassPath()
-
     tasks.createThis<Task>("listKorgeTargets") {
         group = GROUP_KORGE_LIST
         doLast {
