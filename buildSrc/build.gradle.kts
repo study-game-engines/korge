@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.StringReader
 import java.util.*
 
 var File.text
@@ -54,33 +53,4 @@ tasks.withType(KotlinCompile::class).configureEach {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-    sourceSets.getByName("main").java {
-        srcDir("src/main/gen")
-    }
-}
-
-val properties: Properties = Properties().apply { load(StringReader(file("../gradle.properties").text)) }
-val buildsVersionFile: File = file("../buildSrc/src/main/gen/korlibs/korge/gradle/BuildVersions.kt")
-if (!buildsVersionFile.exists()) {
-    buildsVersionFile.parentFile.mkdirs()
-    buildsVersionFile.text = """
-    package korlibs.korge.gradle
-    
-    object BuildVersions {
-        const val GIT = "---"
-        const val KOTLIN = "${libs.versions.kotlin.get()}"
-        const val NODE_JS = "${libs.versions.node.get()}"
-        const val JNA = "${libs.versions.jna.get()}"
-        const val COROUTINES = "${libs.versions.kotlinx.coroutines.get()}"
-        const val ANDROID_BUILD = "${libs.versions.android.build.gradle.get()}"
-        const val KOTLIN_SERIALIZATION = "${libs.versions.kotlinx.serialization.get()}"
-        const val KORGE = "${properties.getProperty("version")}"
-    
-        val ALL_PROPERTIES by lazy { listOf(
-            ::GIT, ::KOTLIN, ::NODE_JS, ::JNA, ::COROUTINES, 
-            ::ANDROID_BUILD, ::KOTLIN_SERIALIZATION, ::KORGE
-        ) }
-        val ALL by lazy { ALL_PROPERTIES.associate { it.name to it.get() } }
-    }
-    """.trim()
 }
