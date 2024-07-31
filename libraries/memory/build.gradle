@@ -2,7 +2,5 @@ artifact 'korge:memory'
 
 source {
  include project(':korge:math-core')
- include project(':korge:encoding')
- include project(':korge:platform')
- include project(':korge:string')
+ include "org.jetbrains.kotlinx:atomicfu:0.24.0"
 }

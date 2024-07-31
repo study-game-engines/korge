@@ -6,5 +6,4 @@ source {
  include project(':korge:platform')
  include project(':korge:datastructure')
  include project(':korge:number')
- include project(':korge:platform')
 }

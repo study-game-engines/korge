@@ -22,9 +22,10 @@ module("korge:datastructure") { "libraries/datastructure" }
 module("korge:datastructure-core") { "libraries/datastructure-core" }
 module("korge:dragonbones") { "libraries/dragonbones" }
 module("korge:dyn") { "libraries/dyn" }
+module("korge:encoding") { "libraries/encoding" }
 module("korge:engine") { "libraries/engine" }
 module("korge:ffi") { "libraries/ffi" }
-module("korge:fleks") { "libraries/fleks" }
+//module("korge:fleks") { "libraries/fleks" }
 module("korge:image") { "libraries/image" }
 module("korge:image-core") { "libraries/image-core" }
 module("korge:inject") { "libraries/inject" }
@@ -37,23 +38,23 @@ module("korge:io-vfs") { "libraries/io-vfs" }
 module("korge:ipc") { "libraries/ipc" }
 module("korge:jseval") { "libraries/jseval" }
 module("korge:logger") { "libraries/logger" }
-module("korge:luak") { "libraries/luak" }
+//module("korge:luak") { "libraries/luak" }
 module("korge:math") { "libraries/math" }
 module("korge:math-core") { "libraries/math-core" }
 module("korge:math-vector") { "libraries/math-vector" }
 module("korge:memory") { "libraries/memory" }
 module("korge:number") { "libraries/number" }
-module("korge:particles") { "libraries/particles" }
+//module("korge:particles") { "libraries/particles" }
 module("korge:platform") { "libraries/platform" }
 module("korge:serialization") { "libraries/serialization" }
-module("korge:spine") { "libraries/spine" }
+//module("korge:spine") { "libraries/spine" }
 module("korge:string") { "libraries/string" }
 module("korge:template") { "libraries/template" }
-module("korge:tiled") { "libraries/tiled" }
+//module("korge:tiled") { "libraries/tiled" }
 module("korge:time") { "libraries/time" }
 module("korge:time-core") { "libraries/time-core" }
 module("korge:wasm") { "libraries/wasm" }
 
 // tools
 module("korge:editor") { "libraries/editor" }
-module("korge:korge-intellij-plugin") { "libraries/korge-intellij-plugin" }
+//module("korge:korge-intellij-plugin") { "libraries/korge-intellij-plugin" }

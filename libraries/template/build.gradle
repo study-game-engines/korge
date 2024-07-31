@@ -4,4 +4,5 @@ source {
  include project(':korge:serialization')
  include project(':korge:platform')
  include project(':korge:string')
+ include "org.jetbrains.kotlinx:atomicfu:0.24.0"
 }

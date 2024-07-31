@@ -1,5 +1,6 @@
 artifact 'korge:string'
 
 source {
+ include "org.jetbrains.kotlinx:atomicfu:0.24.0"
  include project(':korge:platform')
 }
