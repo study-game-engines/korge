@@ -7,7 +7,7 @@ source {
         include project(":korge:datastructure")
         include project(":korge:memory")
         include project(":korge:concurrent")
-//        include "com.soywiz:korlibs-annotations:6.0.0"
+        include project(":korge:annotations")
         include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
     }
     desktop {

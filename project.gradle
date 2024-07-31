@@ -12,6 +12,7 @@ module("korge:sandbox") { "demos/sandbox" }
 module("korge:steroids") { "demos/steroids" }
 
 // libraries
+module("korge:annotations") { "libraries/annotations" }
 module("korge:audio") { "libraries/audio" }
 module("korge:audio-core") { "libraries/audio-core" }
 module("korge:bignumber") { "libraries/bignumber" }

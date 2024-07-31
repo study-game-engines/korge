@@ -9,7 +9,6 @@ open class MalformedInputException(msg: String) : Exception(msg) {
 
 class FileAlreadyExistsException(msg: String) : IOException(msg)
 
-class InternalException(val code: Int) : Exception("Internal Exception with code $code (0x${code.toHexString()})")
 class InvalidOperationException(str: String = "Invalid Operation") : Exception(str)
 class OutOfBoundsException(index: Int = -1, str: String = "Out Of Bounds") : Exception(str)
 class KeyNotFoundException(str: String = "Key Not Found") : Exception(str)
@@ -31,7 +30,6 @@ val invalidArg: Nothing get() = throw InvalidArgumentException()
 val unreachable: Nothing get() = throw UnreachableException()
 val reserved: Nothing get() = throw ReservedException()
 
-fun internalException(code: Int): Nothing = throw InternalException(code)
 fun deprecated(msg: String): Nothing = throw DeprecatedException(msg)
 fun mustValidate(msg: String): Nothing = throw MustValidateCodeException(msg)
 fun noImpl(msg: String): Nothing = throw NotImplementedException(msg)

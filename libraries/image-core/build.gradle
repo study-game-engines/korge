@@ -2,7 +2,7 @@ artifact "korge:image_core"
 
 source {
     common {
-//        include "com.soywiz:korlibs-annotations:6.0.0"
+        include project(":korge:annotations")
         include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
         include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
     }

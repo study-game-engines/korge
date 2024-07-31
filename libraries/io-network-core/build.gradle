@@ -6,6 +6,6 @@ source {
     include project(":korge:logger")
     include project(":korge:utils")
     include project(":korge:io-stream")
-//    include "com.soywiz:korlibs-annotations:6.0.0"
+    include project(":korge:annotations")
     include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
 }
