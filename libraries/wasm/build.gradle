@@ -1,13 +1,13 @@
-artifact 'korge:wasm'
+artifact "korge:wasm"
 
 source {
     common {
-        include project(':korge:platform')
-        include project(':korge:memory')
-        include project(':korge:logger')
-        include project(':korge:math-core')
-        include project(':korge:datastructure')
-        include project(':korge:compression')
+        include project(":korge:utils")
+        include project(":korge:memory")
+        include project(":korge:logger")
+        include project(":korge:math-core")
+        include project(":korge:datastructure")
+        include project(":korge:compression")
     }
     desktop {
         include "org.ow2.asm:asm:9.5"

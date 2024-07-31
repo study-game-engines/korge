@@ -1,5 +1,5 @@
-artifact 'korge:time-core'
+artifact "korge:time-core"
 
 source {
-    include "com.soywiz:korlibs-annotations:6.0.0"
+//    include "com.soywiz:korlibs-annotations:6.0.0"
 }

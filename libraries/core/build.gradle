@@ -2,8 +2,8 @@ artifact "korge:core"
 
 source {
     common {
-        include "org.jetbrains.kotlinx:atomicfu:0.24.0"
-        include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
+        include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
+        include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
         include project(":korge:audio")
         include project(":korge:image")
         include project(":korge:inject")
@@ -11,7 +11,7 @@ source {
         include project(":korge:time")
     }
     desktop {
-        include "org.jetbrains.kotlin:kotlin-reflect"
+        include "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         include "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
         include "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
     }

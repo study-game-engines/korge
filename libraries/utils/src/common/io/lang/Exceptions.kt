@@ -9,7 +9,6 @@ open class MalformedInputException(msg: String) : Exception(msg) {
 
 class FileAlreadyExistsException(msg: String) : IOException(msg)
 
-@OptIn(ExperimentalStdlibApi::class)
 class InternalException(val code: Int) : Exception("Internal Exception with code $code (0x${code.toHexString()})")
 class InvalidOperationException(str: String = "Invalid Operation") : Exception(str)
 class OutOfBoundsException(index: Int = -1, str: String = "Out Of Bounds") : Exception(str)

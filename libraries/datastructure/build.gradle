@@ -1,8 +1,8 @@
-artifact 'korge:datastructure'
+artifact "korge:datastructure"
 
 source {
- include project(':korge:concurrent')
- include project(':korge:time-core')
- include project(':korge:math-vector')
- include project(':korge:datastructure-core')
+ include project(":korge:concurrent")
+ include project(":korge:time-core")
+ include project(":korge:math-vector")
+ include project(":korge:datastructure-core")
 }

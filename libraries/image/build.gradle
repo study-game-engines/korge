@@ -1,21 +1,21 @@
-artifact 'korge:image'
+artifact "korge:image"
 
 source {
-    include project(':korge:io')
-    include project(':korge:image-core')
-    include project(':korge:io-vfs')
-    include project(':korge:math')
-    include project(':korge:ffi')
-    include project(':korge:string')
-    include project(':korge:platform')
-    include project(':korge:compression')
-    include project(':korge:dyn')
-    include project(':korge:math-core')
-    include project(':korge:encoding')
-    include project(':korge:serialization')
-    include project(':korge:wasm')
-    include project(':korge:string')
-    include project(':korge:io')
-    include "com.soywiz:korlibs-checksum:6.0.0"
-    include "org.jetbrains.kotlinx:atomicfu:0.24.0"
+    include project(":korge:io")
+    include project(":korge:image-core")
+    include project(":korge:io-vfs")
+    include project(":korge:math")
+    include project(":korge:ffi")
+    include project(":korge:string")
+    include project(":korge:utils")
+    include project(":korge:compression")
+    include project(":korge:dyn")
+    include project(":korge:math-core")
+    include project(":korge:encoding")
+    include project(":korge:serialization")
+    include project(":korge:wasm")
+    include project(":korge:string")
+    include project(":korge:io")
+//    include "com.soywiz:korlibs-checksum:6.0.0"
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

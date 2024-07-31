@@ -1,4 +1,4 @@
-artifact 'korge:bignumber'
+artifact "korge:bignumber"
 
 source {
 }

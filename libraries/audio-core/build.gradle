@@ -1,9 +1,9 @@
-artifact 'korge:audio-core'
+artifact "korge:audio-core"
 
 source {
- include project(':korge:math-core')
- include project(':korge:math-vector')
- include project(':korge:ffi')
- include project(':korge:platform')
- include project(':korge:io-fs')
+ include project(":korge:math-core")
+ include project(":korge:math-vector")
+ include project(":korge:ffi")
+ include project(":korge:utils")
+ include project(":korge:io-fs")
 }

@@ -1,7 +1,8 @@
 package korlibs.time
 
 import korlibs.time.DateTime.Companion.EPOCH
-import korlibs.time.core.*
+import korlibs.time.core.CoreTime
+import korlibs.time.core.CoreTimeInternalApi
 import korlibs.time.core.internal.*
 import korlibs.time.core.internal.CoreTimeInternal.MILLIS_PER_DAY
 import korlibs.time.core.internal.CoreTimeInternal.MILLIS_PER_HOUR
@@ -15,7 +16,7 @@ import korlibs.time.core.internal.CoreTimeInternal.Year_days
 import korlibs.time.core.internal.CoreTimeInternal.Year_daysSinceOne
 import korlibs.time.core.internal.CoreTimeInternal.Year_fromDays
 import korlibs.time.core.internal.CoreTimeInternal.Year_isLeap
-import kotlin.jvm.*
+import kotlin.jvm.JvmInline
 import kotlin.time.*
 
 /**
@@ -31,7 +32,7 @@ import kotlin.time.*
 value class DateTime(
     /** Number of milliseconds since UNIX [EPOCH] */
     val unixMillis: Double
-) : Comparable<DateTime>, korlibs.Serializable {
+) : Comparable<DateTime> {
     companion object {
         @Suppress("MayBeConstant", "unused")
         private const val serialVersionUID = 1L
@@ -151,11 +152,13 @@ value class DateTime(
 
         /** Constructs a new [DateTime] from a [unix] timestamp in milliseconds. */
         operator fun invoke(unix: Long) = fromUnixMillis(unix)
+
         /** Constructs a new [DateTime] from a [unix] timestamp in milliseconds. */
         operator fun invoke(unix: Double) = fromUnixMillis(unix)
 
         /** Constructs a new [DateTime] from a [unix] timestamp in milliseconds. */
         fun fromUnixMillis(unix: Double): DateTime = DateTime(unix)
+
         /** Constructs a new [DateTime] from a [unix] timestamp in milliseconds. */
         fun fromUnixMillis(unix: Long): DateTime = fromUnixMillis(unix.toDouble())
 
@@ -164,6 +167,7 @@ value class DateTime(
 
         /** Returns the total milliseconds since unix epoch. The same as [nowUnixMillisLong] but as double. To prevent allocation on targets without Long support. */
         fun nowUnixMillis(): Double = CoreTime.currentTimeMillisDouble()
+
         /** Returns the total milliseconds since unix epoch. */
         fun nowUnixMillisLong(): Long = CoreTime.currentTimeMillisDouble().toLong()
 
@@ -233,6 +237,7 @@ value class DateTime(
 
     /** The month part as [Int] where January is represented as 0 */
     val month0: Int get() = month1 - 1
+
     /** The month part as [Int] where January is represented as 1 */
     val month1: Int get() = getDatePart(yearOneMillis, DatePart.Month)
 
@@ -247,10 +252,13 @@ value class DateTime(
 
     /** The [hours] part */
     val hours: Int get() = (yearOneMillis / MILLIS_PER_HOUR).toIntMod(24)
+
     /** The [minutes] part */
     val minutes: Int get() = (yearOneMillis / MILLIS_PER_MINUTE).toIntMod(60)
+
     /** The [seconds] part */
     val seconds: Int get() = (yearOneMillis / MILLIS_PER_SECOND).toIntMod(60)
+
     /** The [milliseconds] part */
     val milliseconds: Int get() = (yearOneMillis).toIntMod(1000)
 
@@ -274,8 +282,10 @@ value class DateTime(
 
 fun max(a: DateTime, b: DateTime): DateTime =
     DateTime.fromUnixMillis(kotlin.math.max(a.unixMillis, b.unixMillis))
+
 fun min(a: DateTime, b: DateTime): DateTime =
     DateTime.fromUnixMillis(kotlin.math.min(a.unixMillis, b.unixMillis))
+
 fun DateTime.clamp(min: DateTime, max: DateTime): DateTime = when {
     this < min -> min
     this > max -> max

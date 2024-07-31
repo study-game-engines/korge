@@ -1,6 +1,6 @@
-artifact 'korge:math-core'
+artifact "korge:math-core"
 
 source {
- include project(':korge:platform')
- include project(':korge:number')
+ include project(":korge:utils")
+ include project(":korge:number")
 }

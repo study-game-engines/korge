@@ -1,4 +1,4 @@
-artifact 'korge:number'
+artifact "korge:number"
 
 source {
 }

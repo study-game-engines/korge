@@ -1,7 +1,7 @@
-artifact 'korge:io-fs'
+artifact "korge:io-fs"
 
 source {
-    include project(':korge:platform')
-    include project(':korge:io-stream')
-    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
+    include project(":korge:utils")
+    include project(":korge:io-stream")
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
 }

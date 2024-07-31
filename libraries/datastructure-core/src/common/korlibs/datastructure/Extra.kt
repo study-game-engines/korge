@@ -83,8 +83,7 @@ interface Extra {
     }
 }
 
-fun <T> Extra.extraCache(name: String, block: () -> T): T =
-    (getExtra(name) as? T?) ?: block().also { setExtra(name, it) }
+fun <T> Extra.extraCache(name: String, block: () -> T): T = (getExtra(name) as? T?) ?: block().also { setExtra(name, it) }
 //fun <T : Any?> Extra.getExtraTyped(name: String): T? = (extra as? MutableMap<String, T?>)?.get(name).fastCastTo<T?>()
 @Suppress("UNCHECKED_CAST") fun <T : Any?> Extra.getExtraTyped(name: String): T? = (extra as? MutableMap<String, T?>)?.get(name)
 fun Extra.hasExtra(name: String): Boolean = extra?.contains(name) == true
@@ -98,8 +97,4 @@ fun Extra.setExtra(name: String, value: Any?) {
 }
 
 inline fun <T> extraProperty(name: String? = null, noinline default: () -> T) = Extra.Property(name, default)
-inline fun <T2 : Extra, T> extraPropertyThis(
-    name: String? = null,
-    noinline transform: T2.(T) -> T = { it },
-    noinline default: T2.() -> T
-): Extra.PropertyThis<T2, T> = Extra.PropertyThis(name, default).withTransform(transform)
+inline fun <T2 : Extra, T> extraPropertyThis(name: String? = null, noinline transform: T2.(T) -> T = { it }, noinline default: T2.() -> T): Extra.PropertyThis<T2, T> = Extra.PropertyThis(name, default).withTransform(transform)

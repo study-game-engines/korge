@@ -1,6 +1,6 @@
-artifact 'korge:logger'
+artifact "korge:logger"
 
 source {
- include "org.jetbrains.kotlinx:atomicfu:0.24.0"
- include project(':korge:concurrent')
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
+    include project(":korge:concurrent")
 }

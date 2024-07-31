@@ -1,5 +1,5 @@
-artifact 'korge:crypto'
+artifact "korge:crypto"
 
 source {
- include project(':korge:encoding')
+ include project(":korge:encoding")
 }

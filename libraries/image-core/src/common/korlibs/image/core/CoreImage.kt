@@ -165,6 +165,7 @@ interface CoreImageFormatProvider {
 }
 
 object DummyCoreImageFormatProvider : CoreImageFormatProvider {
+
     override val isSupported: Boolean get() = false
 
     override suspend fun decode(data: ByteArray): CoreImage {
@@ -174,6 +175,7 @@ object DummyCoreImageFormatProvider : CoreImageFormatProvider {
     override suspend fun encode(image: CoreImage, format: CoreImageFormat, level: Double): ByteArray {
         TODO("Not yet implemented")
     }
+
 }
 
 expect val CoreImageFormatProvider_default: CoreImageFormatProvider

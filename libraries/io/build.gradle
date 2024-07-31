@@ -1,25 +1,25 @@
-artifact 'korge:io'
+artifact "korge:io"
 
 source {
-    include project(':korge:compression')
-    include project(':korge:jseval')
-    include project(':korge:io-vfs')
-    include project(':korge:io-stream')
-    include project(':korge:io-network-core')
-    include project(':korge:math-core')
-    include project(':korge:memory')
-    include project(':korge:ffi')
-    include project(':korge:crypto')
-    include project(':korge:encoding')
-    include project(':korge:platform')
-    include project(':korge:datastructure')
-    include project(':korge:number')
-    include project(':korge:time-core')
-    include project(':korge:logger')
-    include project(':korge:dyn')
-    include project(':korge:string')
-    include project(':korge:serialization')
-    include project(':korge:io-fs')
+    include project(":korge:compression")
+    include project(":korge:jseval")
+    include project(":korge:io-vfs")
+    include project(":korge:io-stream")
+    include project(":korge:io-network-core")
+    include project(":korge:math-core")
+    include project(":korge:memory")
+    include project(":korge:ffi")
+    include project(":korge:crypto")
+    include project(":korge:encoding")
+    include project(":korge:utils")
+    include project(":korge:datastructure")
+    include project(":korge:number")
+    include project(":korge:time-core")
+    include project(":korge:logger")
+    include project(":korge:dyn")
+    include project(":korge:string")
+    include project(":korge:serialization")
+    include project(":korge:io-fs")
     include "com.soywiz:korlibs-checksum:6.0.0"
-    include "org.jetbrains.kotlinx:atomicfu:0.24.0"
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

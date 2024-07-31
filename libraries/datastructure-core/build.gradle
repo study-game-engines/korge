@@ -1,5 +1,5 @@
-artifact 'korge:datastructure-core'
+artifact "korge:datastructurecore"
 
 source {
-    // - org.jetbrains.kotlinx:atomicfu:0.24.0: exported
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

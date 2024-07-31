@@ -1,8 +1,8 @@
-artifact 'korge:template'
+artifact "korge:template"
 
 source {
- include project(':korge:serialization')
- include project(':korge:platform')
- include project(':korge:string')
- include "org.jetbrains.kotlinx:atomicfu:0.24.0"
+    include project(":korge:serialization")
+    include project(":korge:utils")
+    include project(":korge:string")
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

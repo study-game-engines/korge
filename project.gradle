@@ -46,7 +46,7 @@ module("korge:math-vector") { "libraries/math-vector" }
 module("korge:memory") { "libraries/memory" }
 module("korge:number") { "libraries/number" }
 //module("korge:particles") { "libraries/particles" }
-module("korge:platform") { "libraries/platform" }
+module("korge:utils") { "libraries/utils" }
 module("korge:serialization") { "libraries/serialization" }
 //module("korge:spine") { "libraries/spine" }
 module("korge:string") { "libraries/string" }

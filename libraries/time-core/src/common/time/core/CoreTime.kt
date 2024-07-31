@@ -44,7 +44,7 @@ interface ICoreTime {
     /** Accurately synchronously sleep (may spinlock on JS and WASM, use with care) */
     fun sleep(duration: Duration) {
         val end = TimeSource.Monotonic.markNow() + duration
-        var timeLeft = duration
+        var timeLeft: Duration = duration
 
         val LONG_SLEEP_PRECISION = 20.milliseconds
         val SLEEP_PRECISION = 4.milliseconds

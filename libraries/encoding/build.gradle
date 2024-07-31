@@ -1,4 +1,4 @@
-artifact 'korge:encoding'
+artifact "korge:encoding"
 
 source {
 }

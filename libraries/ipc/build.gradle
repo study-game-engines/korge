@@ -1,6 +1,6 @@
 artifact "korge:ipc-desktop"
 
 source {
-    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
-    include "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0"
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+    include "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
 }

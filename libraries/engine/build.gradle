@@ -3,7 +3,7 @@ artifact "korge:engine"
 source {
     common {
         include project(":korge:core")
-        include "org.jetbrains.kotlinx:kotlinx-coroutines-debug:1.9.0-RC"
+        include "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$kotlinx_coroutines_version"
     }
     desktop {
         include project(":korge:ipc")
