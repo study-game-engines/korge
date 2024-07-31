@@ -1,0 +1,62 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+settings.ext.module = { String artifactId, Closure modulePath -> module(artifactId, modulePath()) }
+
+settings.ext.plugin = { String groupId, Closure pluginPath -> includeBuild(new File(currentDir, pluginPath())) }
+
+settings.ext.project = { String groupId, Closure projectPath -> project(groupId, projectPath()) }
+
+/*internals*/
+
+void project(String groupId, String projectPath) {
+    String parentDir = currentDir
+    currentDir = projectPath
+    apply from: "$currentDir/project.gradle"
+    currentDir = parentDir
+}
+
+void module(String artifactId, String modulePath) {
+    // artifact
+    File moduleDir = new File(rootProject.projectDir, "$currentDir/$modulePath")
+    if (!moduleDir.exists()) return
+    artifact(artifactId, moduleDir)
+
+    // assemble artifacts
+    String assembleName = (moduleDir.name == "examples" && artifactId != "examples") ? "${moduleDir.parentFile.name}-examples" : moduleDir.name
+    artifact("$artifactId-android", new File(moduleDir, "assemble/$assembleName-android"))
+    artifact("$artifactId-desktop", new File(moduleDir, "assemble/$assembleName-desktop"))
+    artifact("$artifactId-ios", new File(moduleDir, "assemble/$assembleName-ios"))
+    artifact("$artifactId-js", new File(moduleDir, "assemble/$assembleName-js"))
+
+    // example artifacts
+    File examplesBuildFile = new File(moduleDir, "build.gradle")
+    if (examplesBuildFile.exists()) {
+        Pattern pattern = Pattern.compile(/^example\("(\w*)".*$/)
+        BufferedReader reader = new BufferedReader(new FileReader(examplesBuildFile))
+        String line
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = pattern.matcher(line)
+            Collection<Collection<String>> matches = matcher.findAll()
+            if (matches.size() != 0) {
+                String exampleName = matches[0][1]
+                String exampleSpecifier = "$exampleName-example"
+                String exampleId = artifactId.endsWith("examples") ? "${artifactId.replace("examples", "")}$exampleSpecifier" : "$artifactId-$exampleSpecifier"
+                artifact(exampleId, moduleDir)
+            }
+        }
+    }
+
+    // examples module
+    module("$artifactId-examples", "$modulePath/examples")
+ }
+
+void artifact(String artifactId, File artifactDir) {
+    File buildFile = new File(artifactDir, "build.gradle")
+    if (!buildFile.exists()) return
+    String projectPath = ":$artifactId"
+    include(projectPath)
+    project(projectPath).projectDir = artifactDir
+}
+
+settings.ext.currentDir = "."

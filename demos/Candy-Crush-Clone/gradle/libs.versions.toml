@@ -1,2 +1,0 @@
-[plugins]
-korge = { id = "com.soywiz.korge", version = "3.4.0" }

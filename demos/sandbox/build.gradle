@@ -1,7 +1,1 @@
-korge {
-    entrypoint("Sandbox", "JvmMain")
-}
-
-dependencies {
-    add("commonMainApi", project(":korge"))
-}
+artifact "korge:steroids"
