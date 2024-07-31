@@ -1,0 +1,2 @@
+@echo off
+gradlew compileKotlinDesktop compileKotlin compileKotlinJs
