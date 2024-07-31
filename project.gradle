@@ -17,6 +17,7 @@ module("korge:audio-core") { "libraries/audio-core" }
 module("korge:bignumber") { "libraries/bignumber" }
 module("korge:compression") { "libraries/compression" }
 module("korge:concurrent") { "libraries/concurrent" }
+module("korge:core") { "libraries/core" }
 module("korge:crypto") { "libraries/crypto" }
 module("korge:datastructure") { "libraries/datastructure" }
 module("korge:datastructure-core") { "libraries/datastructure-core" }

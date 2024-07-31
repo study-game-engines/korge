@@ -9,7 +9,7 @@ korlibs-datastructure = { module = "com.soywiz:korlibs-datastructure", version.r
 korlibs-datastructure-core = { module = "com.soywiz:korlibs-datastructure-core", version.ref = "korlibs" }
 korlibs-memory = { module = "com.soywiz:korlibs-memory", version.ref = "korlibs" }
 korlibs-io-stream = { module = "com.soywiz:korlibs-io-stream", version.ref = "korlibs" }
-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "c" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
