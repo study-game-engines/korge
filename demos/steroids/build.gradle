@@ -1,1 +1,5 @@
 artifact "korge:sandbox"
+
+source {
+    include project(":korge:engine")
+}

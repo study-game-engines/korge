@@ -1,1 +1,5 @@
 artifact "korge:dungeon"
+
+source {
+    include project(":korge:engine")
+}

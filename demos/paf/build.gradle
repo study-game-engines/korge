@@ -1,1 +1,5 @@
 artifact "korge:paf"
+
+source {
+    include project(":korge:engine")
+}

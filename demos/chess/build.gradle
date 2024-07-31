@@ -1,1 +1,5 @@
 artifact "korge:chess"
+
+source {
+    include project(":korge:engine")
+}

@@ -1,1 +1,5 @@
 artifact "korge:pacoman"
+
+source {
+    include project(":korge:engine")
+}
