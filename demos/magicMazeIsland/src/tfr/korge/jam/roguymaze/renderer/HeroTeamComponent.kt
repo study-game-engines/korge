@@ -1,8 +1,8 @@
 package tfr.korge.jam.roguymaze.renderer
 
-import com.soywiz.korge.view.Stage
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korinject.AsyncInjector
+import korlibs.image.bitmap.BmpSlice
+import korlibs.inject.Injector
+import korlibs.korge.view.Stage
 import tfr.korge.jam.roguymaze.audio.SoundMachine
 import tfr.korge.jam.roguymaze.lib.EventBus
 import tfr.korge.jam.roguymaze.lib.Resources
@@ -14,20 +14,20 @@ import tfr.korge.jam.roguymaze.renderer.animation.HeroAnimator
 /**
  * A team out of 4 [HeroComponent]s
  */
-class HeroTeamComponent(val injector: AsyncInjector,
-        val bus: EventBus,
-        val view: Stage,
-        val world: World,
-        worldComponent: WorldComponent,
-        val resources: Resources,
-        soundMachine: SoundMachine) {
+class HeroTeamComponent(val injector: Injector,
+                        val bus: EventBus,
+                        val view: Stage,
+                        val world: World,
+                        worldComponent: WorldComponent,
+                        val resources: Resources,
+                        soundMachine: SoundMachine) {
 
     val players = mutableMapOf<Team.Hero, HeroComponent>()
     private val animator = HeroAnimator(view, world, worldComponent, soundMachine)
 
     companion object {
 
-        suspend operator fun invoke(injector: AsyncInjector): HeroTeamComponent {
+        suspend operator fun invoke(injector: Injector): HeroTeamComponent {
             injector.mapSingleton {
                 HeroTeamComponent(get(), get(), get(), get(), get(), get(), get())
             }

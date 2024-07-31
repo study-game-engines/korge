@@ -1,12 +1,12 @@
 package tfr.korge.jam.roguymaze.renderer
 
-import com.soywiz.klogger.Logger
-import com.soywiz.korge.input.onMouseDrag
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Stage
-import com.soywiz.korinject.AsyncDependency
-import com.soywiz.korinject.AsyncInjector
-import com.soywiz.korma.geom.Point
+import korlibs.inject.Injector
+import korlibs.inject.InjectorDependency
+import korlibs.korge.input.onMouseDrag
+import korlibs.korge.view.Container
+import korlibs.korge.view.Stage
+import korlibs.logger.Logger
+import korlibs.math.geom.Point
 import tfr.korge.jam.roguymaze.audio.SoundMachine
 import tfr.korge.jam.roguymaze.lib.EventBus
 import tfr.korge.jam.roguymaze.lib.Resolution
@@ -16,14 +16,16 @@ import tfr.korge.jam.roguymaze.model.Room
 import tfr.korge.jam.roguymaze.model.Team
 import tfr.korge.jam.roguymaze.model.World
 
-class WorldComponent(val injector: AsyncInjector,
-        val bus: EventBus,
-        val world: World,
-        val resolution: Resolution,
-        private val worldSprites: WorldSprites,
-        private val resources: Resources,
-        override val stage: Stage,
-        val soundMachine: SoundMachine) : Container(), AsyncDependency {
+class WorldComponent(
+    val injector: Injector,
+    val bus: EventBus,
+    val world: World,
+    val resolution: Resolution,
+    private val worldSprites: WorldSprites,
+    private val resources: Resources,
+    override val stage: Stage,
+    val soundMachine: SoundMachine
+) : Container(), InjectorDependency {
 
     /**
      * The size of one tile in px
@@ -35,7 +37,7 @@ class WorldComponent(val injector: AsyncInjector,
     companion object {
         val log = Logger("WorldComponent")
 
-        suspend operator fun invoke(injector: AsyncInjector): WorldComponent {
+        suspend operator fun invoke(injector: Injector): WorldComponent {
             injector.mapSingleton {
                 WorldComponent(get(), get(), get(), get(), get(), get(), get(), get())
             }
@@ -49,7 +51,7 @@ class WorldComponent(val injector: AsyncInjector,
 
     private val rooms = mutableListOf<RoomComponent>()
 
-    override suspend fun init() {
+    override fun init(injector: Injector) {
         players = HeroTeamComponent(injector, bus, stage, world, this, resources, soundMachine)
         addDragListener()
 
@@ -89,7 +91,8 @@ class WorldComponent(val injector: AsyncInjector,
 
 
     fun getAbsoluteWorldCoordinate(pos: PositionGrid.Position): Point = Point(
-            this.x + pos.x * tileSize, this.y + pos.y * tileSize)
+        this.x + pos.x * tileSize, this.y + pos.y * tileSize
+    )
 
     fun getRelativeWorldCoordinate(pos: PositionGrid.Position): Point = Point(pos.x * tileSize, pos.y * tileSize)
 

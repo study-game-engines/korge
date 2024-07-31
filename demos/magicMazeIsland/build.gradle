@@ -1,1 +1,5 @@
 artifact "korge:magicMazeIsland"
+
+source {
+    include project(":korge:engine")
+}

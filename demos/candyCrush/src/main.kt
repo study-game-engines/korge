@@ -1,11 +1,9 @@
-import com.soywiz.klogger.*
 import com.soywiz.korge.*
 import com.soywiz.korge.component.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.view.*
 import com.soywiz.korgw.*
 import com.soywiz.korim.color.*
-import com.soywiz.korinject.*
 import j4k.candycrush.*
 import j4k.candycrush.audio.*
 import j4k.candycrush.compontens.*
@@ -15,7 +13,8 @@ import j4k.candycrush.level.*
 import j4k.candycrush.lib.*
 import j4k.candycrush.renderer.*
 import j4k.candycrush.renderer.animation.*
-
+import korlibs.inject.*
+import korlibs.logger.*
 
 /**
  *  Main entry point for the game. To start it, run the gradle tasks:
