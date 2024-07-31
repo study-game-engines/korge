@@ -1,0 +1,5 @@
+artifact 'korge:time'
+
+source {
+ include project(':korge:time-core')
+}

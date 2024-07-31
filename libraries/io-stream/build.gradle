@@ -1,0 +1,10 @@
+artifact 'korge:io-stream'
+
+source {
+    include project(':korge:platform')
+    include project(':korge:memory')
+    include project(':korge:datastructure-core')
+    include project(':korge:string')
+    include project(':korge:math-core')
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
+}

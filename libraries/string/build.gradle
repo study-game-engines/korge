@@ -1,0 +1,5 @@
+artifact 'korge:string'
+
+source {
+ include project(':korge:platform')
+}

@@ -1,0 +1,17 @@
+artifact 'korge:ffi'
+
+source {
+    common {
+        include project(':korge:io-fs')
+        include project(':korge:platform')
+        include project(':korge:datastructure')
+        include project(':korge:memory')
+        include project(':korge:concurrent')
+        include "com.soywiz:korlibs-annotations:6.0.0"
+        include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
+    }
+    desktop {
+        include "net.java.dev.jna:jna:5.14.0"
+        include "net.java.dev.jna:jna-platform:5.14.0"
+    }
+}

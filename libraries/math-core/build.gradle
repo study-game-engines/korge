@@ -1,0 +1,6 @@
+artifact 'korge:math-core'
+
+source {
+ include project(':korge:platform')
+ include project(':korge:number')
+}

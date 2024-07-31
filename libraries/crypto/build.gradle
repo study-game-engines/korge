@@ -1,0 +1,5 @@
+artifact 'korge:crypto'
+
+source {
+ include project(':korge:encoding')
+}

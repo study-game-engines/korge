@@ -1,0 +1,10 @@
+artifact 'korge:math'
+
+source {
+ include project(':korge:math-core')
+ include project(':korge:math-vector')
+ include project(':korge:platform')
+ include project(':korge:datastructure')
+ include project(':korge:number')
+ include project(':korge:platform')
+}

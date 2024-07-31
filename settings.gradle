@@ -1,2 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
 apply from: "wrapper.gradle"
 apply from: "project.gradle"

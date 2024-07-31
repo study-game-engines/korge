@@ -1,0 +1,7 @@
+artifact 'korge:template'
+
+source {
+ include project(':korge:serialization')
+ include project(':korge:platform')
+ include project(':korge:string')
+}

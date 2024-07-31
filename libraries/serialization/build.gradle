@@ -1,0 +1,8 @@
+artifact 'korge:serialization'
+
+source {
+ include project(':korge:string')
+ include project(':korge:math-core')
+ include project(':korge:datastructure-core')
+ include project(':korge:platform')
+}

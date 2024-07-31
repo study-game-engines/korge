@@ -1,0 +1,5 @@
+artifact 'korge:dyn'
+
+source {
+ include project(':korge:datastructure-core')
+}

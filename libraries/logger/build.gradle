@@ -1,0 +1,5 @@
+artifact 'korge:logger'
+
+source {
+ include project(':korge:concurrent')
+}

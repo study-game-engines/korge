@@ -1,0 +1,9 @@
+artifact 'korge:concurrent'
+
+source {
+ include project(':korge:time-core')
+ include project(':korge:platform')
+ include project(':korge:datastructure-core')
+// - org.jetbrains.kotlinx:atomicfu:0.24.0: exported
+// - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC: exported
+}

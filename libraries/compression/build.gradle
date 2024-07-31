@@ -1,0 +1,9 @@
+artifact 'korge:compression'
+
+source {
+ include project(':korge:io-stream')
+ include project(':korge:concurrent')
+ include project(':korge:math-core')
+ include project(':korge:datastructure-core')
+ // com.soywiz:korlibs-checksum:6.0.0
+}

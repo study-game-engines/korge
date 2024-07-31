@@ -1,0 +1,6 @@
+artifact 'korge:io-nodejs'
+
+source {
+ include project(':korge:platform')
+ include project(':korge:io')
+}

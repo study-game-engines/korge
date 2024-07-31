@@ -1,0 +1,5 @@
+artifact 'korge:inject'
+
+source {
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC"
+}

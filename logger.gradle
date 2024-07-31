@@ -1,0 +1,41 @@
+// useLogger(new Logger())
+
+@SuppressWarnings('all')
+class Logger extends BuildAdapter implements TaskExecutionListener {
+
+    private final long startTime = System.nanoTime()
+    private final static List<String> tasks = new ArrayList()
+
+    void beforeSettings(Settings settings) {
+        settings.getGradle().startParameter.taskRequests.forEach { TaskExecutionRequest taskRequest ->
+            tasks.addAll(taskRequest.args)
+        }
+    }
+
+    void buildFinished(BuildResult result) {
+        if (tasks.isEmpty()) return
+        if (result.failure != null) {
+            println(result.failure.localizedMessage)
+            if (result.failure.cause.cause != null) println(result.failure.cause.cause.localizedMessage)
+        } else {
+            final long elapsedTime = (long) ((System.nanoTime() - startTime) / 1_000_000_000L)
+            String firstTask = tasks.first
+            if (firstTask.startsWith("build")) {
+                String targets = tasks.findAll { it.startsWith("build") }.collect { it.replaceFirst("build", "").toLowerCase() }.findAll { !it.isEmpty() }.join(", ")
+                println("build for $targets completed in $elapsedTime seconds")
+            } else if (firstTask.startsWith("compile")) {
+                String targets = tasks.findAll { it.startsWith("compile") }.collect { it.replaceFirst("compile", "").replaceFirst("Kotlin", "").replaceFirst("Debug", "").toLowerCase() }.findAll { !it.isEmpty() }.join(", ")
+                println("compilation for $targets completed in $elapsedTime seconds")
+            } else if (firstTask.endsWith("installShadowDist")) {
+                String targets = tasks.findAll { it.endsWith("installShadowDist") }.collect { it.replace(":installShadowDist", "") }.findAll { !it.isEmpty() }.join(", ")
+                println("installation for $targets completed in $elapsedTime seconds")
+            }
+        }
+        tasks.clear()
+    }
+
+    void beforeExecute(Task task) {}
+
+    void afterExecute(Task task, TaskState state) {}
+
+}
