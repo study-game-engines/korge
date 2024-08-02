@@ -1,12 +1,15 @@
 package korlibs.event
 
 import korlibs.datastructure.*
-import korlibs.datastructure.iterators.*
-import korlibs.io.file.*
-import korlibs.math.geom.*
-import korlibs.number.*
-import korlibs.platform.*
-import korlibs.time.*
+import korlibs.datastructure.iterators.fastForEach
+import korlibs.datastructure.iterators.fastIterateRemove
+import korlibs.io.file.VfsFile
+import korlibs.math.geom.Point
+import korlibs.math.geom.Vector2I
+import korlibs.number.niceStr
+import korlibs.platform.Platform
+import korlibs.time.DateTime
+import korlibs.time.TimeSpan
 
 open class TypedEvent<T : BEvent>(open override var type: EventType<T>) : Event(), TEvent<T>
 
@@ -21,6 +24,7 @@ abstract class Event {
     fun stopPropagation(reason: Any? = null) {
         throw StopPropagatingException(reason)
     }
+
     var defaultPrevented: Boolean = false
     fun preventDefault(reason: Any? = null) {
         defaultPrevented = true
@@ -38,9 +42,12 @@ operator fun <T : Event> T.invoke(block: T.() -> Unit): T {
     return this
 }
 
-@Deprecated("") fun Event.preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
-@Deprecated("") fun preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
-@Deprecated("") class PreventDefaultException(val reason: Any? = null) : Exception()
+@Deprecated("")
+fun Event.preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
+@Deprecated("")
+fun preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
+@Deprecated("")
+class PreventDefaultException(val reason: Any? = null) : Exception()
 class StopPropagatingException(val reason: Any? = null) : Exception()
 
 interface BEvent {
@@ -70,6 +77,7 @@ data class GestureEvent(
 
     enum class Type : EventType<GestureEvent> {
         MAGNIFY, ROTATE, SWIPE, SMART_MAGNIFY;
+
         companion object {
             val ALL = values()
         }
@@ -111,8 +119,9 @@ data class MouseEvent(
 
     var component: Any? = null
 
-	enum class Type : EventType<MouseEvent> {
+    enum class Type : EventType<MouseEvent> {
         MOVE, DRAG, UP, DOWN, CLICK, ENTER, EXIT, SCROLL;
+
         companion object {
             val ALL = values()
         }
@@ -184,13 +193,14 @@ data class FocusEvent(
     override var type: Type = Type.FOCUS
 ) : Event(), TEvent<FocusEvent> {
     enum class Type : EventType<FocusEvent> { FOCUS, BLUR }
+
     val typeFocus get() = type == Type.FOCUS
     val typeBlur get() = type == Type.BLUR
 }
 
 data class Touch(
-	val index: Int = -1,
-	var id: Int = -1,
+    val index: Int = -1,
+    var id: Int = -1,
     var p: Point = Point.ZERO,
     var force: Float = 1f,
     var status: Status = Status.KEEP,
@@ -205,9 +215,9 @@ data class Touch(
 
     val isActive: Boolean get() = status != Status.REMOVE
 
-	companion object {
-		val dummy = Touch(-1)
-	}
+    companion object {
+        val dummy = Touch(-1)
+    }
 
     fun copyFrom(other: Touch) {
         this.id = other.id
@@ -319,6 +329,7 @@ data class TouchEvent(
 ) : Event(), TEvent<TouchEvent> {
     enum class Type : EventType<TouchEvent> {
         START, END, MOVE, HOVER, UNKNOWN;
+
         companion object {
             val ALL = values()
         }
@@ -327,6 +338,7 @@ data class TouchEvent(
     companion object {
         val MAX_TOUCHES = 10
     }
+
     private val bufferTouches = Array(MAX_TOUCHES) { Touch(it) }
     internal val _touches = FastArrayList<Touch>()
     internal val _activeTouches = FastArrayList<Touch>()
@@ -414,6 +426,7 @@ class GenericEvent(
 ) : Event(), TEvent<GenericEvent> {
     enum class Type : EventType<GenericEvent> {
         PROJECTOR_TO_GAME, GAME_TO_PROJECTOR;
+
         companion object {
             val ALL = Type.entries
         }
@@ -442,6 +455,7 @@ data class KeyEvent constructor(
     //companion object : EventType<KeyEvent>
     enum class Type : EventType<KeyEvent> {
         UP, DOWN, TYPE;
+
         companion object {
             val ALL = values()
         }
@@ -484,8 +498,9 @@ data class ChangeEvent(var oldValue: Any? = null, var newValue: Any? = null) : T
     }
 }
 
-data class ReshapeEvent(var x: Int = 0, var y: Int = 0, var width: Int = 0, var height: Int = 0, var setPos: Boolean = true) : TypedEvent<ReshapeEvent>(ReshapeEvent) {
-    companion object : EventType<ReshapeEvent>
+val RESHAPE_EVENT: EventType<ReshapeEvent> = object : EventType<ReshapeEvent> {}
+
+data class ReshapeEvent(var x: Int = 0, var y: Int = 0, var width: Int = 0, var height: Int = 0, var setPos: Boolean = true) : TypedEvent<ReshapeEvent>(RESHAPE_EVENT) {
 
     fun copyFrom(other: ReshapeEvent) {
         this.x = other.x
@@ -504,8 +519,9 @@ data class FullScreenEvent(var fullscreen: Boolean = false) : TypedEvent<FullScr
     }
 }
 
-open class RenderEvent : TypedEvent<RenderEvent>(RenderEvent) {
-    companion object : RenderEvent(), EventType<RenderEvent>
+val RENDER_EVENT: EventType<RenderEvent> = object : EventType<RenderEvent> {}
+
+open class RenderEvent : TypedEvent<RenderEvent>(RENDER_EVENT) {
 
     var update: Boolean = true
     var render: Boolean = true
@@ -560,11 +576,12 @@ class DisposeEvent() : TypedEvent<DisposeEvent>(DisposeEvent) {
 }
 
 data class DropFileEvent(override var type: Type = Type.START, var files: List<VfsFile>? = null) : Event(), TEvent<DropFileEvent> {
-	enum class Type : EventType<DropFileEvent> {
-       START, END, DROP;
-       companion object {
-           val ALL = values()
-       }
+    enum class Type : EventType<DropFileEvent> {
+        START, END, DROP;
+
+        companion object {
+            val ALL = values()
+        }
     }
 
     fun copyFrom(other: DropFileEvent) {

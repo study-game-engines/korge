@@ -261,7 +261,7 @@ open class GameWindow :
 
     /** Happens on the rendering thread */
     fun onRenderEvent(block: (RenderEvent) -> Unit): AutoCloseable {
-        return onEvent(RenderEvent, block)
+        return onEvent(RENDER_EVENT, block)
     }
 
     val fastCounterTimePerFrame: FastDuration get() = (1_000_000.0 / fps).fastMicroseconds

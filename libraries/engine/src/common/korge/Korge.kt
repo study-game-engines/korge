@@ -186,9 +186,7 @@ object KorgeRunner {
         if (!Platform.isJsBrowser) {
             configureLoggerFromProperties(localCurrentDirVfs["klogger.properties"])
         }
-        val realGameWindow = (config.gameWindow ?: coroutineContext[GameWindow] ?: CreateDefaultGameWindow(
-            config.windowCreationConfig.copy(title = config.title)
-        ))
+        val realGameWindow = (config.gameWindow ?: coroutineContext[GameWindow] ?: CreateDefaultGameWindow(config.windowCreationConfig.copy(title = config.title)))
         realGameWindow.bgcolor = config.backgroundColor ?: Colors.BLACK
         realGameWindow.loop {
             val gameWindow = this
@@ -498,7 +496,7 @@ object KorgeRunner {
             views.dispatch(e)
         }
 
-        eventDispatcher.onEvent(ReshapeEvent) { e ->
+        eventDispatcher.onEvent(RESHAPE_EVENT) { e ->
             //try { throw Exception() } catch (e: Throwable) { e.printStackTrace() }
             //println("eventDispatcher.addEventListener<ReshapeEvent>: ${ag.backWidth}x${ag.backHeight} : ${e.width}x${e.height}")
             //println("resized. ${ag.backWidth}, ${ag.backHeight}")
