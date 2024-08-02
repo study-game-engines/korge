@@ -36,7 +36,7 @@ open class SyncEventLoop(
     private val lock = Lock()
     private var running = true
 
-    protected class TimedTask(val eventLoop: SyncEventLoop, var now: Duration, val time: Duration, var interval: Boolean, val callback: () -> Unit) :
+    class TimedTask(val eventLoop: SyncEventLoop, var now: Duration, val time: Duration, var interval: Boolean, val callback: () -> Unit) :
         Comparable<TimedTask>, AutoCloseable {
         var timeMark: Duration
             get() = now + time
@@ -110,12 +110,12 @@ open class SyncEventLoop(
         }
     }
 
-    protected fun shouldTimedTaskRun(task: TimedTask): Boolean {
+    fun shouldTimedTaskRun(task: TimedTask): Boolean {
         if (immediateRun) return true
         return now >= timedTasks.head.timeMark
     }
 
-    protected fun wait(waitTime: Duration) {
+    fun wait(waitTime: Duration) {
         if (immediateRun) return
         lock { lock.wait(waitTime) }
     }

@@ -108,8 +108,8 @@ open class UIButton(
             updatedUIButton(enable = value)
         }
 
-    //protected val rect: NinePatchEx = ninePatch(null, width, height)
-    //protected val background = roundRect(
+    //val rect: NinePatchEx = ninePatch(null, width, height)
+    //val background = roundRect(
     //    width, height, radiusWidth(width), radiusHeight(height), bgColorOut)
     //    .also { it.renderer = GraphicsRenderer.SYSTEM }
     //    //.filters(DropshadowFilter(0.0, 3.0, shadowColor = Colors.BLACK.withAd(0.126)))
@@ -124,7 +124,7 @@ open class UIButton(
     //    .also { it.colorMul = bgColorOut }
     //    .also { it.mouseEnabled = false }
 
-    //protected val textShadowView = text("", 16.0)
+    //val textShadowView = text("", 16.0)
     @ViewProperty(min = 1.0, max = 300.0)
     var textSize: Double
         get() = richText.defaultStyle.textSize
@@ -138,9 +138,9 @@ open class UIButton(
     @ViewPropertyProvider(TextAlignmentProvider::class)
     var textAlignment: TextAlignment by textView::align
 
-    protected val iconView = image(Bitmaps.transparent)
-	protected var bover = false
-	protected var bpressing = false
+    val iconView = image(Bitmaps.transparent)
+	var bover = false
+	var bpressing = false
     val animator = animator(parallel = true, defaultEasing = Easing.LINEAR)
     val animatorEffects = animator(parallel = true, defaultEasing = Easing.LINEAR)
 

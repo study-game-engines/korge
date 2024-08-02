@@ -1,15 +1,19 @@
 import Number.*
-import korlibs.korge.view.*
-import korlibs.image.color.*
 import korlibs.image.color.Colors
 import korlibs.korge.view.Container
+import korlibs.korge.view.addTo
+import korlibs.korge.view.align.centerBetween
+import korlibs.korge.view.roundRect
+import korlibs.korge.view.text
+import korlibs.math.geom.RectCorners
+import korlibs.math.geom.Size
 
 fun Container.block(number: Number) = Block(number).addTo(this)
 
 class Block(val number: Number) : Container() {
 
     init {
-        roundRect(cellSize, cellSize, 5.0, fill = number.color)
+        roundRect(Size(cellSize, cellSize), RectCorners(5.0), fill = number.color)
         val textColor = when (number) {
             ZERO, ONE -> Colors.BLACK
             else -> Colors.WHITE

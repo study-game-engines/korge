@@ -69,7 +69,7 @@ class GameScene() : SceneBase() {
 
                     if (currentGameState.vidas == 0) {                    // Si no tienes vidas
                         //fade_off();                     // Acaba el juego
-                        sceneContainer.changeTo<TitleScene>()
+                        sceneContainer.changeTo(TitleScene::class)
                         return@loop
                     }
                     currentGameState.muerte = 0

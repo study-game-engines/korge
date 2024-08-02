@@ -9,7 +9,7 @@ fun test() {
 
 }
 
-inline class ByteUnits private constructor(val bytes: Double) {
+inline class ByteUnits (val bytes: Double) {
     val bytesLong: Long get() = bytes.toLong()
     val kiloBytes: Double get() = bytes / 1024.0
     val megaBytes: Double get() = bytes / (1024.0 * 1024.0)

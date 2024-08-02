@@ -84,7 +84,7 @@ class TitleScene() : SceneBase() {
 
             loop {
                 if ((key and (BUTTON_A or BUTTON_B or BUTTON_C or BUTTON_START)).toBool()){
-                    sceneContainer.changeTo<GameScene>()
+                    sceneContainer.changeTo(GameScene::class)
                 }
 
                 frame()

@@ -6,8 +6,8 @@ import korlibs.concurrent.lock.*
 import korlibs.datastructure.*
 
 open class SynchronizedCollection<T>(
-    protected val base: MutableCollection<T>,
-    protected val lock: NonRecursiveLock = NonRecursiveLock()
+    val base: MutableCollection<T>,
+    val lock: NonRecursiveLock = NonRecursiveLock()
 ) : MutableCollection<T> {
     override val size: Int get() = lock { base.size }
     override fun clear() = lock { base.clear() }
@@ -23,8 +23,8 @@ open class SynchronizedCollection<T>(
 }
 
 open class SynchronizedList<T>(
-    protected val base: MutableList<T>,
-    protected val lock: NonRecursiveLock = NonRecursiveLock()
+    val base: MutableList<T>,
+    val lock: NonRecursiveLock = NonRecursiveLock()
 ) : BaseMutableList<T> {
     override fun clear() = lock { base.clear() }
     override fun add(index: Int, element: T) { lock { base.add(index, element) } }
@@ -44,8 +44,8 @@ open class SynchronizedList<T>(
 }
 
 open class SynchronizedMap<K, V>(
-    protected val base: MutableMap<K, V>,
-    protected val lock: NonRecursiveLock = NonRecursiveLock()
+    val base: MutableMap<K, V>,
+    val lock: NonRecursiveLock = NonRecursiveLock()
 ) : BaseMutableMap<K, V> {
     override val entries: MutableSet<MutableMap.MutableEntry<K, V>> get() = SynchronizedSet(base.entries)
     override val keys: MutableSet<K> get() = SynchronizedSet(base.keys)
@@ -69,8 +69,8 @@ open class SynchronizedMap<K, V>(
 }
 
 open class SynchronizedMutableIterator<T>(
-    protected val iterator: MutableIterator<T>,
-    protected val lock: NonRecursiveLock = NonRecursiveLock()
+    val iterator: MutableIterator<T>,
+    val lock: NonRecursiveLock = NonRecursiveLock()
 ) : MutableIterator<T> {
     override fun hasNext(): Boolean = lock { iterator.hasNext() }
     override fun next(): T = lock { iterator.next() }
@@ -78,8 +78,8 @@ open class SynchronizedMutableIterator<T>(
 }
 
 open class SynchronizedSet<T>(
-    protected val base: MutableSet<T>,
-    protected val lock: NonRecursiveLock = NonRecursiveLock()
+    val base: MutableSet<T>,
+    val lock: NonRecursiveLock = NonRecursiveLock()
 ) : MutableSet<T> {
     override fun add(element: T): Boolean = lock { base.add(element) }
     override fun addAll(elements: Collection<T>): Boolean = lock { base.addAll(elements) }

@@ -54,7 +54,7 @@ class NSMutableDictionary(id: Long) : NSDictionary(id) {
     operator fun get(key: Any): NSObject = getValue(NSObject.cast(key))
 }
 
-class NSNumber private constructor(id: Long) : NSObject(id) {
+class NSNumber (id: Long) : NSObject(id) {
     constructor(value: Int) : this(NSClass("NSNumber").alloc().msgSend("initWithInt:", value))
     constructor(value: Double) : this(NSClass("NSNumber").alloc().msgSend("initWithDouble:", value))
     constructor(value: Long, unit: Unit = Unit) : this(NSClass("NSNumber").alloc().msgSend("initWithLong:", value))

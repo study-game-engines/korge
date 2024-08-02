@@ -370,7 +370,7 @@ open class GameWindow :
 
     var exitProcessOnClose: Boolean = true
     var exitCode = 0; private set
-    var running = true; protected set
+    var running = true; set
     private var closing = false
 
     open fun close(exitCode: Int = 0) {
@@ -825,7 +825,7 @@ open class EventLoopGameWindow : GameWindow() {
         }
     }
 
-    protected fun sleep(time: Duration) {
+    fun sleep(time: Duration) {
         // Reimplement: Spinlock!
         val start = PerformanceCounter.reference
         while ((PerformanceCounter.reference - start) < time) {
@@ -834,16 +834,16 @@ open class EventLoopGameWindow : GameWindow() {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    protected fun doSmallSleep() {
+    fun doSmallSleep() {
         if (!vsync) {
             blockingSleep(0.1.milliseconds)
         }
     }
-    protected open fun doHandleEvents() = Unit
-    protected open fun doInitRender() = Unit
-    protected open fun doSwapBuffers() = Unit
-    protected open fun doInitialize() = Unit
-    protected open fun doDestroy() = Unit
+    open fun doHandleEvents() = Unit
+    open fun doInitRender() = Unit
+    open fun doSwapBuffers() = Unit
+    open fun doInitialize() = Unit
+    open fun doDestroy() = Unit
 }
 
 fun GameWindow.mainLoop(entry: suspend GameWindow.() -> Unit) = Korio { loop(entry) }

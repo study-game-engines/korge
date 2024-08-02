@@ -240,7 +240,7 @@ open class FFILib(val paths: List<String>, val lazyCreate: Boolean = true) : Aut
     constructor(vararg paths: String?, lazyCreate: Boolean = true) : this(paths.toList().filterNotNull(), lazyCreate = lazyCreate)
 
     val functions = arrayListOf<FuncDelegate<*>>()
-    open protected fun createFFILibSym(): FFILibSym =  FFILibSym(this)
+    open fun createFFILibSym(): FFILibSym =  FFILibSym(this)
     var _sym: FFILibSym? = null
     val sym: FFILibSym get() {
         if (_sym == null) _sym = createFFILibSym()
@@ -285,7 +285,7 @@ open class FFILib(val paths: List<String>, val lazyCreate: Boolean = true) : Aut
     inline fun <reified T : Function<*>> func(name: String? = null, config: FFIFuncConfig = FFIFuncConfig.DEFAULT, required: Boolean = true): FuncInfo<T> = FuncInfo<T>(typeOf<T>(), name, config, required)
 
     //inline fun <reified T : Function<*>> castToFunc(ptr: FFIPointer): T = sym.castToFunc(ptr, FuncInfo(typeOf<T>(), null))
-    protected fun finalize() {
+    fun finalize() {
         sym
     }
 

@@ -29,7 +29,7 @@ abstract class Process(parent: Container) : Container() {
     val key: KeyV get() = scene.key
     val mouse: MouseV get() = scene.mouseV
     val audio: AudioV get() = scene.audioV
-    protected var job: Job? = null
+    var job: Job? = null
 
     init {
         parent.addChild(this)
@@ -94,7 +94,7 @@ abstract class Process(parent: Container) : Container() {
         removeFromParent()
     }
 
-    protected open fun onDestroy() {
+    open fun onDestroy() {
     }
 
     class ChangeActionException(val action: KSuspendFunction0<Unit>) : Exception()

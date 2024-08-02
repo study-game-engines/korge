@@ -65,7 +65,7 @@ class ViewClassInfoGroup(
     val actionsAndProps = (props?.flatProperties ?: emptyList()) + (actions?.flatProperties ?: emptyList())
 }
 
-class ViewPropsInfo private constructor(val clazz: KClass<*>) {
+class ViewPropsInfo (val clazz: KClass<*>) {
     companion object {
         val CACHE = LinkedHashMap<KClass<*>, ViewPropsInfo>()
 

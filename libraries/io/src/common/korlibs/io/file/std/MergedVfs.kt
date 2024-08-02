@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 open class MergedVfs(vfsList: List<VfsFile> = listOf(), val name: String = "unknown") : Vfs.Proxy() {
+
     private val logger = Logger("MergedVfs")
 
     constructor(vararg vfsList: VfsFile) : this(vfsList.toList())

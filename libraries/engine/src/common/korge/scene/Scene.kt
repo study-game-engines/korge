@@ -54,7 +54,7 @@ abstract class Scene : InjectorAsyncDependency, ViewsContainer, CoroutineScope, 
 
 	val root get() = _sceneViewContainer
 
-	protected val cancellables = CancellableGroup()
+	val cancellables = CancellableGroup()
     override val coroutineContext by lazy {
         views.coroutineContext +
             InjectorContext(injector) +
@@ -71,7 +71,7 @@ abstract class Scene : InjectorAsyncDependency, ViewsContainer, CoroutineScope, 
     open val sceneHeight: Int get() = sceneView.height.toInt()
 
     override val resources: Resources by lazy { injector.getSync() }
-	protected open fun createSceneView(size: Size): SContainer = SContainer(size)
+	open fun createSceneView(size: Size): SContainer = SContainer(size)
 
     /**
      * This method will be called by the [SceneContainer] that will display this [Scene].

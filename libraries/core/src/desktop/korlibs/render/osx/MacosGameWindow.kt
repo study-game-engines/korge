@@ -307,9 +307,9 @@ class MacGameWindow(val checkGl: Boolean, val logGl: Boolean) : GameWindow() {
             window.msgSend("setTitle:", NSString(value))
         }
     override var width: Int = initialWidth
-        protected set
+        set
     override var height: Int = initialHeight
-        protected set
+        set
     override var icon: Bitmap? = null
         set(value) {
             field = value

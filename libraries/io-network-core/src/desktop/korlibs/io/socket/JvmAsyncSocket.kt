@@ -9,7 +9,7 @@ import java.nio.channels.ServerSocketChannel
 import java.nio.channels.SocketChannel
 import javax.net.ssl.*
 
-class JvmAsyncSocket private constructor(val secure: Boolean = false, unit: Unit) : AsyncSocket {
+class JvmAsyncSocket (val secure: Boolean = false, unit: Unit) : AsyncSocket {
     private val connectionQueue = Mutex()
     private val readQueue = Mutex()
     private val writeQueue = Mutex()

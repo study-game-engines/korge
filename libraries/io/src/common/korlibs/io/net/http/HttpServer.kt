@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlin.coroutines.*
 
-open class HttpServer protected constructor() : AsyncCloseable {
+open class HttpServer constructor() : AsyncCloseable {
 	companion object {
 		operator fun invoke() = defaultHttpFactory.createServer()
 	}
@@ -135,15 +135,15 @@ open class HttpServer protected constructor() : AsyncCloseable {
 			addHeader(key, value)
 		}
 
-        protected open val _output: AsyncOutputStream by lazy { object : AsyncOutputStream {
+        open val _output: AsyncOutputStream by lazy { object : AsyncOutputStream {
             override suspend fun write(buffer: ByteArray, offset: Int, len: Int) = _write(buffer, offset, len)
             override suspend fun close() = _end()
         } }
-		protected abstract suspend fun _handler(handler: (ByteArray) -> Unit)
-		protected abstract suspend fun _endHandler(handler: () -> Unit)
-		protected abstract suspend fun _sendHeader(code: Int, message: String, headers: Http.Headers)
-		protected abstract suspend fun _write(data: ByteArray, offset: Int = 0, size: Int = data.size - offset)
-		protected abstract suspend fun _end()
+		abstract suspend fun _handler(handler: (ByteArray) -> Unit)
+		abstract suspend fun _endHandler(handler: () -> Unit)
+		abstract suspend fun _sendHeader(code: Int, message: String, headers: Http.Headers)
+		abstract suspend fun _write(data: ByteArray, offset: Int = 0, size: Int = data.size - offset)
+		abstract suspend fun _end()
 
 		suspend fun handler(handler: (ByteArray) -> Unit) {
 			_handler(handler)
@@ -233,13 +233,13 @@ open class HttpServer protected constructor() : AsyncCloseable {
 		}
 	}
 
-    protected open suspend fun errorHandlerInternal(handler: suspend (Throwable) -> Unit) {
+    open suspend fun errorHandlerInternal(handler: suspend (Throwable) -> Unit) {
     }
 
-    protected open suspend fun websocketHandlerInternal(handler: suspend (WsRequest) -> Unit) {
+    open suspend fun websocketHandlerInternal(handler: suspend (WsRequest) -> Unit) {
 	}
 
-	protected open suspend fun httpHandlerInternal(handler: suspend (Request) -> Unit) {
+	open suspend fun httpHandlerInternal(handler: suspend (Request) -> Unit) {
 	}
 
 	suspend fun allHandler(handler: suspend (BaseRequest) -> Unit) = this.apply {
@@ -247,7 +247,7 @@ open class HttpServer protected constructor() : AsyncCloseable {
 		httpHandler { handler(it) }
 	}
 
-	protected open suspend fun listenInternal(port: Int, host: String = "127.0.0.1") {
+	open suspend fun listenInternal(port: Int, host: String = "127.0.0.1") {
 		val deferred = CompletableDeferred<Unit>(Job())
         //onListening(port)
 		deferred.await()
@@ -257,7 +257,7 @@ open class HttpServer protected constructor() : AsyncCloseable {
     open val actualHost: String get() = "127.0.0.1"
     //val onListening = Signal<Int>()
 
-	protected open suspend fun closeInternal() {
+	open suspend fun closeInternal() {
 	}
 
     suspend fun errorHandler(handler: suspend (Throwable) -> Unit): HttpServer {

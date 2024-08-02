@@ -129,7 +129,7 @@ import kotlin.reflect.*
  */
 abstract class LibFunction
 /** Default constructor for use by subclasses  */
-protected constructor() : LuaFunction() {
+constructor() : LuaFunction() {
 
     /** User-defined opcode to differentiate between instances of the library function class.
      *
@@ -137,7 +137,7 @@ protected constructor() : LuaFunction() {
      * Subclass will typicall switch on this value to provide the specific behavior for each function.
      */
     @kotlin.jvm.JvmField
-    protected var opcode: Int = 0
+    var opcode: Int = 0
 
     /** The common name for this function, useful for debugging.
      *
@@ -145,7 +145,7 @@ protected constructor() : LuaFunction() {
      * Binding functions initialize this to the name to which it is bound.
      */
     @kotlin.jvm.JvmField
-    protected var name: String? = null
+    var name: String? = null
 
     override fun tojstring(): String {
         return if (name != null) name!! else super.tojstring()
@@ -164,7 +164,7 @@ protected constructor() : LuaFunction() {
      * @see .bind
      */
     @JvmOverloads
-    protected fun bind(env: LuaValue, factory: () -> LibFunction, names: Array<String>, firstopcode: Int = 0) {
+    fun bind(env: LuaValue, factory: () -> LibFunction, names: Array<String>, firstopcode: Int = 0) {
         try {
             var i = 0
             val n = names.size
@@ -214,17 +214,17 @@ protected constructor() : LuaFunction() {
     companion object {
 
         /** Java code generation utility to allocate storage for upvalue, leave it empty  */
-        protected fun newupe(): Array<LuaValue> {
+        fun newupe(): Array<LuaValue> {
             return arrayOfNulls<LuaValue>(1) as Array<LuaValue>
         }
 
         /** Java code generation utility to allocate storage for upvalue, initialize with nil  */
-        protected fun newupn(): Array<LuaValue> {
+        fun newupn(): Array<LuaValue> {
             return arrayOf(LuaValue.NIL)
         }
 
         /** Java code generation utility to allocate storage for upvalue, initialize with value  */
-        protected fun newupl(v: LuaValue): Array<LuaValue> {
+        fun newupl(v: LuaValue): Array<LuaValue> {
             return arrayOf(v)
         }
     }

@@ -21,7 +21,7 @@ import korlibs.memory.*
 import korlibs.time.*
 import kotlin.math.max
 
-class ZipFile private constructor(
+class ZipFile (
     val dummy: Boolean,
     val s: AsyncStream,
     val caseSensitive: Boolean = true,

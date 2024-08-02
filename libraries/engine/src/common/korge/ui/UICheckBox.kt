@@ -116,7 +116,7 @@ open class UIBaseCheckBox<T : UIBaseCheckBox<T>>(
         }
     }
 
-    protected open fun onComponentClick() {
+    open fun onComponentClick() {
         this@UIBaseCheckBox.checked = !this@UIBaseCheckBox.checked
         focused = true
     }

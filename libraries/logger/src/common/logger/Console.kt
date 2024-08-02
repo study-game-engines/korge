@@ -57,11 +57,11 @@ open class BaseConsole() : AnsiEscape {
         }
     }
 
-    protected open fun logInternal(kind: Kind, vararg msg: Any?) {
+    open fun logInternal(kind: Kind, vararg msg: Any?) {
         println(logToString(kind, *msg))
     }
 
-    protected open fun logToString(kind: Kind, vararg msg: Any?): String = buildString {
+    open fun logToString(kind: Kind, vararg msg: Any?): String = buildString {
         val color = kind.color
         if (color != null) appendFgColor(color)
         msg.joinTo(this, ", ")

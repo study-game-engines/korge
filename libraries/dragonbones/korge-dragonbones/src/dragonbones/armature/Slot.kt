@@ -204,13 +204,13 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 	 * @language zh_CN
 	 */
 	var displayController: String? = null
-	protected var _displayDataDirty: Boolean = false
-	protected var _displayDirty: Boolean = false
-	protected var _geometryDirty: Boolean = false
-	protected var _textureDirty: Boolean = false
-	protected var _visibleDirty: Boolean = false
-	protected var _blendModeDirty: Boolean = false
-	protected var _zOrderDirty: Boolean = false
+	var _displayDataDirty: Boolean = false
+	var _displayDirty: Boolean = false
+	var _geometryDirty: Boolean = false
+	var _textureDirty: Boolean = false
+	var _visibleDirty: Boolean = false
+	var _blendModeDirty: Boolean = false
+	var _zOrderDirty: Boolean = false
 	/**
 	 * @internal
 	 */
@@ -219,12 +219,12 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 	 * @internal
 	 */
 	var _verticesDirty: Boolean = false
-	protected var _transformDirty: Boolean = false
-	protected var _visible: Boolean = true
-	protected var _blendMode: BlendMode = BlendMode.Normal
-	protected var _displayIndex: Int = -1
-	protected var _animationDisplayIndex: Int = -1
-	protected var _cachedFrameIndex: Int = -1
+	var _transformDirty: Boolean = false
+	var _visible: Boolean = true
+	var _blendMode: BlendMode = BlendMode.Normal
+	var _displayIndex: Int = -1
+	var _animationDisplayIndex: Int = -1
+	var _cachedFrameIndex: Int = -1
 	/**
 	 * @internal
 	 */
@@ -241,7 +241,7 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 	 * @internal
 	 */
 	var _pivotY: Double = 0.0
-	protected val _localMatrix: MMatrix = MMatrix()
+	val _localMatrix: MMatrix = MMatrix()
 	/**
 	 * @internal
 	 */
@@ -266,12 +266,12 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 	 * @internal
 	 */
 	var _geometryData: GeometryData? = null
-	protected var _boundingBoxData: BoundingBoxData? = null
-	protected var _textureData: TextureData? = null
-	protected var _rawDisplay: Any? = null // Initial value.
-	protected var _meshDisplay: Any? = null // Initial value.
-	protected var _display: Any? = null
-	protected var _childArmature: Armature? = null
+	var _boundingBoxData: BoundingBoxData? = null
+	var _textureData: TextureData? = null
+	var _rawDisplay: Any? = null // Initial value.
+	var _meshDisplay: Any? = null // Initial value.
+	var _display: Any? = null
+	var _childArmature: Armature? = null
 	/**
 	 * @private
 	 */
@@ -352,26 +352,26 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 		this._cachedFrameIndices = null
 	}
 
-	protected abstract fun _initDisplay(value: Any, isRetain: Boolean): Unit
-	protected abstract fun _disposeDisplay(value: Any, isRelease: Boolean): Unit
-	protected abstract fun _onUpdateDisplay(): Unit
-	protected abstract fun _addDisplay(): Unit
-	protected abstract fun _replaceDisplay(value: Any): Unit
-	protected abstract fun _removeDisplay(): Unit
-	protected abstract fun _updateZOrder(): Unit
+	abstract fun _initDisplay(value: Any, isRetain: Boolean): Unit
+	abstract fun _disposeDisplay(value: Any, isRelease: Boolean): Unit
+	abstract fun _onUpdateDisplay(): Unit
+	abstract fun _addDisplay(): Unit
+	abstract fun _replaceDisplay(value: Any): Unit
+	abstract fun _removeDisplay(): Unit
+	abstract fun _updateZOrder(): Unit
 	/**
 	 * @internal
 	 */
 	abstract fun _updateVisible(): Unit
 
-	protected abstract fun _updateBlendMode(): Unit
-	protected abstract fun _updateColor(): Unit
-	protected abstract fun _updateFrame(): Unit
-	protected abstract fun _updateMesh(): Unit
-	protected abstract fun _updateTransform(): Unit
-	protected abstract fun _identityTransform()
+	abstract fun _updateBlendMode(): Unit
+	abstract fun _updateColor(): Unit
+	abstract fun _updateFrame(): Unit
+	abstract fun _updateMesh(): Unit
+	abstract fun _updateTransform(): Unit
+	abstract fun _identityTransform()
 
-	protected fun _hasDisplay(display: Any?): Boolean {
+	fun _hasDisplay(display: Any?): Boolean {
 		this._displayFrames.fastForEach { displayFrame ->
 			if (displayFrame.display == display) {
 				return true
@@ -406,7 +406,7 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 		}
 	}
 
-	protected fun _updateDisplayData() {
+	fun _updateDisplayData() {
 		//println("_updateDisplayData:$name,_displayIndex=$_displayIndex")
 		val prevDisplayFrame = this._displayFrame
 		val prevGeometryData = this._geometryData
@@ -529,7 +529,7 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 		}
 	}
 
-	protected fun _updateDisplay() {
+	fun _updateDisplay() {
 		val prevDisplay = this._display ?: this._rawDisplay
 		val prevChildArmature = _childArmature
 
@@ -611,7 +611,7 @@ abstract class Slot(pool: SingleObjectPool<out Slot>) :  TransformObject(pool) {
 		}
 	}
 
-	protected fun _updateGlobalTransformMatrix(isCache: Boolean) {
+	fun _updateGlobalTransformMatrix(isCache: Boolean) {
 		val parentMatrix = if (this._parent!!._boneData!!.isBone) this._parent!!.globalTransformMatrix else (this._parent as Surface)._getGlobalTransformMatrix(this.global.xf, this.global.yf)
 		this.globalTransformMatrix.copyFrom(this._localMatrix)
 		this.globalTransformMatrix.concat(parentMatrix)

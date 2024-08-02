@@ -119,7 +119,7 @@ abstract class BaseObservableArray2<T, E>(open val base: IArray2<E>, val updated
         reset()
     }
 
-    protected fun reset() {
+    fun reset() {
         xmin = Int.MAX_VALUE
         xmax = Int.MIN_VALUE
         ymin = Int.MAX_VALUE
@@ -142,11 +142,11 @@ abstract class BaseObservableArray2<T, E>(open val base: IArray2<E>, val updated
         ymax = maxOf(ymax, y).coerceIn(0, height - 1)
     }
 
-    protected fun modified(x: Int, y: Int) {
+    fun modified(x: Int, y: Int) {
         _mark(x, y)
         flush()
     }
-    protected fun modified(rect: RectangleInt) {
+    fun modified(rect: RectangleInt) {
         _mark(rect.left, rect.top)
         _mark(rect.right - 1, rect.bottom - 1)
         flush()
@@ -164,13 +164,13 @@ abstract class BaseObservableArray1<T, E>(val updated: T.(IntRange) -> Unit) : B
 
     abstract val size: Int
 
-    protected fun coercedRange(r: IntRange): IntRange = r.first.coerceIn(0, size - 1) .. r.last.coerceIn(0, size - 1)
+    fun coercedRange(r: IntRange): IntRange = r.first.coerceIn(0, size - 1) .. r.last.coerceIn(0, size - 1)
 
     init {
         reset()
     }
 
-    protected fun reset() {
+    fun reset() {
         imin = Int.MAX_VALUE
         imax = Int.MIN_VALUE
     }
@@ -186,11 +186,11 @@ abstract class BaseObservableArray1<T, E>(val updated: T.(IntRange) -> Unit) : B
         imin = minOf(imin, idx)
         imax = maxOf(imax, idx)
     }
-    protected fun modified(idx: Int) {
+    fun modified(idx: Int) {
         _modified(idx)
         flush()
     }
-    protected fun modified(range: IntRange) {
+    fun modified(range: IntRange) {
         _modified(range.first)
         _modified(range.last)
         flush()
@@ -199,11 +199,11 @@ abstract class BaseObservableArray1<T, E>(val updated: T.(IntRange) -> Unit) : B
 
 abstract class BaseObservableArray<E>() {
     val version: Int get() = _version.value
-    protected var _version = atomic(0)
+    var _version = atomic(0)
 
-    protected abstract fun flush()
+    abstract fun flush()
 
-    protected var locked = atomic(0)
+    var locked = atomic(0)
     inline fun <T> lock(block: () -> T): T {
         lock()
         try {

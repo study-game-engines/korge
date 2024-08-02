@@ -118,7 +118,7 @@ abstract class BaseMinimp3AudioFormat : AudioFormat("mp3") {
         }
     }
 
-    protected abstract fun createMp3Decoder(): BaseMp3Decoder
+    abstract fun createMp3Decoder(): BaseMp3Decoder
 
     class BaseMp3DecoderInfo {
         val tempBuffer = ByteArray(1152 * 2 * 2)

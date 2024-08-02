@@ -126,7 +126,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
     var eventListenerParent: BaseEventListener? = null
         private set
 
-    protected fun changeEventListenerParent(other: BaseEventListener?) {
+    fun changeEventListenerParent(other: BaseEventListener?) {
         this.eventListenerParent?.__updateChildListenerCount(this, add = false)
         this.eventListenerParent = other
         this.eventListenerParent?.__updateChildListenerCount(this, add = true)
@@ -139,7 +139,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
     @PublishedApi
     internal var __eventListenerStats: FastIdentityMap<EventType<*>, Int>? = null
 
-    protected class Listener<T: BEvent>(val func: (T) -> Unit, val node: ListenerNode<T>, val base: BaseEventListener) : CloseableCancellable {
+    class Listener<T: BEvent>(val func: (T) -> Unit, val node: ListenerNode<T>, val base: BaseEventListener) : CloseableCancellable {
         override fun close() {
             if (node.listeners.remove(this)) {
                 base.__updateChildListenerCount(node.type, -1)
@@ -152,7 +152,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
         }
     }
 
-    protected class ListenerNode<T: BEvent>(val type: EventType<T>) {
+    class ListenerNode<T: BEvent>(val type: EventType<T>) {
         val listeners = FastArrayList<Listener<T>>()
         val temp = FastArrayList<Listener<T>>()
     }
@@ -177,7 +177,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
         return Listener(handler, lists, this).also { it.attach() }
     }
 
-    protected fun <T : BEvent> getListenersForType(type: EventType<T>): ListenerNode<T>? {
+    fun <T : BEvent> getListenersForType(type: EventType<T>): ListenerNode<T>? {
         return __eventListeners?.get(type) as? ListenerNode<T>
     }
 

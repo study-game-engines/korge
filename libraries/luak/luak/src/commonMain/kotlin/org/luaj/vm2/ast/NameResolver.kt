@@ -115,7 +115,7 @@ class NameResolver : Visitor() {
         super.visit(pars)
     }
 
-    protected fun defineLocalVars(names: List<Name>) {
+    fun defineLocalVars(names: List<Name>) {
         var i = 0
         val n = names.size
         while (i < n) {
@@ -124,11 +124,11 @@ class NameResolver : Visitor() {
         }
     }
 
-    protected fun defineLocalVar(name: Name) {
+    fun defineLocalVar(name: Name) {
         name.variable = scope!!.define(name.name)
     }
 
-    protected fun resolveNameReference(name: Name): Variable {
+    fun resolveNameReference(name: Name): Variable {
         val v = scope!!.find(name.name)
         if (v.isLocal && scope!!.functionNestingCount != v.definingScope!!.functionNestingCount)
             v.isupvalue = true

@@ -485,7 +485,7 @@ inline fun Xml(rootTag: String, props: Map<String, Any?>?, block: XmlBuilder.() 
 /**
  * [Map] with [String] keys that are treated in a insensitive manner.
  */
-private class CaseInsensitiveStringMap<T> private constructor(
+private class CaseInsensitiveStringMap<T> (
     private val mapOrig: MutableMap<String, T>,
     private val lcToOrig: MutableMap<String, String>,
     private val mapLC: MutableMap<String, T>

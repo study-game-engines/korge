@@ -10,7 +10,7 @@ package korlibs.io.lang
  * While on plain [String] it requires surrogate pairs to represent some characters.
  */
 //inline
-class WString private constructor(private val codePoints: IntArray, private val string: String) {
+class WString (private val codePoints: IntArray, private val string: String) {
     val length get() = codePoints.size
 
     operator fun get(index: Int): WChar = WChar(codePoints[index])

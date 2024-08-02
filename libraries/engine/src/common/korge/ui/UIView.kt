@@ -50,7 +50,7 @@ open class UIView(
 		enabled = false
 	}
 
-	protected open fun onSizeChanged() {
+	open fun onSizeChanged() {
         parent?.onChildChangedSize(this)
 	}
 

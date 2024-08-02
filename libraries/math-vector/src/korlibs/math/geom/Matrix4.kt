@@ -1,7 +1,6 @@
 package korlibs.math.geom
 
-import korlibs.math.*
-import korlibs.math.geom.Matrix4.*
+import korlibs.math.IsAlmostEqualsF
 import kotlin.math.*
 
 
@@ -11,11 +10,11 @@ import kotlin.math.*
 // v[Row][Column]
 //@KormaExperimental
 //@KormaValueApi
-//inline class Matrix4 private constructor(
+//inline class Matrix4 (
 /**
  * Useful for representing complete transforms: rotations, scales, translations, projections, etc.
  */
-data class Matrix4 private constructor(
+data class Matrix4(
     private val data: FloatArray,
     //val c0: Vector4, val c1: Vector4, val c2: Vector4, val c3: Vector4,
 
@@ -27,10 +26,23 @@ data class Matrix4 private constructor(
     init {
         check(data.size == 16)
     }
-    val v00: Float get() = data[0]; val v10: Float get() = data[1]; val v20: Float get() = data[2]; val v30: Float get() = data[3]
-    val v01: Float get() = data[4]; val v11: Float get() = data[5]; val v21: Float get() = data[6]; val v31: Float get() = data[7]
-    val v02: Float get() = data[8]; val v12: Float get() = data[9]; val v22: Float get() = data[10]; val v32: Float get() = data[11]
-    val v03: Float get() = data[12]; val v13: Float get() = data[13]; val v23: Float get() = data[14]; val v33: Float get() = data[15]
+
+    val v00: Float get() = data[0];
+    val v10: Float get() = data[1];
+    val v20: Float get() = data[2];
+    val v30: Float get() = data[3]
+    val v01: Float get() = data[4];
+    val v11: Float get() = data[5];
+    val v21: Float get() = data[6];
+    val v31: Float get() = data[7]
+    val v02: Float get() = data[8];
+    val v12: Float get() = data[9];
+    val v22: Float get() = data[10];
+    val v32: Float get() = data[11]
+    val v03: Float get() = data[12];
+    val v13: Float get() = data[13];
+    val v23: Float get() = data[14];
+    val v33: Float get() = data[15]
 
     override fun equals(other: Any?): Boolean = other is Matrix4 && this.data.contentEquals(other.data)
     override fun hashCode(): Int = data.contentHashCode()
@@ -44,31 +56,32 @@ data class Matrix4 private constructor(
 
     fun transposed(): Matrix4 = Matrix4.fromColumns(r0, r1, r2, r3)
 
-    val determinant: Float get() = 0f +
-        (v30 * v21 * v12 * v03) -
-        (v20 * v31 * v12 * v03) -
-        (v30 * v11 * v22 * v03) +
-        (v10 * v31 * v22 * v03) +
-        (v20 * v11 * v32 * v03) -
-        (v10 * v21 * v32 * v03) -
-        (v30 * v21 * v02 * v13) +
-        (v20 * v31 * v02 * v13) +
-        (v30 * v01 * v22 * v13) -
-        (v00 * v31 * v22 * v13) -
-        (v20 * v01 * v32 * v13) +
-        (v00 * v21 * v32 * v13) +
-        (v30 * v11 * v02 * v23) -
-        (v10 * v31 * v02 * v23) -
-        (v30 * v01 * v12 * v23) +
-        (v00 * v31 * v12 * v23) +
-        (v10 * v01 * v32 * v23) -
-        (v00 * v11 * v32 * v23) -
-        (v20 * v11 * v02 * v33) +
-        (v10 * v21 * v02 * v33) +
-        (v20 * v01 * v12 * v33) -
-        (v00 * v21 * v12 * v33) -
-        (v10 * v01 * v22 * v33) +
-        (v00 * v11 * v22 * v33)
+    val determinant: Float
+        get() = 0f +
+                (v30 * v21 * v12 * v03) -
+                (v20 * v31 * v12 * v03) -
+                (v30 * v11 * v22 * v03) +
+                (v10 * v31 * v22 * v03) +
+                (v20 * v11 * v32 * v03) -
+                (v10 * v21 * v32 * v03) -
+                (v30 * v21 * v02 * v13) +
+                (v20 * v31 * v02 * v13) +
+                (v30 * v01 * v22 * v13) -
+                (v00 * v31 * v22 * v13) -
+                (v20 * v01 * v32 * v13) +
+                (v00 * v21 * v32 * v13) +
+                (v30 * v11 * v02 * v23) -
+                (v10 * v31 * v02 * v23) -
+                (v30 * v01 * v12 * v23) +
+                (v00 * v31 * v12 * v23) +
+                (v10 * v01 * v32 * v23) -
+                (v00 * v11 * v32 * v23) -
+                (v20 * v11 * v02 * v33) +
+                (v10 * v21 * v02 * v33) +
+                (v20 * v01 * v12 * v33) -
+                (v00 * v21 * v12 * v33) -
+                (v10 * v01 * v22 * v33) +
+                (v00 * v11 * v22 * v33)
 
     // Use toTRS/decompose
     //fun decomposeProjection(): Vector4 = c3
@@ -139,6 +152,7 @@ data class Matrix4 private constructor(
         this.data.copyInto(out, offset, 0, 16)
         return out
     }
+
     fun copyToRows(out: FloatArray = FloatArray(16), offset: Int = 0): FloatArray {
         this.r0.copyTo(out, offset + 0)
         this.r1.copyTo(out, offset + 4)
@@ -152,12 +166,14 @@ data class Matrix4 private constructor(
         v01: Float, v11: Float, v21: Float, v31: Float,
         v02: Float, v12: Float, v22: Float, v32: Float,
         v03: Float, v13: Float, v23: Float, v33: Float,
-    ) : this(floatArrayOf(
-        v00, v10, v20, v30,
-        v01, v11, v21, v31,
-        v02, v12, v22, v32,
-        v03, v13, v23, v33,
-    ))
+    ) : this(
+        floatArrayOf(
+            v00, v10, v20, v30,
+            v01, v11, v21, v31,
+            v02, v12, v22, v32,
+            v03, v13, v23, v33,
+        )
+    )
 
     constructor() : this(
         1f, 0f, 0f, 0f,
@@ -213,7 +229,6 @@ data class Matrix4 private constructor(
     }
 
 
-
     fun translated(x: Float, y: Float, z: Float, w: Float = 1f): Matrix4 = this * Matrix4.translation(x, y, z, w)
     fun translated(x: Double, y: Double, z: Double, w: Double = 1.0) = this.translated(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
     fun translated(x: Int, y: Int, z: Int, w: Int = 1) = this.translated(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
@@ -238,12 +253,14 @@ data class Matrix4 private constructor(
         val invSX = 1f / scale.x
         val invSY = 1f / scale.y
         val invSZ = 1f / scale.z
-        val rotation = Quaternion.fromRotationMatrix(Matrix4.fromRows(
-            v00 * invSX, v01 * invSY, v02 * invSZ, v03,
-            v10 * invSX, v11 * invSY, v12 * invSZ, v13,
-            v20 * invSX, v21 * invSY, v22 * invSZ, v23,
-            v30, v31, v32, v33
-        ))
+        val rotation = Quaternion.fromRotationMatrix(
+            Matrix4.fromRows(
+                v00 * invSX, v01 * invSY, v02 * invSZ, v03,
+                v10 * invSX, v11 * invSY, v12 * invSZ, v13,
+                v20 * invSX, v21 * invSY, v22 * invSZ, v23,
+                v30, v31, v32, v33
+            )
+        )
         return TRS4(translation, rotation, scale)
     }
 
@@ -287,9 +304,9 @@ data class Matrix4 private constructor(
 
     override fun isAlmostEquals(other: Matrix4, epsilon: Float): Boolean =
         c0.isAlmostEquals(other.c0, epsilon) &&
-            c1.isAlmostEquals(other.c1, epsilon) &&
-            c2.isAlmostEquals(other.c2, epsilon) &&
-            c3.isAlmostEquals(other.c3, epsilon)
+                c1.isAlmostEquals(other.c1, epsilon) &&
+                c2.isAlmostEquals(other.c2, epsilon) &&
+                c3.isAlmostEquals(other.c3, epsilon)
 
     companion object {
         const val M00 = 0
@@ -452,6 +469,7 @@ data class Matrix4 private constructor(
             0f, 0f, 1f, z,
             0f, 0f, 0f, w
         )
+
         fun translation(x: Double, y: Double, z: Double, w: Double = 1.0): Matrix4 = translation(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
         fun translation(x: Int, y: Int, z: Int, w: Int = 1): Matrix4 = translation(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
 
@@ -461,6 +479,7 @@ data class Matrix4 private constructor(
             0f, 0f, z, 0f,
             0f, 0f, 0f, w
         )
+
         fun scale(x: Double, y: Double, z: Double, w: Double = 1.0): Matrix4 = scale(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
         fun scale(x: Int, y: Int, z: Int, w: Int = 1): Matrix4 = scale(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
 
@@ -470,6 +489,7 @@ data class Matrix4 private constructor(
             x, y, 1f, 0f,
             0f, 0f, 0f, 1f
         )
+
         fun shear(x: Double, y: Double, z: Double): Matrix4 = shear(x.toFloat(), y.toFloat(), z.toFloat())
         fun shear(x: Int, y: Int, z: Int): Matrix4 = shear(x.toFloat(), y.toFloat(), z.toFloat())
 
@@ -526,6 +546,7 @@ data class Matrix4 private constructor(
                 0f, 0f, 0f, 1f
             )
         }
+
         fun rotation(angle: Angle, direction: Vector3F): Matrix4 = rotation(angle, direction.x, direction.y, direction.z)
         fun rotation(angle: Angle, x: Double, y: Double, z: Double): Matrix4 = rotation(angle, x.toFloat(), y.toFloat(), z.toFloat())
         fun rotation(angle: Angle, x: Int, y: Int, z: Int): Matrix4 = rotation(angle, x.toFloat(), y.toFloat(), z.toFloat())
@@ -601,8 +622,10 @@ data class Matrix4 private constructor(
                 0f, 0f, 0f, 1f
             )
         }
+
         fun ortho(left: Double, right: Double, bottom: Double, top: Double, near: Double, far: Double): Matrix4 =
             ortho(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), near.toFloat(), far.toFloat())
+
         fun ortho(left: Int, right: Int, bottom: Int, top: Int, near: Int, far: Int): Matrix4 =
             ortho(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), near.toFloat(), far.toFloat())
 
@@ -630,10 +653,12 @@ data class Matrix4 private constructor(
                 0f, 0f, -1f, 0f
             )
         }
-        fun frustum(left: Double, right: Double, bottom: Double, top: Double, zNear: Double = 0.0, zFar: Double = 1.0): Matrix4
-            = frustum(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), zNear.toFloat(), zFar.toFloat())
-        fun frustum(left: Int, right: Int, bottom: Int, top: Int, zNear: Int = 0, zFar: Int = 1): Matrix4
-            = frustum(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), zNear.toFloat(), zFar.toFloat())
+
+        fun frustum(left: Double, right: Double, bottom: Double, top: Double, zNear: Double = 0.0, zFar: Double = 1.0): Matrix4 =
+            frustum(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), zNear.toFloat(), zFar.toFloat())
+
+        fun frustum(left: Int, right: Int, bottom: Int, top: Int, zNear: Int = 0, zFar: Int = 1): Matrix4 =
+            frustum(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat(), zNear.toFloat(), zFar.toFloat())
 
         fun perspective(fovy: Angle, aspect: Float, zNear: Float, zFar: Float): Matrix4 {
             val top = tan(fovy.radians.toFloat() / 2f) * zNear
@@ -642,8 +667,8 @@ data class Matrix4 private constructor(
             val right = aspect * top
             return frustum(left, right, bottom, top, zNear, zFar)
         }
-        fun perspective(fovy: Angle, aspect: Double, zNear: Double, zFar: Double): Matrix4
-            = perspective(fovy, aspect.toFloat(), zNear.toFloat(), zFar.toFloat())
+
+        fun perspective(fovy: Angle, aspect: Double, zNear: Double, zFar: Double): Matrix4 = perspective(fovy, aspect.toFloat(), zNear.toFloat(), zFar.toFloat())
 
         fun lookAt(
             eye: Vector3F,

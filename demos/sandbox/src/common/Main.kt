@@ -1,23 +1,31 @@
+package korge.sandbox
 
-import korlibs.event.*
-import korlibs.graphics.*
-import korlibs.image.color.*
-import korlibs.image.text.*
-import korlibs.io.async.*
-import korlibs.korge.*
-import korlibs.korge.input.*
-import korlibs.korge.time.*
-import korlibs.korge.tween.*
-import korlibs.korge.view.*
+import korlibs.event.Key
+import korlibs.graphics.clear
+import korlibs.image.color.Colors
+import korlibs.image.color.mix
+import korlibs.image.text.TextAlignment
+import korlibs.io.async.launchImmediately
+import korlibs.korge.Korge
+import korlibs.korge.KorgeCore
+import korlibs.korge.KorgeDisplayMode
+import korlibs.korge.input.keys
+import korlibs.korge.time.delay
+import korlibs.korge.tween.get
+import korlibs.korge.tween.tween
+import korlibs.korge.view.Stage
 import korlibs.korge.view.align.alignBottomToBottomOf
 import korlibs.korge.view.align.centerXOn
-import korlibs.math.interpolation.*
-import korlibs.time.*
+import korlibs.korge.view.text
+import korlibs.math.interpolation.toRatio
+import korlibs.time.DateTime
+import korlibs.time.Stopwatch
+import korlibs.time.seconds
 import samples.*
-import samples.asteroids.*
-import samples.connect4.*
-import samples.minesweeper.*
-import samples.pong.*
+import samples.asteroids.MainAsteroids
+import samples.connect4.MainConnect4
+import samples.minesweeper.MainMineSweeper
+import samples.pong.MainPong
 
 val DEFAULT_KORGE_BG_COLOR = Colors.DARKCYAN.mix(Colors.BLACK, 0.8.toRatio())
 
@@ -65,6 +73,7 @@ suspend fun main2() = KorgeCore {
 
 suspend fun main() = Korge(
     windowSize = Korge.DEFAULT_WINDOW_SIZE,
+    virtualSize = Korge.DEFAULT_WINDOW_SIZE,
     backgroundColor = DEFAULT_KORGE_BG_COLOR,
     displayMode = KorgeDisplayMode.CENTER_NO_CLIP,
     debug = false,

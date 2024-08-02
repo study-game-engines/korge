@@ -45,7 +45,7 @@ import org.luaj.vm2.lib.jse.JsePlatform
  * @since luaj 3.0.1
 </P> */
 class DefaultLauncher : Launcher {
-    protected var g: Globals = JsePlatform.standardGlobals()
+    var g: Globals = JsePlatform.standardGlobals()
 
     /** Launches the script with chunk name 'main'  */
     override fun launch(script: String, arg: Array<Any>?): Array<Any?>? = launchChunk(g.load(script, "main"), arg!!)

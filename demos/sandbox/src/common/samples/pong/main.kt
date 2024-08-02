@@ -8,6 +8,6 @@ class MainPong : ScaledScene(800, 600) {
     override suspend fun SContainer.sceneMain() {
         injector.root.mapPrototype { MenuScene() }
         injector.root.mapPrototype { PlayScene() }
-        sceneContainer().changeTo<MenuScene>()
+        sceneContainer().changeTo(MenuScene::class)
     }
 }

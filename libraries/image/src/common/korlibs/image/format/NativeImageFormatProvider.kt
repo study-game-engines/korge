@@ -32,12 +32,12 @@ fun CoreImageInfo.toImageInfo(): ImageInfo = ImageInfo().also {
 }
 
 open class NativeImageFormatProvider : ImageFormatEncoderDecoder {
-    protected suspend fun <T> executeIo(callback: suspend () -> T): T = when {
+    suspend fun <T> executeIo(callback: suspend () -> T): T = when {
         coroutineContext.preferSyncIo -> callback()
         else -> withContext(Dispatchers.CIO) { callback() }
     }
 
-    protected open suspend fun decodeHeaderInternal(data: ByteArray): ImageInfo {
+    open suspend fun decodeHeaderInternal(data: ByteArray): ImageInfo {
         return CoreImage.info(data).toImageInfo()
         //val result = decodeInternal(data, ImageDecodingProps.DEFAULT)
         //return ImageInfo().also {
@@ -50,7 +50,7 @@ open class NativeImageFormatProvider : ImageFormatEncoderDecoder {
         return CoreImage.encode(image.mainBitmap.toCoreImage(), CoreImageFormat.fromMimeType(props.mimeType), props.quality)
     }
 
-    protected open suspend fun decodeInternal(data: ByteArray, props: ImageDecodingProps): NativeImageResult {
+    open suspend fun decodeInternal(data: ByteArray, props: ImageDecodingProps): NativeImageResult {
         if (props.asumePremultiplied || props.premultiplied == false) {
             return RegisteredImageFormats.decode(data, props).toNativeImageResult(props)
         }
@@ -58,17 +58,17 @@ open class NativeImageFormatProvider : ImageFormatEncoderDecoder {
         return image.toNativeImage(props).toNativeImageResult(props)
     }
 
-    protected fun CoreImage.toNativeImage(props: ImageDecodingProps): NativeImage {
+    fun CoreImage.toNativeImage(props: ImageDecodingProps): NativeImage {
         return convertCoreImageToNativeImage(this, props)
     }
 
-    protected open fun convertCoreImageToNativeImage(image: CoreImage, props: ImageDecodingProps): NativeImage {
+    open fun convertCoreImageToNativeImage(image: CoreImage, props: ImageDecodingProps): NativeImage {
         return image.to32().toBitmap().toNativeImage(props)
     }
 
-    protected open suspend fun decodeInternal(vfs: Vfs, path: String, props: ImageDecodingProps): NativeImageResult = decodeInternal(vfs.file(path).readBytes(), props)
+    open suspend fun decodeInternal(vfs: Vfs, path: String, props: ImageDecodingProps): NativeImageResult = decodeInternal(vfs.file(path).readBytes(), props)
 
-    protected fun NativeImage.result(props: ImageDecodingProps): NativeImageResult {
+    fun NativeImage.result(props: ImageDecodingProps): NativeImageResult {
         return NativeImageResult(when {
             props.asumePremultiplied -> this.asumePremultiplied()
             else -> this
@@ -119,7 +119,7 @@ open class NativeImageFormatProvider : ImageFormatEncoderDecoder {
         return out
     }
 
-    protected open fun toNativeImageSure(bmp: Bitmap): NativeImage {
+    open fun toNativeImageSure(bmp: Bitmap): NativeImage {
         return BitmapNativeImage(bmp)
     }
 
@@ -185,8 +185,8 @@ open class BaseNativeImageFormatProvider : NativeImageFormatProvider() {
         return CoreImage.encode(image.mainBitmap.toCoreImage(), CoreImageFormat.fromMimeType(props.mimeType), props.quality)
     }
 
-    protected open fun createBitmapNativeImage(bmp: Bitmap): BitmapNativeImage = BitmapNativeImage(bmp)
-    protected open fun wrapNative(bmp: Bitmap, props: ImageDecodingProps): NativeImageResult {
+    open fun createBitmapNativeImage(bmp: Bitmap): BitmapNativeImage = BitmapNativeImage(bmp)
+    open fun wrapNative(bmp: Bitmap, props: ImageDecodingProps): NativeImageResult {
         val bmp32: Bitmap32 = bmp.toBMP32IfRequired()
         //bmp32.premultiplyInPlace()
         //return BitmapNativeImage(bmp32)
@@ -198,7 +198,7 @@ open class BaseNativeImageFormatProvider : NativeImageFormatProvider() {
             }
         ))
     }
-    protected fun Bitmap.wrapNativeExt(props: ImageDecodingProps = ImageDecodingProps.DEFAULT_PREMULT) = wrapNative(this, props)
+    fun Bitmap.wrapNativeExt(props: ImageDecodingProps = ImageDecodingProps.DEFAULT_PREMULT) = wrapNative(this, props)
 
     override fun create(width: Int, height: Int, premultiplied: Boolean?): NativeImage = createBitmapNativeImage(Bitmap32(width, height, premultiplied = premultiplied ?: true))
     override fun copy(bmp: Bitmap): NativeImage = createBitmapNativeImage(bmp)

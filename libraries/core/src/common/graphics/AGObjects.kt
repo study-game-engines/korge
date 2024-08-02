@@ -28,7 +28,7 @@ open class AGObject : AutoCloseable {
         _cachedVersion = _version - 1
     }
 
-    protected fun markAsDirty() {
+    fun markAsDirty() {
         _version++
     }
 
@@ -111,7 +111,7 @@ inline class AGTextureUnitInfoArray(val data: IntArray) {
     operator fun get(index: Int): AGTextureUnitInfo = AGTextureUnitInfo.fromRaw(data[index])
     fun copyOf() = AGTextureUnitInfoArray(data.copyOf())
 }
-inline class AGTextureUnitInfo private constructor(val data: Int) {
+inline class AGTextureUnitInfo (val data: Int) {
 
     companion object {
         val INVALID = AGTextureUnitInfo(-1)
@@ -219,10 +219,10 @@ open class AGFrameBuffer(val base: AGFrameBufferBase, val id: Int = -1) : AutoCl
         const val DEFAULT_INITIAL_HEIGHT = 128
     }
 
-    var nsamples: Int = 1; protected set
+    var nsamples: Int = 1; set
     val hasStencilAndDepth: Boolean get() = hasDepth && hasStencil
-    var hasStencil: Boolean = true; protected set
-    var hasDepth: Boolean = true; protected set
+    var hasStencil: Boolean = true; set
+    var hasDepth: Boolean = true; set
 
     var x = 0
     var y = 0

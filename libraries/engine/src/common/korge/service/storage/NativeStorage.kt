@@ -29,9 +29,9 @@ val ViewsContainer.storage: NativeStorage get() = this.views.storage
 abstract class FiledBasedNativeStorage(val views: Views) : IStorageWithKeys {
     val gameStorageFolder by lazy { views.realSettingsFolder.also { mkdirs(it) } }
     val gameStorageFile get() = "${gameStorageFolder}/game.storage"
-    protected abstract fun mkdirs(folder: String)
-    protected abstract fun saveStr(data: String)
-    protected abstract fun loadStr(): String
+    abstract fun mkdirs(folder: String)
+    abstract fun saveStr(data: String)
+    abstract fun loadStr(): String
 
     private val lock = Lock()
     private var map: MutableMap<String, String>? = null

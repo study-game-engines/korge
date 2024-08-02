@@ -39,7 +39,7 @@ import kotlin.math.*
  *
  * @see FuncState
  */
-open class Constants protected constructor() : Lua() {
+open class Constants constructor() : Lua() {
     companion object {
 
         /** Maximum stack size of a luaj vm interpreter instance.  */
@@ -65,7 +65,7 @@ open class Constants protected constructor() : Lua() {
 
 
         @JvmStatic
-        protected fun _assert(b: Boolean) {
+        fun _assert(b: Boolean) {
             if (!b)
                 throw LuaError("compiler assert failed")
         }

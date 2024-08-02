@@ -21,8 +21,8 @@ abstract class BaseSignal<T, THandler>(val onRegister: () -> Unit = {}) {
         }
     }
 
-    protected var handlers: MutableList<Node> = FastArrayList<Node>()
-    protected var handlersToRemove: MutableList<Node> = FastArrayList<Node>()
+    var handlers: MutableList<Node> = FastArrayList<Node>()
+    var handlersToRemove: MutableList<Node> = FastArrayList<Node>()
     val listenerCount: Int get() = handlers.size
     val hasListeners get() = listenerCount > 0
     fun clear() = handlers.clear()
@@ -32,14 +32,14 @@ abstract class BaseSignal<T, THandler>(val onRegister: () -> Unit = {}) {
     //fun add(handler: THandler): AutoCloseable = _add(false, handler)
     //operator fun invoke(handler: THandler): AutoCloseable = add(handler)
 
-    protected fun _add(once: Boolean, handler: THandler): AutoCloseable {
+    fun _add(once: Boolean, handler: THandler): AutoCloseable {
         onRegister()
         val node = Node(once, handler)
         handlers.add(node)
         return node
     }
-    protected var iterating: Int = 0
-    protected inline fun iterateCallbacks(callback: (THandler) -> Unit) {
+    var iterating: Int = 0
+    inline fun iterateCallbacks(callback: (THandler) -> Unit) {
         if (handlers.isEmpty()) return
         try {
             iterating++

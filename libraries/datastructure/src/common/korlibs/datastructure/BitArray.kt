@@ -7,9 +7,9 @@ import kotlin.experimental.*
  * Equivalent to [BooleanArray] but tightly packed to consume less memory,
  * at the cost of being ~3-4x slower.
  */
-//class BitArray private constructor(val data: IntArray, size: Int) : AbstractList<Boolean>(), Collection<Boolean> {
-class BitArray private constructor(val data: ByteArray, size: Int) : AbstractList<Boolean>(), Collection<Boolean> {
-//class BitArray private constructor(val data: IntArray, size: Int) : AbstractCollection<Boolean>(), Collection<Boolean> {
+//class BitArray (val data: IntArray, size: Int) : AbstractList<Boolean>(), Collection<Boolean> {
+class BitArray (val data: ByteArray, size: Int) : AbstractList<Boolean>(), Collection<Boolean> {
+//class BitArray (val data: IntArray, size: Int) : AbstractCollection<Boolean>(), Collection<Boolean> {
     override val size: Int = size
 
     override fun iterator(): Iterator<Boolean> {

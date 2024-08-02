@@ -2,15 +2,14 @@
 
 package korlibs.math.geom
 
-import korlibs.math.*
-import kotlin.math.*
+import korlibs.math.IsAlmostEqualsF
+import kotlin.math.floor
 
 /**
  * Useful for representing rotations and scales.
  */
-data class Matrix3 private constructor(
-    internal val data: FloatArray,
-) : IsAlmostEqualsF<Matrix3> {
+data class Matrix3(internal val data: FloatArray) : IsAlmostEqualsF<Matrix3> {
+
     override fun equals(other: Any?): Boolean = other is Matrix3 && this.data.contentEquals(other.data)
     override fun hashCode(): Int = data.contentHashCode()
 
@@ -73,6 +72,7 @@ data class Matrix3 private constructor(
         -v01, -v11, -v21,
         -v02, -v12, -v22,
     )
+
     operator fun unaryPlus(): Matrix3 = this
 
     operator fun minus(other: Matrix3): Matrix3 = Matrix3(
@@ -80,6 +80,7 @@ data class Matrix3 private constructor(
         v01 - other.v01, v11 - other.v11, v21 - other.v21,
         v02 - other.v02, v12 - other.v12, v22 - other.v22,
     )
+
     operator fun plus(other: Matrix3): Matrix3 = Matrix3(
         v00 + other.v00, v10 + other.v10, v20 + other.v20,
         v01 + other.v01, v11 + other.v11, v21 + other.v21,
@@ -92,13 +93,15 @@ data class Matrix3 private constructor(
         v01 * scale, v11 * scale, v21 * scale,
         v02 * scale, v12 * scale, v22 * scale,
     )
+
     operator fun div(scale: Float): Matrix3 = this * (1f / scale)
 
     fun inv(): Matrix3 = inverted()
 
-    val determinant: Float get() = v00 * (v11 * v22 - v21 * v12) -
-        v01 * (v10 * v22 - v12 * v20) +
-        v02 * (v10 * v21 - v11 * v20)
+    val determinant: Float
+        get() = v00 * (v11 * v22 - v21 * v12) -
+                v01 * (v10 * v22 - v12 * v20) +
+                v02 * (v10 * v21 - v11 * v20)
 
     fun inverted(): Matrix3 {
         val determinant = this.determinant
@@ -137,8 +140,8 @@ data class Matrix3 private constructor(
     fun transposed(): Matrix3 = Matrix3.fromColumns(r0, r1, r2)
 
     override fun isAlmostEquals(other: Matrix3, epsilon: Float): Boolean = c0.isAlmostEquals(other.c0, epsilon)
-        && c1.isAlmostEquals(other.c1, epsilon)
-        && c2.isAlmostEquals(other.c2, epsilon)
+            && c1.isAlmostEquals(other.c1, epsilon)
+            && c2.isAlmostEquals(other.c2, epsilon)
 
     companion object {
         const val M00 = 0

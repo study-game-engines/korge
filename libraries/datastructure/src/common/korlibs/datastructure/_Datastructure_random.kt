@@ -6,7 +6,7 @@ import korlibs.concurrent.lock.*
 import kotlin.random.*
 
 // Copy of XorWowRandom from the Kotlin Standard library but optimizing some methods
-open class FastRandom private constructor(
+open class FastRandom (
     private var x: Int,
     private var y: Int,
     private var z: Int,

@@ -22,13 +22,13 @@ open class Json {
         else -> StringBuilder().apply { stringify(obj, this) }.toString()
     }
 
-    protected open val optimizeNumbers: Boolean = false
-    //protected open val optimizeNumbers: Boolean = true
-    protected open fun <T> createArrayList(capacity: Int = 16): MutableList<T> = ArrayList(capacity)
-    protected open fun createDoubleArrayList(doubles: MiniNumberArrayList): Any = doubles.toDoubleArray().toList()
-    //protected open fun createDoubleArrayList(doubles: MiniNumberArrayList): Any = doubles
+    open val optimizeNumbers: Boolean = false
+    //open val optimizeNumbers: Boolean = true
+    open fun <T> createArrayList(capacity: Int = 16): MutableList<T> = ArrayList(capacity)
+    open fun createDoubleArrayList(doubles: MiniNumberArrayList): Any = doubles.toDoubleArray().toList()
+    //open fun createDoubleArrayList(doubles: MiniNumberArrayList): Any = doubles
 
-    protected class MiniNumberArrayList : DoubleList {
+    class MiniNumberArrayList : DoubleList {
         override var size: Int = 0
             private set
 

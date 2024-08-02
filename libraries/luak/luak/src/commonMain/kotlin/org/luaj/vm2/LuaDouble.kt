@@ -62,7 +62,7 @@ import kotlin.jvm.*
  */
 class LuaDouble
 /** Don't allow ints to be boxed by DoubleValues   */
-private constructor(
+(
     /** The value being held by this instance.  */
     internal val v: Double
 ) : LuaNumber() {

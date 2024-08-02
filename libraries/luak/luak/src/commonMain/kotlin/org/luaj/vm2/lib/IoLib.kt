@@ -88,7 +88,7 @@ abstract class IoLib : TwoArgFunction() {
     @kotlin.jvm.JvmField internal var filemethods: LuaTable = LuaTable()
 
     @kotlin.jvm.JvmField
-    protected var globals: Globals? = null
+    var globals: Globals? = null
 
     abstract inner class File : LuaValue() {
 
@@ -149,7 +149,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException
      */
 
-    protected abstract fun wrapStdin(): File
+    abstract fun wrapStdin(): File
 
     /**
      * Wrap the standard output.
@@ -157,7 +157,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException
      */
 
-    protected abstract fun wrapStdout(): File
+    abstract fun wrapStdout(): File
 
     /**
      * Wrap the standard error output.
@@ -165,7 +165,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException
      */
 
-    protected abstract fun wrapStderr(): File
+    abstract fun wrapStderr(): File
 
     /**
      * Open a file in a particular mode.
@@ -178,7 +178,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException if could not be opened
      */
 
-    protected abstract fun openFile(
+    abstract fun openFile(
         filename: String?,
         readMode: Boolean,
         appendMode: Boolean,
@@ -192,7 +192,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException if could not be opened
      */
 
-    protected abstract fun tmpFile(): File
+    abstract fun tmpFile(): File
 
     /**
      * Start a new process and return a file for input or output
@@ -202,7 +202,7 @@ abstract class IoLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException if an i/o exception occurs
      */
 
-    protected abstract fun openProgram(prog: String?, mode: String?): File
+    abstract fun openProgram(prog: String?, mode: String?): File
 
     override fun call(modname: LuaValue, env: LuaValue): LuaValue {
         globals = env.checkglobals()

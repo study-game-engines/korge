@@ -19,7 +19,7 @@ import kotlin.time.*
  * LOG_LEVEL=debug
  * ```
  */
-class Logger private constructor(val name: String, val normalizedName: String, val dummy: Boolean) {
+class Logger (val name: String, val normalizedName: String, val dummy: Boolean) {
     var nativeLogger: Any? = null
 
     var optLevel: Level? = null

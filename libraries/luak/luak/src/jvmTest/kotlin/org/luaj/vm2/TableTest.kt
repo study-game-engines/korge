@@ -25,8 +25,8 @@ import java.util.*
 import kotlin.test.*
 
 open class TableTest {
-    protected open fun new_Table(): LuaTable = LuaTable()
-    protected open fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
+    open fun new_Table(): LuaTable = LuaTable()
+    open fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
     private fun keyCount(t: LuaTable): Int = keys(t).size
 
     private fun keys(t: LuaTable): Array<LuaValue> {

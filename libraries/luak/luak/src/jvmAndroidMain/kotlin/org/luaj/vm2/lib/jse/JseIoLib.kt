@@ -125,7 +125,7 @@ class JseIoLib : IoLib() {
     }
 
 
-    private inner class FileImpl private constructor(
+    private inner class FileImpl (
         private val file: RandomAccessFile?,
         `is`: LuaBinInput?,
         private val os: OutputStream?

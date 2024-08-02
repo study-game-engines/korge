@@ -26,7 +26,7 @@ open class AudioFormat(vararg exts: String) {
 	}
 
 	open suspend fun tryReadInfo(data: AsyncStream, props: AudioDecodingProps = AudioDecodingProps.DEFAULT): Info? = null
-	protected open suspend fun decodeStreamInternal(data: AsyncStream, props: AudioDecodingProps = AudioDecodingProps.DEFAULT): AudioStream? = null
+	open suspend fun decodeStreamInternal(data: AsyncStream, props: AudioDecodingProps = AudioDecodingProps.DEFAULT): AudioStream? = null
     suspend fun decodeStream(data: AsyncStream, props: AudioDecodingProps = AudioDecodingProps.DEFAULT): AudioStream? {
         return if (props.dispatcher != null) {
             withContext(props.dispatcher) { decodeStreamInternal(data, props) }

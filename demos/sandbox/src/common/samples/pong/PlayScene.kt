@@ -193,7 +193,7 @@ class PlayScene() : Scene() {
         keys {
             down {
                 when (it.key) {
-                    Key.ESCAPE -> sceneContainer.changeTo<MenuScene>()
+                    Key.ESCAPE -> sceneContainer.changeTo(MenuScene::class)
                     Key.SPACE -> playState = GameStates.Playing
                     else -> Unit
                 }

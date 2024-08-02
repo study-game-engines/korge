@@ -86,7 +86,7 @@ abstract class AG : AGFeatures, Extra by Extra.Mixin() {
         }
     }
 
-    protected open fun execute(command: AGCommand) = Unit
+    open fun execute(command: AGCommand) = Unit
 
     open fun clear(
         frameBuffer: AGFrameBufferBase,
@@ -124,7 +124,7 @@ abstract class AG : AGFeatures, Extra by Extra.Mixin() {
 
     open fun readToTexture(frameBuffer: AGFrameBufferBase, frameBufferInfo: AGFrameBufferInfo, texture: AGTexture, x: Int, y: Int, width: Int, height: Int): Unit = Unit
     open fun readToMemory(frameBuffer: AGFrameBufferBase, frameBufferInfo: AGFrameBufferInfo, x: Int, y: Int, width: Int, height: Int, data: Any, kind: AGReadKind): Unit = Unit
-    protected open fun readStats(out: AGStats) = Unit
+    open fun readStats(out: AGStats) = Unit
 
     private val stats = AGStats()
     fun getStats(out: AGStats = stats): AGStats = out.also { readStats(it) }

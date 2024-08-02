@@ -72,8 +72,8 @@ interface BaseList<T> : List<T> {
 }
 
 open class BaseSubList<T>(val list: List<T>, start: Int, end: Int) : BaseList<T> {
-    var start: Int = start ; protected set
-    var end: Int = end ; protected set
+    var start: Int = start ; set
+    var end: Int = end ; set
     override val size: Int get() = end - start
     fun checkIndex(index: Int): Int {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException()

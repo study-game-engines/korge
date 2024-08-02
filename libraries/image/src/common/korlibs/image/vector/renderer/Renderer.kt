@@ -21,8 +21,8 @@ abstract class Renderer {
     }
 
     private var bufferingLevel = 0
-    protected open fun isBuffering() = bufferingLevel > 0
-    protected open fun flush() = Unit
+    open fun isBuffering() = bufferingLevel > 0
+    open fun flush() = Unit
     fun bufferingStart() = bufferingLevel++
     fun bufferingEnd() {
         bufferingLevel--
@@ -39,7 +39,7 @@ abstract class Renderer {
         renderFinal(rstate, fill, winding)
     }
 
-    protected open fun renderFinal(state: Context2d.State, fill: Boolean, winding: Winding? = null): Unit = Unit
+    open fun renderFinal(state: Context2d.State, fill: Boolean, winding: Winding? = null): Unit = Unit
 
     open fun Paint.isPaintSupported(): Boolean = when {
         //this is GradientPaint -> false // For debugging gradients in other targets ie. CG and GDI+

@@ -26,7 +26,7 @@ import java.io.*
 
 /** Analog of Process that pipes input and output to client-specified streams.
  */
-class JseProcess private constructor(
+class JseProcess (
     internal val process: Process,
     stdin: LuaBinInput?,
     stdout: OutputStream?,

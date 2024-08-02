@@ -1,6 +1,6 @@
 package korlibs.datastructure
 
-class FloatMap<T> private constructor(private var nbits: Int, private val loadFactor: Double) {
+class FloatMap<T> (private var nbits: Int, private val loadFactor: Double) {
     constructor(loadFactor: Double = 0.75) : this(4, loadFactor)
     companion object {
         @PublishedApi
@@ -47,7 +47,7 @@ class FloatMap<T> private constructor(private var nbits: Int, private val loadFa
     override fun hashCode(): Int = this.map.hashCode()
 }
 
-class FloatFloatMap private constructor(private var nbits: Int, private val loadFactor: Double) {
+class FloatFloatMap (private var nbits: Int, private val loadFactor: Double) {
     constructor(loadFactor: Double = 0.75) : this(4, loadFactor)
     companion object {
         @PublishedApi
@@ -93,7 +93,7 @@ class FloatFloatMap private constructor(private var nbits: Int, private val load
     override fun hashCode(): Int = this.map.hashCode()
 }
 
-class IntFloatMap private constructor(private var nbits: Int, private val loadFactor: Double) {
+class IntFloatMap (private var nbits: Int, private val loadFactor: Double) {
     constructor(loadFactor: Double = 0.75) : this(4, loadFactor)
     companion object {
         @PublishedApi
@@ -140,7 +140,7 @@ class IntFloatMap private constructor(private var nbits: Int, private val loadFa
     override fun hashCode(): Int = this.map.hashCode()
 }
 
-class FloatIntMap private constructor(private var nbits: Int, private val loadFactor: Double) {
+class FloatIntMap (private var nbits: Int, private val loadFactor: Double) {
     constructor(loadFactor: Double = 0.75) : this(4, loadFactor)
     companion object {
         @PublishedApi

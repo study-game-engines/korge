@@ -316,12 +316,12 @@ open class Globals(
     /* Abstract base class to provide basic buffered input storage and delivery.
 	 * This class may be moved to its own package in the future.
 	 */
-    internal abstract class AbstractBufferedStream protected constructor(buflen: Int) : LuaBinInput() {
-        protected var b: ByteArray = ByteArray(buflen)
-        protected var i = 0
-        protected var j = 0
+    internal abstract class AbstractBufferedStream constructor(buflen: Int) : LuaBinInput() {
+        var b: ByteArray = ByteArray(buflen)
+        var i = 0
+        var j = 0
 
-        protected abstract fun avail(): Int
+        abstract fun avail(): Int
         override fun read(): Int = avail().let { a -> if (a <= 0) -1 else 0xff and b[i++].toInt() and 0xFF }
         override fun read(b: ByteArray, off: Int, len: Int): Int {
             val a = avail()

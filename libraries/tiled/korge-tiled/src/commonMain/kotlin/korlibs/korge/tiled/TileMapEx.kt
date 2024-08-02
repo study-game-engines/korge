@@ -129,7 +129,7 @@ abstract class BaseTileMapEx(
     var repeatX = TileMapRepeatEx.NONE
     var repeatY = TileMapRepeatEx.NONE
 
-    protected var contentVersion = 0
+    var contentVersion = 0
     private var cachedContentVersion = 0
 
     // @TODO: Use a TextureVertexBuffer or something

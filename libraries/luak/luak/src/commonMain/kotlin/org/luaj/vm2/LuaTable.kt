@@ -78,16 +78,16 @@ import kotlin.math.*
 open class LuaTable : LuaValue, Metatable {
 
     /** the array values  */
-    protected var array: Array<LuaValue?> = LuaValue.NOVALS
+    var array: Array<LuaValue?> = LuaValue.NOVALS
 
     /** the hash part  */
-    protected var hash: Array<Slot?> = NOBUCKETS
+    var hash: Array<Slot?> = NOBUCKETS
 
     /** the number of hash entries  */
     var hashEntries: Int = 0
 
     /** metatable for this table, or null  */
-    protected var m_metatable: Metatable? = null
+    var m_metatable: Metatable? = null
 
     /**
      * Get the length of the array part of the table.
@@ -242,7 +242,7 @@ open class LuaTable : LuaValue, Metatable {
         return hashget(key)
     }
 
-    protected fun hashget(key: LuaValue): LuaValue {
+    fun hashget(key: LuaValue): LuaValue {
         if (hashEntries > 0) {
             var slot: Slot? = hash[hashSlot(key)]
             while (slot != null) {
@@ -1350,7 +1350,7 @@ open class LuaTable : LuaValue, Metatable {
             return lg
         }
 
-        protected fun isLargeKey(key: LuaValue): Boolean {
+        fun isLargeKey(key: LuaValue): Boolean {
             when (key.type()) {
                 LuaValue.TSTRING -> return key.rawlen() > LuaString.RECENT_STRINGS_MAX_LENGTH
                 LuaValue.TNUMBER, LuaValue.TBOOLEAN -> return false

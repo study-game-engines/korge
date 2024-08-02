@@ -42,8 +42,8 @@ abstract class Bitmap(
     //override fun getOrNull() = this
     //override suspend fun get() = this
 
-    protected val tempInts: IntArray by lazy { IntArray(width * 2) }
-    protected val tempRgba: RgbaArray get() = RgbaArray(tempInts)
+    val tempInts: IntArray by lazy { IntArray(width * 2) }
+    val tempRgba: RgbaArray get() = RgbaArray(tempInts)
 
     /** Version of the content. lock+unlock mutates this version to allow for example to re-upload the bitmap to the GPU when synchronizing bitmaps into textures */
     var contentVersion: Int = 0

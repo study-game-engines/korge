@@ -28,7 +28,7 @@ class AGOpengl(val gl: KmlGl, var context: KmlGlContext? = null) : AG() {
 
     override val parentFeatures: AGFeatures get() = gl
 
-    protected val glGlobalState = GLGlobalState(gl, this)
+    val glGlobalState = GLGlobalState(gl, this)
 
     //val queue = Deque<(gl: GL) -> Unit>()
 

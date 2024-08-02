@@ -43,7 +43,7 @@ abstract class Hasher(val chunkSize: Int, val digestSize: Int, val name: String)
 
     private val chunk = ByteArray(chunkSize)
     private var writtenInChunk = 0
-    protected var totalWritten = 0L
+    var totalWritten = 0L
 
     open fun reset(): Hasher {
         coreReset()
@@ -86,10 +86,10 @@ abstract class Hasher(val chunkSize: Int, val digestSize: Int, val name: String)
         coreReset()
     }
 
-    protected abstract fun coreReset()
-    protected abstract fun corePadding(totalWritten: Long): ByteArray
-    protected abstract fun coreUpdate(chunk: ByteArray)
-    protected abstract fun coreDigest(out: ByteArray)
+    abstract fun coreReset()
+    abstract fun corePadding(totalWritten: Long): ByteArray
+    abstract fun coreUpdate(chunk: ByteArray)
+    abstract fun coreDigest(out: ByteArray)
 
     fun update(data: ByteArray) = update(data, 0, data.size)
     fun digest(): Hash = Hash(ByteArray(digestSize).also { digestOut(it) })

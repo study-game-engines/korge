@@ -81,12 +81,12 @@ open class UIOldScrollBar(
             current = value.clamped * (totalSize - pageSize)
         }
 
-    protected val background = solidRect(100, 100, styles.buttonBackColor)
-    protected val upButton = uiButton(size = Size(16, 16))
-    protected val downButton = uiButton(size = Size(16, 16))
-    protected val thumb = uiButton(size = Size(16, 16))
+    val background = solidRect(100, 100, styles.buttonBackColor)
+    val upButton = uiButton(size = Size(16, 16))
+    val downButton = uiButton(size = Size(16, 16))
+    val thumb = uiButton(size = Size(16, 16))
 
-    protected val views get() = stage?.views
+    val views get() = stage?.views
 
     override fun renderInternal(ctx: RenderContext) {
         background.color = styles.buttonBackColor
@@ -128,11 +128,11 @@ open class UIOldScrollBar(
         }
     }
 
-    protected fun changeCurrent(value: Double) {
+    fun changeCurrent(value: Double) {
         current = (current + value).clamp(0.0, totalSize - pageSize)
     }
 
-    protected fun reshape() {
+    fun reshape() {
         if (isHorizontal) {
             background.position(buttonWidth, 0.0).size(trackWidth, trackHeight)
             upButton.position(0, 0).size(buttonWidth, buttonHeight)
@@ -145,7 +145,7 @@ open class UIOldScrollBar(
         updatePosition()
     }
 
-    protected fun updatePosition() {
+    fun updatePosition() {
         if (isHorizontal) {
             val thumbWidth = (trackWidth * (pageSize / totalSize)).clamp(4.0, trackWidth)
             thumb.position(buttonWidth + (trackWidth - thumbWidth) * ratio, 0.0).size(thumbWidth, trackHeight)

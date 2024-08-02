@@ -33,7 +33,7 @@ class LoadingScene() : Scene() {
         Resources(views).loadAll()
 
         splash.await()
-        sceneContainer.changeTo<GameScene>()
+        sceneContainer.changeTo(GameScene::class)
     }
 
     suspend fun Container.splash() {

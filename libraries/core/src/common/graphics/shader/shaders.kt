@@ -1122,7 +1122,7 @@ open class ProgramLayout<TVariable : VariableWithOffset>(
     /** Size in bytes for each vertex */
 	val totalSize: Int = layoutSize ?: _lastPos.nextAlignedTo(maxAlignment)
 
-    protected fun names(): String = items.joinToString(", ") { it.name }
+    fun names(): String = items.joinToString(", ") { it.name }
 	override fun toString(): String = "${this::class.portableSimpleName}[${names()}, fixedLocation=$fixedLocation]"
 }
 

@@ -1,13 +1,31 @@
+import korlibs.event.Key
+import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.font.BitmapFont
 import korlibs.image.font.readBitmapFont
+import korlibs.image.format.readBitmap
+import korlibs.image.text.TextAlignment
+import korlibs.io.async.ObservableProperty
+import korlibs.io.async.launchImmediately
 import korlibs.io.file.std.resourcesVfs
 import korlibs.korge.Korge
-import korlibs.korge.view.views
+import korlibs.korge.animate.Animator
+import korlibs.korge.animate.tween
+import korlibs.korge.input.SwipeDirection
+import korlibs.korge.input.keys
+import korlibs.korge.input.onClick
+import korlibs.korge.input.onSwipe
+import korlibs.korge.service.storage.storage
+import korlibs.korge.view.*
+import korlibs.korge.view.align.*
+import korlibs.math.geom.RectCorners
+import korlibs.math.geom.Rectangle
+import korlibs.math.geom.Size
+import korlibs.math.interpolation.Easing
+import korlibs.time.seconds
 import kotlin.collections.set
 import kotlin.properties.*
 import kotlin.random.*
-import korlibs.io.async.ObservableProperty
 
 var cellSize: Double = 0.0
 var fieldSize: Double = 0.0
@@ -32,19 +50,11 @@ var freeId = 0
 var isAnimationRunning = false
 var isGameOver = false
 
-suspend fun main() = Korge (
-    width = 480,
-    height = 640,
+suspend fun main() = Korge(
+    windowSize = Size(480, 640),
+    virtualSize = Size(480, 640),
     title = "2048",
     bgcolor = RGBA(253, 247, 240),
-    /**
-        `gameId` is associated with the location of storage, which contains `history` and `best`.
-        see [Views.realSettingsFolder]
-     */
-    /**
-        `gameId` is associated with the location of storage, which contains `history` and `best`.
-        see [Views.realSettingsFolder]
-     */
     gameId = "io.github.rezmike.game2048",
 ) {
     font = resourcesVfs["clear_sans.fnt"].readBitmapFont()
@@ -67,7 +77,7 @@ suspend fun main() = Korge (
     leftIndent = (views.virtualWidth - fieldSize) / 2
     topIndent = 150.0
 
-    val bgField = roundRect(fieldSize, fieldSize, 5.0, fill = Colors["#b9aea0"]) {
+    val bgField = roundRect(Size(fieldSize, fieldSize), RectCorners(5.0), fill = Colors["#b9aea0"]) {
         position(leftIndent, topIndent)
     }
     graphics {
@@ -81,12 +91,12 @@ suspend fun main() = Korge (
         }
     }
 
-    val bgLogo = roundRect(cellSize, cellSize, 5.0, fill = RGBA(237, 196, 3)) {
+    val bgLogo = roundRect(Size(fieldSize, fieldSize), RectCorners(5.0), fill = RGBA(237, 196, 3)) {
         position(leftIndent, 30.0)
     }
     text("2048", cellSize * 0.5, Colors.WHITE, font).centerOn(bgLogo)
 
-    val bgBest = roundRect(cellSize * 1.5, cellSize * 0.8, 5.0, fill = Colors["#bbae9e"]) {
+    val bgBest = roundRect(Size(1.5 * fieldSize, 0.8 * fieldSize), RectCorners(5.0), fill = Colors["#bbae9e"]) {
         alignRightToRightOf(bgField)
         alignTopToTopOf(bgLogo)
     }
@@ -104,7 +114,7 @@ suspend fun main() = Korge (
         }
     }
 
-    val bgScore = roundRect(cellSize * 1.5, cellSize * 0.8, 5.0, fill = Colors["#bbae9e"]) {
+    val bgScore = roundRect(Size(1.5 * fieldSize, 0.8 * fieldSize), RectCorners(5.0), fill = Colors["#bbae9e"]) {
         alignRightToLeftOf(bgBest, 24.0)
         alignTopToTopOf(bgBest)
     }
@@ -126,7 +136,7 @@ suspend fun main() = Korge (
     val restartImg = resourcesVfs["restart.png"].readBitmap()
     val undoImg = resourcesVfs["undo.png"].readBitmap()
     val restartBlock = container {
-        val background = roundRect(btnSize, btnSize, 5.0, fill = RGBA(185, 174, 160))
+        val background = roundRect(Size(btnSize, btnSize), RectCorners(5.0), fill = RGBA(185, 174, 160))
         image(restartImg) {
             size(btnSize * 0.8, btnSize * 0.8)
             centerOn(background)
@@ -138,7 +148,7 @@ suspend fun main() = Korge (
         }
     }
     val undoBlock = container {
-        val background = roundRect(btnSize, btnSize, 5.0, fill = RGBA(185, 174, 160))
+        val background = roundRect(Size(btnSize, btnSize), RectCorners(5.0), fill = RGBA(185, 174, 160))
         image(undoImg) {
             size(btnSize * 0.6, btnSize * 0.6)
             centerOn(background)

@@ -1,5 +1,7 @@
-artifact "korge:steroids"
+artifact "korge:sandbox"
 
 source {
     include project(":korge:engine")
 }
+
+example("launcher", title: "Sandbox")

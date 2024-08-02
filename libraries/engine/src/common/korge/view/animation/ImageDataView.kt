@@ -57,7 +57,7 @@ open class ImageDataView(
     smoothing: Boolean = true,
 ) : Container(), PixelAnchorable, Anchorable {
     // Here we can create repeated in korge-parallax if required
-    protected open fun createAnimationView(): ImageAnimationView<out SmoothedBmpSlice> {
+    open fun createAnimationView(): ImageAnimationView<out SmoothedBmpSlice> {
         return imageAnimationView()
     }
 

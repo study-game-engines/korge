@@ -76,13 +76,13 @@ open class Bone(pool: SingleObjectPool<out Bone>) :  TransformObject(pool) {
 	 * @internal
 	 */
 	var _childrenTransformDirty: Boolean = false
-	protected var _localDirty: Boolean = true
+	var _localDirty: Boolean = true
 	/**
 	 * @internal
 	 */
 	var _hasConstraint: Boolean = false
-	protected var _visible: Boolean = true
-	protected var _cachedFrameIndex: Int = -1
+	var _visible: Boolean = true
+	var _cachedFrameIndex: Int = -1
 	/**
 	 * @internal
 	 */
@@ -90,7 +90,7 @@ open class Bone(pool: SingleObjectPool<out Bone>) :  TransformObject(pool) {
 	/**
 	 * @private
 	 */
-	protected var _parent: Bone? = null
+	var _parent: Bone? = null
 	/**
 	 * @internal
 	 */
@@ -113,7 +113,7 @@ open class Bone(pool: SingleObjectPool<out Bone>) :  TransformObject(pool) {
 		this._cachedFrameIndices = null
 	}
 
-	protected open fun _updateGlobalTransformMatrix(isCache: Boolean) {
+	open fun _updateGlobalTransformMatrix(isCache: Boolean) {
 		// For typescript.
 		val boneData = this._boneData
 		val global = this.global

@@ -9,8 +9,8 @@ abstract class FastRoundRectBase(
     cornersRatio: RectCorners = RectCorners(.0f, .0f, .0f, .0f),
     doScale: Boolean = true
 ) : ShadedView(PROGRAM, size) {
-    protected var cornersRatio = cornersRatio
-    protected var doScale = doScale
+    var cornersRatio = cornersRatio
+    var doScale = doScale
 
     override fun renderInternal(ctx: RenderContext) {
         //colorMul = Colors.RED

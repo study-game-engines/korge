@@ -37,7 +37,7 @@ data class TileSetTileInfo(
  *
  * Used along [TileMapData] to represent tiles.
  */
-class TileSet private constructor(
+class TileSet (
     val tilesMap: IntMap<TileSetTileInfo>,
 	//val textures: List<BmpSlice?>,
 

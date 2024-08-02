@@ -36,8 +36,8 @@ interface ITextRendererActions {
 }
 
 abstract class TextRendererActions : ITextRendererActions {
-    protected val glyphPath = GlyphPath()
-    protected val glyphMetrics = GlyphMetrics()
+    val glyphPath = GlyphPath()
+    val glyphMetrics = GlyphMetrics()
     val fontMetrics = FontMetrics()
     override val lineHeight: Double get() = fontMetrics.lineHeight
     override var currentLineNum: Int = 0

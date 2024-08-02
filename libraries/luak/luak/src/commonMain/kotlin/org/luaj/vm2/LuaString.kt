@@ -76,7 +76,7 @@ class LuaString
  * @param length length of the byte buffer
  * @return [LuaString] wrapping the byte buffer
  */
-private constructor(
+(
     /** The bytes for the string.  These ***must not be mutated directly*** because
      * the backing may be shared by multiple LuaStrings, and the hash code is
      * computed only at construction time.

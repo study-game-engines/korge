@@ -24,7 +24,7 @@ open class RectBase(
 	//abstract val width: Double
 	//abstract val height: Double
 
-    protected var baseBitmap: BitmapCoords = Bitmaps.white
+    var baseBitmap: BitmapCoords = Bitmaps.white
         set(v) {
             if (field !== v) {
                 field = v
@@ -35,19 +35,19 @@ open class RectBase(
 
 	override var anchor: Anchor = anchor; set(v) { if (field != v) { field = v; dirtyVertices = true; invalidateRender() } }
 
-    protected open val bwidth: Float get() = 0f
-	protected open val bheight: Float get() = 0f
+    open val bwidth: Float get() = 0f
+	open val bheight: Float get() = 0f
 
     override val anchorDispX: Float get() = (anchor.sx * bwidth).toFloat()
     override val anchorDispY: Float get() = (anchor.sy * bheight).toFloat()
 
-    protected open val sLeft: Float get() = -anchorDispX
-	protected open val sTop: Float get() = -anchorDispY
+    open val sLeft: Float get() = -anchorDispX
+	open val sTop: Float get() = -anchorDispY
 
 	val sRight: Float get() = sLeft + bwidth
 	val sBottom: Float get() = sTop + bheight
 
-    protected val vertices = TexturedVertexArray(4, TexturedVertexArray.QUAD_INDICES)
+    val vertices = TexturedVertexArray(4, TexturedVertexArray.QUAD_INDICES)
 
 	override fun renderInternal(ctx: RenderContext) {
 		if (!visible) return
@@ -71,7 +71,7 @@ open class RectBase(
     //        return _programUniforms!!
     //    }
 
-    protected open fun drawVertices(ctx: RenderContext) {
+    open fun drawVertices(ctx: RenderContext) {
         ctx.useBatcher { batch ->
             //batch.texture1212
             //batch.setTemporalUniforms(_programUniforms) {
@@ -84,7 +84,7 @@ open class RectBase(
         }
     }
 
-    protected open fun computeVertices() {
+    open fun computeVertices() {
         vertices.quad(0, sLeft, sTop, bwidth, bheight, globalMatrix, baseBitmap, renderColorMul)
     }
 

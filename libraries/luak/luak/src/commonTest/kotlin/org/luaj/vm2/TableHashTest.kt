@@ -7,8 +7,8 @@ import kotlin.test.*
  * Tests for tables used as lists.
  */
 class TableHashTest {
-    protected fun new_Table(): LuaTable = LuaTable()
-    protected fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
+    fun new_Table(): LuaTable = LuaTable()
+    fun new_Table(n: Int, m: Int): LuaTable = LuaTable(n, m)
 
     @Test
     fun testSetRemove() {

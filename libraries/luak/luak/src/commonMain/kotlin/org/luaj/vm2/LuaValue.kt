@@ -1046,7 +1046,7 @@ abstract class LuaValue : Varargs() {
      * @param expected String naming the type that was expected
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun argerror(expected: String): Nothing {
+    fun argerror(expected: String): Nothing {
         throw LuaError("bad argument: " + expected + " expected, got " + typename())
     }
 
@@ -1055,7 +1055,7 @@ abstract class LuaValue : Varargs() {
      * @param expected String naming the type that was expected
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun typerror(expected: String): Nothing {
+    fun typerror(expected: String): Nothing {
         throw LuaError("$expected expected, got ${typename()}")
     }
 
@@ -1063,7 +1063,7 @@ abstract class LuaValue : Varargs() {
      * Throw a [LuaError] indicating an operation is not implemented
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun unimplemented(`fun`: String): Nothing {
+    fun unimplemented(`fun`: String): Nothing {
         throw LuaError("'$`fun`' not implemented for ${typename()}")
     }
 
@@ -1072,7 +1072,7 @@ abstract class LuaValue : Varargs() {
      * typically involved in managing weak references
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun illegal(op: String, typename: String): Nothing {
+    fun illegal(op: String, typename: String): Nothing {
         throw LuaError("illegal operation '$op' for $typename")
     }
 
@@ -1081,7 +1081,7 @@ abstract class LuaValue : Varargs() {
      * typically due to an invalid operand type
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun lenerror(): Nothing {
+    fun lenerror(): Nothing {
         throw LuaError("attempt to get length of " + typename())
     }
 
@@ -1090,7 +1090,7 @@ abstract class LuaValue : Varargs() {
      * typically due to an invalid operand type
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun aritherror(): Nothing {
+    fun aritherror(): Nothing {
         throw LuaError("attempt to perform arithmetic on " + typename())
     }
 
@@ -1100,7 +1100,7 @@ abstract class LuaValue : Varargs() {
      * @param fun String description of the function that was attempted
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun aritherror(`fun`: String): Nothing {
+    fun aritherror(`fun`: String): Nothing {
         throw LuaError("attempt to perform arithmetic '" + `fun` + "' on " + typename())
     }
 
@@ -1110,7 +1110,7 @@ abstract class LuaValue : Varargs() {
      * @param rhs String description of what was on the right-hand-side of the comparison that resulted in the error.
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun compareerror(rhs: String): Nothing {
+    fun compareerror(rhs: String): Nothing {
         throw LuaError("attempt to compare " + typename() + " with " + rhs)
     }
 
@@ -1120,7 +1120,7 @@ abstract class LuaValue : Varargs() {
      * @param rhs Right-hand-side of the comparison that resulted in the error.
      * @com.soywiz.luak.compat.java.Throws LuaError in all cases
      */
-    protected fun compareerror(rhs: LuaValue): Nothing {
+    fun compareerror(rhs: LuaValue): Nothing {
         throw LuaError("attempt to compare " + typename() + " with " + rhs.typename())
     }
 
@@ -2224,7 +2224,7 @@ abstract class LuaValue : Varargs() {
      * @return [LuaValue] value if metatag is defined
      * @com.soywiz.luak.compat.java.Throws LuaError if [.CALL] metatag is not defined.
      */
-    protected fun callmt(): LuaValue {
+    fun callmt(): LuaValue {
         return checkmetatag(CALL, "attempt to call ")
     }
 
@@ -2852,7 +2852,7 @@ abstract class LuaValue : Varargs() {
      *
      * @see .MOD
      */
-    protected fun arithmt(tag: LuaValue, op2: LuaValue): LuaValue {
+    fun arithmt(tag: LuaValue, op2: LuaValue): LuaValue {
         var h = this.metatag(tag)
         if (h.isnil()) {
             h = op2.metatag(tag)
@@ -2889,7 +2889,7 @@ abstract class LuaValue : Varargs() {
      *
      * @see .MOD
      */
-    protected fun arithmtwith(tag: LuaValue, op1: Double): LuaValue {
+    fun arithmtwith(tag: LuaValue, op1: Double): LuaValue {
         val h = metatag(tag)
         if (h.isnil())
             error("attempt to perform arithmetic " + tag + " on number and " + typename())
@@ -3617,7 +3617,7 @@ abstract class LuaValue : Varargs() {
      * @return [LuaValue] that can be called
      * @com.soywiz.luak.compat.java.Throws LuaError when the lookup fails.
      */
-    protected fun checkmetatag(tag: LuaValue, reason: String): LuaValue {
+    fun checkmetatag(tag: LuaValue, reason: String): LuaValue {
         val h = this.metatag(tag)
         if (h.isnil())
             throw LuaError(reason + typename())
@@ -4077,7 +4077,7 @@ abstract class LuaValue : Varargs() {
          */
         /** get value from metatable operations, or NIL if not defined by metatables  */
         @JvmStatic
-         protected fun gettable(t: LuaValue, key: LuaValue): LuaValue {
+         fun gettable(t: LuaValue, key: LuaValue): LuaValue {
             var t = t
             lateinit var tm: LuaValue
             var loop = 0
@@ -4128,7 +4128,7 @@ abstract class LuaValue : Varargs() {
 
         /** Construct a Metatable instance from the given LuaValue  */
         @JvmStatic
-         protected fun metatableOf(mt: LuaValue?): Metatable? {
+         fun metatableOf(mt: LuaValue?): Metatable? {
             if (mt != null && mt.istable()) {
                 val mode = mt.rawget(MODE)
                 if (mode.isstring()) {

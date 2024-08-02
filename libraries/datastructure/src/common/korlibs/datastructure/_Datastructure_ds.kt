@@ -1191,7 +1191,7 @@ import kotlin.math.*
 // Other BVH implementation: https://github.com/imbcmdth/jsBVH/blob/master/src/jsbvh.js
 
 /** Binary Volume Hierarchy */
-class CSBVH<GO> private constructor(
+class CSBVH<GO> (
     dummy: Boolean,
     val nAda: NodeAdaptor<GO>,
     val LEAF_OBJ_MAX: Int = 1,
@@ -1323,7 +1323,7 @@ class CSBVH<GO> private constructor(
 
         internal constructor(bvh: CSBVH<GO>, gobjectlist: FastArrayList<GO>) : this (bvh,null, gobjectlist, Axis.X,0)
 
-        private constructor(bvh: CSBVH<GO>, lparent: BVHNode<GO>?, gobjectlist: FastArrayList<GO>, lastSplitAxis: Axis, curdepth: Int) : this(bvh) {
+        (bvh: CSBVH<GO>, lparent: BVHNode<GO>?, gobjectlist: FastArrayList<GO>, lastSplitAxis: Axis, curdepth: Int) : this(bvh) {
             this.nodeNumber = bvh.nodeCount++
 
             this.parent = lparent // save off the parent BVHGObj Node

@@ -17,7 +17,7 @@ import kotlinx.coroutines.async
 abstract class Vfs : AsyncCloseable {
 	open suspend fun isCaseSensitive(path: String): Boolean = true
 
-	protected open val absolutePath: String get() = ""
+	open val absolutePath: String get() = ""
 
 	open fun getAbsolutePath(path: String) = absolutePath.pathInfo.lightCombine(path.pathInfo).fullPath
 
@@ -52,7 +52,7 @@ abstract class Vfs : AsyncCloseable {
         exception = exception
 	)
 
-    protected suspend fun checkExecFolder(path: String, cmdAndArgs: List<String>) {
+    suspend fun checkExecFolder(path: String, cmdAndArgs: List<String>) {
         val stat = stat(path)
         //println("stat=$stat")
         if (!stat.isDirectory) {
@@ -60,7 +60,7 @@ abstract class Vfs : AsyncCloseable {
         }
     }
 
-	protected open fun getDefaultEnvironments(): Map<String, String> = emptyMap() // = Environment.getAll()
+	open fun getDefaultEnvironments(): Map<String, String> = emptyMap() // = Environment.getAll()
 
 	open suspend fun exec(
 		path: String,
@@ -213,19 +213,19 @@ abstract class Vfs : AsyncCloseable {
 
 	abstract class Proxy : Vfs() {
 		//private val logger = Logger("Vfs.Proxy")
-		protected abstract suspend fun access(path: String): VfsFile
-		protected open suspend fun VfsFile.transform(): VfsFile = file(this.path)
-		//suspend protected fun transform2_f(f: VfsFile): VfsFile = transform(f)
+		abstract suspend fun access(path: String): VfsFile
+		open suspend fun VfsFile.transform(): VfsFile = file(this.path)
+		//suspend fun transform2_f(f: VfsFile): VfsFile = transform(f)
 
 		override suspend fun isCaseSensitive(path: String): Boolean = access(path).isCaseSensitive()
 
 		final override suspend fun getUnderlyingUnscapedFile(path: String): FinalVfsFile = initOnce().access(path).getUnderlyingUnscapedFile()
 
-		protected open suspend fun init() {
+		open suspend fun init() {
 		}
 
         private var initialized: Deferred<Unit>? = null
-		protected suspend fun initOnce(): Proxy {
+		suspend fun initOnce(): Proxy {
 			if (initialized == null) {
                 initialized = CoroutineScope(coroutineContext + SupervisorJob() + CoroutineName("Initializing.$this")).async {
                     try {

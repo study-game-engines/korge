@@ -1,4 +1,5 @@
-import com.soywiz.kds.*
+import korlibs.datastructure.IntArray2
+import korlibs.datastructure.each
 import kotlin.random.*
 
 class Position(val x: Int, val y: Int)

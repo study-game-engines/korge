@@ -16,7 +16,7 @@ import kotlin.properties.*
 
 class MainGraphicsText : Scene() {
     /** Property delegate to trigger a refresh on change */
-    protected fun <T> refreshable(initial: T, refresh: () -> Unit = { sceneContainer.changeToAsync(this::class) }) = Delegates.observable(initial) { prop, old, new -> refresh() }
+    fun <T> refreshable(initial: T, refresh: () -> Unit = { sceneContainer.changeToAsync(this::class) }) = Delegates.observable(initial) { prop, old, new -> refresh() }
 
     @ViewProperty
     @KeepOnReload var vfont: TtfFont by refreshable(DefaultTtfFont) { launchImmediately { this@MainGraphicsText.sceneView.sceneMainSync() } }

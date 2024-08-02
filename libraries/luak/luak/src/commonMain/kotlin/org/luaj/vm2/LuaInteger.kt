@@ -48,7 +48,7 @@ import kotlin.jvm.*
  */
 class LuaInteger
 /**
- * Package protected constructor.
+ * Package constructor.
  * @see LuaValue.valueOf
  */
 internal constructor(

@@ -269,7 +269,7 @@ open class Array2<TGen>(override val width: Int, override val height: Int, val d
 
 
 @Suppress("NOTHING_TO_INLINE", "RemoveExplicitTypeArguments")
-open class IntArray2(override val width: Int, override val height: Int, val data: IntArray) : IntIArray2 {
+data class IntArray2(override val width: Int, override val height: Int, val data: IntArray) : IntIArray2 {
     init {
         IArray2.checkArraySize(width, height, data.size)
     }

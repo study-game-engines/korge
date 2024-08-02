@@ -32,7 +32,7 @@ import java.io.*
  * Compiler for lua files to lua bytecode.
  */
 class luac @Throws(IOException::class)
-private constructor(args: Array<String>) {
+(args: Array<String>) {
 
     private var list = false
     private var output = "luac.out"

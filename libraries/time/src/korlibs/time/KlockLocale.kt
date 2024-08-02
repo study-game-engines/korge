@@ -67,7 +67,7 @@ abstract class KlockLocale {
 
 	open fun isWeekend(dayOfWeek: DayOfWeek): Boolean = dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday
 
-	protected fun format(str: String) = PatternDateFormat(str, this)
+	fun format(str: String) = PatternDateFormat(str, this)
 
 	open val formatDateTimeMedium get() = format("MMM d, y h:mm:ss a")
 	open val formatDateTimeShort get() = format("M/d/yy h:mm a")

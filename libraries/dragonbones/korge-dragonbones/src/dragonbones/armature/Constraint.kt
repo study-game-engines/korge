@@ -38,7 +38,7 @@ abstract class Constraint(pool: SingleObjectPool<out Constraint>) : BaseObject(p
 	 * @internal
 	 */
 	var _constraintData: ConstraintData? = null
-	protected lateinit var _armature: Armature
+	lateinit var _armature: Armature
 	/**
 	 * - For sort bones.
 	 * @internal
@@ -49,7 +49,7 @@ abstract class Constraint(pool: SingleObjectPool<out Constraint>) : BaseObject(p
 	 * @internal
 	 */
 	lateinit var _root: Bone
-	protected var _bone: Bone? = null
+	var _bone: Bone? = null
 
 	override fun _onClear() {
 		//this._armature = null //
@@ -277,7 +277,7 @@ class PathConstraint(pool: SingleObjectPool<PathConstraint>) :  Constraint(pool)
 		this._pathGlobalVertices = DoubleArray(0)
 	}
 
-	protected fun _updatePathVertices(verticesData: GeometryData) {
+	fun _updatePathVertices(verticesData: GeometryData) {
 		//计算曲线的节点数据
 		val armature = this._armature
 		val dragonBonesData = armature.armatureData.parent!!
@@ -348,7 +348,7 @@ class PathConstraint(pool: SingleObjectPool<PathConstraint>) :  Constraint(pool)
 		}
 	}
 
-	protected fun _computeVertices(start: Int, count: Int, offset: Int, out:  DoubleArrayList) {
+	fun _computeVertices(start: Int, count: Int, offset: Int, out:  DoubleArrayList) {
 		//TODO优化
 		var iW = start
 		for (i in offset until count step 2) {
@@ -357,7 +357,7 @@ class PathConstraint(pool: SingleObjectPool<PathConstraint>) :  Constraint(pool)
 		}
 	}
 
-	protected fun _computeBezierCurve(pathDisplayDta: PathDisplayData, spaceCount: Int, tangents: Boolean, percentPosition: Boolean, percentSpacing: Boolean) {
+	fun _computeBezierCurve(pathDisplayDta: PathDisplayData, spaceCount: Int, tangents: Boolean, percentPosition: Boolean, percentSpacing: Boolean) {
 		//计算当前的骨骼在曲线上的位置
 		val armature = this._armature
 		val intArray = armature.armatureData.parent!!.intArray!!

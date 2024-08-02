@@ -15,14 +15,14 @@ interface WithHitShape2D {
 }
 
 abstract class AbstractShape2D : Shape2D {
-    abstract protected val lazyVectorPath: VectorPath
+    abstract val lazyVectorPath: VectorPath
     override fun toVectorPath(): VectorPath = lazyVectorPath
 
     override fun distance(p: Point): Double = (p - projectedPoint(p)).length * insideSign(p)
     override fun normalVectorAt(p: Point): Vector2D = -projectedPointExt(p, normal = true)
     override fun projectedPoint(p: Point): Point = projectedPointExt(p, normal = false)
-    protected fun insideSign(p: Point): Double = if (containsPoint(p)) -1.0 else +1.0
-    protected fun projectedPointExt(p: Point, normal: Boolean): Point {
+    fun insideSign(p: Point): Double = if (containsPoint(p)) -1.0 else +1.0
+    fun projectedPointExt(p: Point, normal: Boolean): Point {
         var length = Double.POSITIVE_INFINITY
         var pp = Point()
         var n = Point()

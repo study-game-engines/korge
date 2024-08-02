@@ -3,7 +3,7 @@ package korlibs.datastructure
 /**
  * [Map] with [String] keys that are treated in a insensitive manner.
  */
-class CaseInsensitiveStringMap<T> private constructor(
+class CaseInsensitiveStringMap<T> (
     private val mapOrig: MutableMap<String, T>,
     private val lcToOrig: MutableMap<String, String>,
     private val mapLC: MutableMap<String, T>

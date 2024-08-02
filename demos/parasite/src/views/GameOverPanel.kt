@@ -46,7 +46,8 @@ class GameOverPanel(val sceneContainer: SceneContainer) : Container() {
                     if (mouseEnabled) {
                         mouseEnabled = false
                         scale -= 0.05
-                        sceneContainer.changeTo<LoadingProxyScene>(
+                        sceneContainer.changeTo(
+                                LoadingProxyScene::class,
                                 LoadingProxyScene.NextScreen(MainScene::class),
                                 time = .5.seconds
                         )

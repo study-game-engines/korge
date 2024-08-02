@@ -6,7 +6,7 @@ import kotlin.math.*
 /**
  * Rotations around Z axis, then X axis, then Y axis in that order.
  */
-inline class EulerRotation private constructor(val data: Vector4F) : IsAlmostEqualsF<EulerRotation> {
+inline class EulerRotation (val data: Vector4F) : IsAlmostEqualsF<EulerRotation> {
     val config: Config get() = Config(data.w.toInt())
     val order: Order get() = config.order
     val coordinateSystem: CoordinateSystem get() = config.coordinateSystem

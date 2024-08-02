@@ -103,7 +103,7 @@ class LuaThread : LuaValue {
     val isMainThread: Boolean
         get() = this.state.function == null
 
-    /** Private constructor for main thread only  */
+    /**  for main thread only  */
     constructor(globals: Globals) {
         state = State(globals, this, null)
         state.status = STATUS_RUNNING

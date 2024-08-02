@@ -145,8 +145,8 @@ abstract class BaseGraphics(
     var realImageScaleX = 1.0
     var realImageScaleY = 1.0
 
-    protected abstract fun drawShape(ctx: Context2d) // this@BaseGraphics.compoundShape.draw(this)
-    protected abstract fun getShapeBounds(includeStrokes: Boolean): Rectangle // shapes.fastForEach { it.addBounds(bb) }
+    abstract fun drawShape(ctx: Context2d) // this@BaseGraphics.compoundShape.draw(this)
+    abstract fun getShapeBounds(includeStrokes: Boolean): Rectangle // shapes.fastForEach { it.addBounds(bb) }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

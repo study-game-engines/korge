@@ -90,8 +90,8 @@ import org.luaj.vm2.io.*
  * @see Globals.load
  */
 class LoadState
-/** Private constructor for create a load state  */
-private constructor(
+/**  for create a load state  */
+(
     stream: LuaBinInput,
     /** Name of what is being loaded?  */
     internal var name: String

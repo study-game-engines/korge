@@ -41,7 +41,7 @@ open class CustomHashMap<K, V>(
     private fun getBucketOrNull(key: K): Bucket? = buckets.get(hasher(key))
 
     override var size: Int = 0
-        protected set
+        set
 
     override fun clear() {
         size = 0

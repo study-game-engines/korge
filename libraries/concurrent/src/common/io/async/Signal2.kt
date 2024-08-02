@@ -35,8 +35,8 @@ abstract class BaseSignal2<T1, T2>(val onRegister: () -> Unit = {}) {
         }
     }
 
-    protected var handlers = ArrayList<Node>()
-    protected var handlersToRemove = ArrayList<Node>()
+    var handlers = ArrayList<Node>()
+    var handlersToRemove = ArrayList<Node>()
     val listenerCount: Int get() = handlers.size
     fun clear() = handlers.clear()
 
@@ -45,14 +45,14 @@ abstract class BaseSignal2<T1, T2>(val onRegister: () -> Unit = {}) {
     //fun add(handler: THandler): AutoCloseable = _add(false, handler)
     //operator fun invoke(handler: THandler): AutoCloseable = add(handler)
 
-    protected fun _add(once: Boolean, handler: (T1, T2) -> Unit): AutoCloseable {
+    fun _add(once: Boolean, handler: (T1, T2) -> Unit): AutoCloseable {
         onRegister()
         val node = Node(once, handler)
         handlers.add(node)
         return node
     }
-    protected var iterating: Int = 0
-    protected inline fun iterateCallbacks(callback: ((T1, T2) -> Unit) -> Unit) {
+    var iterating: Int = 0
+    inline fun iterateCallbacks(callback: ((T1, T2) -> Unit) -> Unit) {
         try {
             iterating++
             handlers.fastIterateRemove { node ->

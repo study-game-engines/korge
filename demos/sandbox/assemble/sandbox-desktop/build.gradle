@@ -1,0 +1,5 @@
+artifact "korge:sandbox-desktop"
+
+source {
+    include project(":korge:sandbox")
+}

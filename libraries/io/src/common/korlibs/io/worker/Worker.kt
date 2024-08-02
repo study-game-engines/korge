@@ -53,7 +53,7 @@ open class WorkerTask {
         }
     internal var result: Any? = null
     private var runSuspend = false
-    protected fun runSuspend(block: suspend (params: List<Any?>) -> Any?) {
+    fun runSuspend(block: suspend (params: List<Any?>) -> Any?) {
         runSuspend = true
         try {
             if (gettingStackTrace) {

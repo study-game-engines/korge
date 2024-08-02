@@ -83,7 +83,7 @@ inline fun <T> IWASMLib.stackKeep(block: () -> T): T {
 
 abstract class BaseWASMLib(override val content: ByteArray) : IWASMLib {
     val loaded: Boolean get() = true
-    protected var _context: CoroutineContext? = null
+    var _context: CoroutineContext? = null
 
     override fun initOnce(context: CoroutineContext) {
         super.initOnce(context)

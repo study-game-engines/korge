@@ -1,12 +1,20 @@
 package korlibs.graphics
 
-import korlibs.datastructure.*
-import korlibs.datastructure.iterators.*
+import korlibs.datastructure.Extra
+import korlibs.datastructure.FastArrayList
+import korlibs.datastructure.fastArrayListOf
+import korlibs.datastructure.iterators.fastForEach
 import korlibs.graphics.shader.*
-import korlibs.image.color.*
-import korlibs.io.lang.*
-import korlibs.math.*
-import korlibs.math.geom.*
+import korlibs.image.color.RGBA
+import korlibs.image.color.RGBAf
+import korlibs.io.lang.unreachable
+import korlibs.math.geom.BoundsBuilder
+import korlibs.math.geom.Matrix
+import korlibs.math.geom.Point
+import korlibs.math.geom.Rectangle
+import korlibs.math.ilog2
+import korlibs.math.toIntRound
+import korlibs.math.toShortClamped
 import korlibs.memory.*
 
 inline class AGReadKind(val ordinal: Int) {
@@ -15,12 +23,14 @@ inline class AGReadKind(val ordinal: Int) {
         val DEPTH = AGReadKind(1)
         val STENCIL = AGReadKind(2)
     }
-    val size: Int get() = when (this) {
-        COLOR -> 4
-        DEPTH -> 4
-        STENCIL -> 1
-        else -> unreachable
-    }
+
+    val size: Int
+        get() = when (this) {
+            COLOR -> 4
+            DEPTH -> 4
+            STENCIL -> 1
+            else -> unreachable
+        }
 
     override fun toString(): String = when (this) {
         COLOR -> "COLOR"
@@ -39,13 +49,16 @@ inline class AGTextureTargetKind(val ordinal: Int) {
         EXTERNAL_TEXTURE -> "EXTERNAL_TEXTURE"
         else -> "AGTextureTargetKind($ordinal)"
     }
-    val dims: Int get() = when (this) {
-        TEXTURE_2D -> 2
-        TEXTURE_3D -> 3
-        TEXTURE_CUBE_MAP -> 3
-        EXTERNAL_TEXTURE -> 3
-        else -> 0
-    }
+
+    val dims: Int
+        get() = when (this) {
+            TEXTURE_2D -> 2
+            TEXTURE_3D -> 3
+            TEXTURE_CUBE_MAP -> 3
+            EXTERNAL_TEXTURE -> 3
+            else -> 0
+        }
+
     companion object {
         val TEXTURE_2D = AGTextureTargetKind(0)
         val TEXTURE_3D = AGTextureTargetKind(1)
@@ -84,12 +97,13 @@ inline class AGBlendEquation(val ordinal: Int) {
         else -> "-"
     }
 
-    val op: String get() = when (this) {
-        ADD -> "+"
-        SUBTRACT -> "-"
-        REVERSE_SUBTRACT -> "r-"
-        else -> unreachable
-    }
+    val op: String
+        get() = when (this) {
+            ADD -> "+"
+            SUBTRACT -> "-"
+            REVERSE_SUBTRACT -> "r-"
+            else -> unreachable
+        }
 
     fun apply(l: Float, r: Float): Float = when (this) {
         ADD -> l + r
@@ -135,19 +149,20 @@ inline class AGBlendFactor(val ordinal: Int) {
         else -> "-"
     }
 
-    val op: String get() = when (this) {
-        DESTINATION_ALPHA -> "dstA"
-        DESTINATION_COLOR -> "dstRGB"
-        ONE -> "1"
-        ONE_MINUS_DESTINATION_ALPHA -> "(1 - dstA)"
-        ONE_MINUS_DESTINATION_COLOR -> "(1 - dstRGB)"
-        ONE_MINUS_SOURCE_ALPHA -> "(1 - srcA)"
-        ONE_MINUS_SOURCE_COLOR -> "(1 - srcRGB)"
-        SOURCE_ALPHA -> "srcA"
-        SOURCE_COLOR -> "srcRGB"
-        ZERO -> "0"
-        else -> unreachable
-    }
+    val op: String
+        get() = when (this) {
+            DESTINATION_ALPHA -> "dstA"
+            DESTINATION_COLOR -> "dstRGB"
+            ONE -> "1"
+            ONE_MINUS_DESTINATION_ALPHA -> "(1 - dstA)"
+            ONE_MINUS_DESTINATION_COLOR -> "(1 - dstRGB)"
+            ONE_MINUS_SOURCE_ALPHA -> "(1 - srcA)"
+            ONE_MINUS_SOURCE_COLOR -> "(1 - srcRGB)"
+            SOURCE_ALPHA -> "srcA"
+            SOURCE_COLOR -> "srcRGB"
+            ZERO -> "0"
+            else -> unreachable
+        }
 
     fun get(srcC: Float, srcA: Float, dstC: Float, dstA: Float): Float = when (this) {
         DESTINATION_ALPHA -> dstA
@@ -191,7 +206,7 @@ inline class AGStencilOp(val ordinal: Int) {
 
 
 /** 2 bits required for encoding */
-inline class AGTriangleFace(val ordinal :Int) {
+inline class AGTriangleFace(val ordinal: Int) {
     companion object {
         val FRONT = AGTriangleFace(0)
         val BACK = AGTriangleFace(1)
@@ -314,13 +329,14 @@ inline class AGDrawType(val ordinal: Int) {
 
 /** Encoded in 2 bits */
 inline class AGIndexType(val ordinal: Int) {
-    val bytesSize: Int get() = when (this) {
-        NONE -> 0
-        UBYTE -> 1
-        USHORT -> 2
-        UINT -> 4
-        else -> -1
-    }
+    val bytesSize: Int
+        get() = when (this) {
+            NONE -> 0
+            UBYTE -> 1
+            USHORT -> 2
+            UINT -> 4
+            else -> -1
+        }
 
     companion object {
         val NONE = AGIndexType(0)
@@ -335,6 +351,7 @@ inline class AGIndexType(val ordinal: Int) {
             4 -> UINT
             else -> AGIndexType(-1)
         }
+
         operator fun get(kind: VarKind): AGIndexType = fromBytesSize(kind.bytesSize)
     }
 
@@ -515,11 +532,14 @@ inline class AGStencilReference(val data: Long) {
     val readMaskBack: Int get() = back.extract8(8)
     val writeMaskBack: Int get() = back.extract8(16)
 
-    fun withReferenceValue(referenceValue: Int, referenceValueBack: Int = referenceValue): AGStencilReference = AGStencilReference(front.insert8(referenceValue, 0), back.insert8(referenceValueBack, 0))
+    fun withReferenceValue(referenceValue: Int, referenceValueBack: Int = referenceValue): AGStencilReference =
+        AGStencilReference(front.insert8(referenceValue, 0), back.insert8(referenceValueBack, 0))
+
     fun withReadMask(readMask: Int, readMaskBack: Int = readMask): AGStencilReference = AGStencilReference(front.insert8(readMask, 8), back.insert8(readMaskBack, 8))
     fun withWriteMask(writeMask: Int, writeMaskBack: Int = writeMask): AGStencilReference = AGStencilReference(front.insert8(writeMask, 16), back.insert8(writeMaskBack, 16))
 
-    override fun toString(): String = "AGStencilReference(front=[referenceValue=$referenceValueFront, readMask=$readMaskFront, writeMask=$writeMaskFront], back=[referenceValue=$referenceValueBack, readMask=$readMaskBack, writeMask=$writeMaskBack])"
+    override fun toString(): String =
+        "AGStencilReference(front=[referenceValue=$referenceValueFront, readMask=$readMaskFront, writeMask=$writeMaskFront], back=[referenceValue=$referenceValueBack, readMask=$readMaskBack, writeMask=$writeMaskBack])"
 }
 
 // @TODO: We should have compare mode, actions, mask, reference, etc. for both FRONT and BACK separately
@@ -545,10 +565,17 @@ inline class AGStencilOpFunc(val data: Int) {
     val actionOnDepthPassStencilFailBack: AGStencilOp get() = AGStencilOp(data.extract3(21))
 
     fun withEnabled(enabled: Boolean): AGStencilOpFunc = AGStencilOpFunc(data.insert(enabled, 31))
-    fun withCompareMode(compareMode: AGCompareMode, compareModeBack: AGCompareMode = compareMode): AGStencilOpFunc = AGStencilOpFunc(data.insert3(compareMode.ordinal, 0).insert3(compareModeBack.ordinal, 12))
-    fun withActionOnBothPass(actionOnBothPass: AGStencilOp, actionOnBothPassBack: AGStencilOp = actionOnBothPass): AGStencilOpFunc = AGStencilOpFunc(data.insert3(actionOnBothPass.ordinal, 3).insert3(actionOnBothPassBack.ordinal, 15))
-    fun withActionOnDepthFail(actionOnDepthFail: AGStencilOp, actionOnDepthFailBack: AGStencilOp = actionOnDepthFail): AGStencilOpFunc = AGStencilOpFunc(data.insert3(actionOnDepthFail.ordinal, 6).insert3(actionOnDepthFailBack.ordinal, 18))
-    fun withActionOnDepthPassStencilFail(actionOnDepthPassStencilFail: AGStencilOp, actionOnDepthPassStencilFailBack: AGStencilOp = actionOnDepthPassStencilFail): AGStencilOpFunc = AGStencilOpFunc(data.insert3(actionOnDepthPassStencilFail.ordinal, 9).insert3(actionOnDepthPassStencilFailBack.ordinal, 21))
+    fun withCompareMode(compareMode: AGCompareMode, compareModeBack: AGCompareMode = compareMode): AGStencilOpFunc =
+        AGStencilOpFunc(data.insert3(compareMode.ordinal, 0).insert3(compareModeBack.ordinal, 12))
+
+    fun withActionOnBothPass(actionOnBothPass: AGStencilOp, actionOnBothPassBack: AGStencilOp = actionOnBothPass): AGStencilOpFunc =
+        AGStencilOpFunc(data.insert3(actionOnBothPass.ordinal, 3).insert3(actionOnBothPassBack.ordinal, 15))
+
+    fun withActionOnDepthFail(actionOnDepthFail: AGStencilOp, actionOnDepthFailBack: AGStencilOp = actionOnDepthFail): AGStencilOpFunc =
+        AGStencilOpFunc(data.insert3(actionOnDepthFail.ordinal, 6).insert3(actionOnDepthFailBack.ordinal, 18))
+
+    fun withActionOnDepthPassStencilFail(actionOnDepthPassStencilFail: AGStencilOp, actionOnDepthPassStencilFailBack: AGStencilOp = actionOnDepthPassStencilFail): AGStencilOpFunc =
+        AGStencilOpFunc(data.insert3(actionOnDepthPassStencilFail.ordinal, 9).insert3(actionOnDepthPassStencilFailBack.ordinal, 21))
 
     // Shortcut
     fun withAction(
@@ -558,7 +585,8 @@ inline class AGStencilOpFunc(val data: Int) {
         actionOnBothPassBack: AGStencilOp = actionOnBothPass,
         actionOnDepthFailBack: AGStencilOp = actionOnDepthFail,
         actionOnDepthPassStencilFailBack: AGStencilOp = actionOnDepthPassStencilFail,
-    ): AGStencilOpFunc = withActionOnBothPass(actionOnBothPass, actionOnBothPassBack).withActionOnDepthFail(actionOnDepthFail, actionOnDepthFailBack).withActionOnDepthPassStencilFail(actionOnDepthPassStencilFail, actionOnDepthPassStencilFailBack)
+    ): AGStencilOpFunc = withActionOnBothPass(actionOnBothPass, actionOnBothPassBack).withActionOnDepthFail(actionOnDepthFail, actionOnDepthFailBack)
+        .withActionOnDepthPassStencilFail(actionOnDepthPassStencilFail, actionOnDepthPassStencilFailBack)
 
     override fun toString(): String {
         if (!enabled) return "AGStencilOpFunc(enabled=false)"
@@ -580,12 +608,14 @@ fun Rectangle?.toAGScissor(): AGScissor {
     if (this == null) return AGScissor.NIL
     return AGScissor(x.toInt(), y.toInt(), width.toInt(), height.toInt())
 }
+
 operator fun BoundsBuilder.plus(scissor: AGScissor): BoundsBuilder =
     this + Point(scissor.left, scissor.top) + Point(scissor.right, scissor.bottom)
 
 inline class AGFrameBufferInfo(val dataLong: Long) {
     val data get() = dataLong.low
     val data2 get() = dataLong.high
+
     constructor(data: Int, data2: Int) : this(Long.fromLowHigh(data, data2))
 
     val width: Int get() = data.extract14(0)
@@ -597,7 +627,7 @@ inline class AGFrameBufferInfo(val dataLong: Long) {
     val hasStencil: Boolean get() = data.extractBool(29)
     private val samplesBits: Int get() = data.extract2(30)
     val samples: Int get() = 1 shl samplesBits
-    val hasStencilAndDepth: Boolean  get() = hasDepth && hasStencil
+    val hasStencilAndDepth: Boolean get() = hasDepth && hasStencil
 
     fun withXY(x: Int = this.x, y: Int = this.y): AGFrameBufferInfo = AGFrameBufferInfo(data, data2.insert14(x, 0).insert14(y, 14))
     fun withSize(width: Int = this.width, height: Int = this.height): AGFrameBufferInfo = AGFrameBufferInfo(data.insert14(width, 0).insert14(height, 14), data2)
@@ -620,13 +650,14 @@ inline class AGSize(val data: Int) {
     val height: Int get() = data.extract16(16)
 
     fun with(width: Int = this.width, height: Int = this.height): AGSize = AGSize(0.insert(width, 0, 16).insert(height, 16, 16))
+
     companion object {
         val INVALID: AGSize get() = AGSize(-2)
         operator fun invoke(width: Int, height: Int): AGSize = AGSize(0).with(width, height)
     }
 }
 
-data class AGScissor private constructor(
+data class AGScissor(
     val _left: Short,
     val _top: Short,
     val _right: Short,
@@ -716,6 +747,7 @@ fun AGScissor.applyMatrixBounds(m: Matrix): AGScissor {
 enum class AGBufferKind {
     INDEX,
     VERTEX,
+
     // Only if supported by the OpenGL implmenetation. In GLES it requires 3.0 or greater, or an extension
     UNIFORM
 }
@@ -755,7 +787,12 @@ data class AGVertexData(
     val buffer: AGBuffer = AGBuffer(),
     val baseOffset: Int = 0
 ) {
-    constructor(vararg attributes: Attribute, layoutSize: Int? = null, buffer: AGBuffer = AGBuffer(), baseOffset: Int = 0) : this(VertexLayout(*attributes, layoutSize = layoutSize), buffer = buffer, baseOffset = baseOffset)
+    constructor(vararg attributes: Attribute, layoutSize: Int? = null, buffer: AGBuffer = AGBuffer(), baseOffset: Int = 0) : this(
+        VertexLayout(
+            *attributes,
+            layoutSize = layoutSize
+        ), buffer = buffer, baseOffset = baseOffset
+    )
 }
 
 sealed interface AGCommand {
@@ -863,7 +900,27 @@ data class AGBatch(
     var instances: Int = 1
 ) : AGCommand {
     override fun execute(ag: AG) {
-        ag.draw(frameBuffer, frameBufferInfo, vertexData, program, drawType, vertexCount, indices, indexType, drawOffset, blending, uniformBlocks, textureUnits, stencilRef, stencilOpFunc, colorMask, depthAndFrontFace, scissor, cullFace, instances)
+        ag.draw(
+            frameBuffer,
+            frameBufferInfo,
+            vertexData,
+            program,
+            drawType,
+            vertexCount,
+            indices,
+            indexType,
+            drawOffset,
+            blending,
+            uniformBlocks,
+            textureUnits,
+            stencilRef,
+            stencilOpFunc,
+            colorMask,
+            depthAndFrontFace,
+            scissor,
+            cullFace,
+            instances
+        )
     }
 }
 

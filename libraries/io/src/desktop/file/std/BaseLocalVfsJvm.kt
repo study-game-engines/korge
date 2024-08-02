@@ -89,7 +89,7 @@ internal open class BaseLocalVfsJvm : LocalVfs() {
     override suspend fun rename(src: String, dst: String): Boolean =
         executeIo { resolveFileCaseSensitive(src).renameTo(resolveFile(dst)) }
 
-    protected open fun watchModifiers(path: String): Array<WatchEvent.Modifier> = emptyArray()
+    open fun watchModifiers(path: String): Array<WatchEvent.Modifier> = emptyArray()
 
     override suspend fun watch(path: String, handler: (FileEvent) -> Unit): AutoCloseable {
         var running = true
@@ -152,7 +152,7 @@ internal open class BaseLocalVfsJvm : LocalVfs() {
         }
     }
 
-    protected suspend fun <T> executeIo(callback: suspend () -> T): T = jvmExecuteIo(callback)
+    suspend fun <T> executeIo(callback: suspend () -> T): T = jvmExecuteIo(callback)
 
     companion object {
         suspend fun open(vfs: Vfs, file: File, mode: VfsOpenMode, path: String): AsyncStream {

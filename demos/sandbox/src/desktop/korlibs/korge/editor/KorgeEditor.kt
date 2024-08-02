@@ -1,3 +1,5 @@
+package korge.sandbox
+
 import kotlinx.coroutines.*
 
 object KorgeEditor {

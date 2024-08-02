@@ -14,7 +14,7 @@ import kotlin.jvm.*
 class SimpleCharStream
 /** Constructor.  */
 @JvmOverloads constructor(
-    protected var inputStream: LuaReader,
+    var inputStream: LuaReader,
     startline: Int = 1,
     startcolumn: Int = 1, buffersize: Int = 4096
 ) {
@@ -23,20 +23,20 @@ class SimpleCharStream
     internal var tokenBegin: Int = 0
     /** Position in buffer.  */
     var bufpos = -1
-    protected var bufline: IntArray? = null
-    protected var bufcolumn: IntArray? = null
+    var bufline: IntArray? = null
+    var bufcolumn: IntArray? = null
 
-    protected var column = 0
-    protected var line = 1
+    var column = 0
+    var line = 1
 
-    protected var prevCharIsCR = false
-    protected var prevCharIsLF = false
+    var prevCharIsCR = false
+    var prevCharIsLF = false
 
-    protected var buffer: CharArray? = null
-    protected var maxNextCharInd = 0
-    protected var inBuf = 0
+    var buffer: CharArray? = null
+    var maxNextCharInd = 0
+    var inBuf = 0
     @kotlin.jvm.JvmField
-    protected var tabSize = 1
+    var tabSize = 1
 
     /** Get token end column number.  */
     val endColumn: Int get() = bufcolumn!![bufpos]
@@ -57,7 +57,7 @@ class SimpleCharStream
     fun getTabSize(i: Int): Int = tabSize
 
 
-    protected fun ExpandBuff(wrapAround: Boolean) {
+    fun ExpandBuff(wrapAround: Boolean) {
         val newbuffer = CharArray(bufsize + 2048)
         val newbufline = IntArray(bufsize + 2048)
         val newbufcolumn = IntArray(bufsize + 2048)
@@ -100,7 +100,7 @@ class SimpleCharStream
     }
 
 
-    protected fun FillBuff() {
+    fun FillBuff() {
         if (maxNextCharInd == available) {
             when {
                 available == bufsize -> when {
@@ -148,7 +148,7 @@ class SimpleCharStream
         return c
     }
 
-    protected fun UpdateLineColumn(c: Char) {
+    fun UpdateLineColumn(c: Char) {
         column++
 
         if (prevCharIsLF) {

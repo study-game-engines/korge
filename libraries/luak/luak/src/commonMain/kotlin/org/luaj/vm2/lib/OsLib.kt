@@ -89,7 +89,7 @@ import kotlin.time.*
  */
 open class OsLib : TwoArgFunction() {
 
-    @kotlin.jvm.JvmField protected var globals: Globals? = null
+    @kotlin.jvm.JvmField var globals: Globals? = null
 
     /** Perform one-time initialization on the library by creating a table
      * containing the library functions, adding that table to the supplied environment,
@@ -178,7 +178,7 @@ open class OsLib : TwoArgFunction() {
      * OsLib class was loaded.
      */
     @OptIn(ExperimentalTime::class)
-    protected fun clock(): Double {
+    fun clock(): Double {
         return clockMark.elapsedNow().inWholeMicroseconds.toDouble() / 1_000_000.0
         //return (JSystem.currentTimeMillis() - t0) / 1000.0
     }
@@ -190,7 +190,7 @@ open class OsLib : TwoArgFunction() {
      * @param t1
      * @return diffeence in time values, in seconds
      */
-    protected fun difftime(t2: Double, t1: Double): Double {
+    fun difftime(t2: Double, t1: Double): Double {
         return t2 - t1
     }
 
@@ -322,7 +322,7 @@ open class OsLib : TwoArgFunction() {
      * is available and zero otherwise.
      * @param command command to pass to the system
      */
-    protected open fun execute(command: String?): Varargs {
+    open fun execute(command: String?): Varargs {
         return LuaValue.varargsOf(LuaValue.NIL, LuaValue.valueOf("exit"), LuaValue.ONE)
     }
 
@@ -330,7 +330,7 @@ open class OsLib : TwoArgFunction() {
      * Calls the C function exit, with an optional code, to terminate the host program.
      * @param code
      */
-    protected fun exit(code: Int) {
+    fun exit(code: Int) {
         JSystem.exit(code)
     }
 
@@ -351,7 +351,7 @@ open class OsLib : TwoArgFunction() {
      * @param varname
      * @return String value, or null if not defined
      */
-    protected open fun getenv(varname: String?): String? {
+    open fun getenv(varname: String?): String? {
         return JSystem.getProperty(varname!!)
     }
 
@@ -364,7 +364,7 @@ open class OsLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException if it fails
      */
 
-    protected open fun remove(filename: String?) {
+    open fun remove(filename: String?) {
         throw IOException("not implemented")
     }
 
@@ -377,7 +377,7 @@ open class OsLib : TwoArgFunction() {
      * @com.soywiz.luak.compat.java.Throws IOException if it fails
      */
 
-    protected open fun rename(oldname: String?, newname: String?) {
+    open fun rename(oldname: String?, newname: String?) {
         throw IOException("not implemented")
     }
 
@@ -399,7 +399,7 @@ open class OsLib : TwoArgFunction() {
      * @return the name of the new locale, or null if the request
      * cannot be honored.
      */
-    protected fun setlocale(locale: String?, category: String?): String {
+    fun setlocale(locale: String?, category: String?): String {
         return "C"
     }
 
@@ -412,7 +412,7 @@ open class OsLib : TwoArgFunction() {
      * @param table
      * @return long value for the time
      */
-    protected fun time(table: LuaTable?): Double {
+    fun time(table: LuaTable?): Double {
         val d: LuaDate = when (table) {
             null -> LuaDate()
             else -> LuaDate(
@@ -442,7 +442,7 @@ open class OsLib : TwoArgFunction() {
      * @return String filename to use
      */
     @Synchronized
-    protected open fun tmpname(): String = TMP_PREFIX + tmpnames++ + TMP_SUFFIX
+    open fun tmpname(): String = TMP_PREFIX + tmpnames++ + TMP_SUFFIX
 
     companion object {
         @kotlin.jvm.JvmField var TMP_PREFIX = ".luaj"

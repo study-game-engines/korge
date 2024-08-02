@@ -148,7 +148,7 @@ object Arc {
  * Original library created by Pomax: https://github.com/Pomax/bezierjs
  * Based on algorithms described here: https://pomax.github.io/bezierinfo/
  */
-class Bezier private constructor(val points: PointList, dummy: Unit) : Curve, IsAlmostEquals<Bezier> {
+class Bezier (val points: PointList, dummy: Unit) : Curve, IsAlmostEquals<Bezier> {
     init {
         if (points.size > 4) error("Only supports quad and cubic beziers")
     }

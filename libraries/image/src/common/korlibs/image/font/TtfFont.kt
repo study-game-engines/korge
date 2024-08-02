@@ -68,10 +68,10 @@ class TtfFont(
 // - http://chanae.walon.org/pub/ttf/ttf_glyphs.htm
 @OptIn(KorimInternal::class)
 abstract class BaseTtfFont(
-    protected val s: FastByteArrayInputStream,
-    protected val extName: String? = null,
-    protected val onlyReadMetadata: Boolean = false,
-    protected val enableLigatures: Boolean = true,
+    val s: FastByteArrayInputStream,
+    val extName: String? = null,
+    val onlyReadMetadata: Boolean = false,
+    val enableLigatures: Boolean = true,
 ) : VectorFont, Extra by Extra.Mixin() {
     constructor(
         d: ByteArray,
@@ -128,7 +128,7 @@ abstract class BaseTtfFont(
         return path
     }
 
-    protected fun getTextScale(size: Double): Double {
+    fun getTextScale(size: Double): Double {
         //return size / (yMax - yMin).toDouble()
         return size / unitsPerEm.toDouble()
     }
@@ -164,69 +164,69 @@ abstract class BaseTtfFont(
         override fun toString(): String = "NamesInfo(${toMap()})"
     }
 
-    protected val namesi = NamesInfo()
-    protected val tempContours = Array(3) { Contour() }
-    protected val lineHeight get() = yMax - yMin
+    val namesi = NamesInfo()
+    val tempContours = Array(3) { Contour() }
+    val lineHeight get() = yMax - yMin
 
-    var numGlyphs = 0; protected set
-    var maxPoints = 0; protected set
-    var maxContours = 0; protected set
-    var maxCompositePoints = 0; protected set
-    var maxCompositeContours = 0; protected set
-    var maxZones = 0; protected set
-    var maxTwilightPoints = 0; protected set
-    var maxStorage = 0; protected set
-    var maxFunctionDefs = 0; protected set
-    var maxInstructionDefs = 0; protected set
-    var maxStackElements = 0; protected set
-    var maxSizeOfInstructions = 0; protected set
-    var maxComponentElements = 0; protected set
-    var maxComponentDepth = 0; protected set
+    var numGlyphs = 0; set
+    var maxPoints = 0; set
+    var maxContours = 0; set
+    var maxCompositePoints = 0; set
+    var maxCompositeContours = 0; set
+    var maxZones = 0; set
+    var maxTwilightPoints = 0; set
+    var maxStorage = 0; set
+    var maxFunctionDefs = 0; set
+    var maxInstructionDefs = 0; set
+    var maxStackElements = 0; set
+    var maxSizeOfInstructions = 0; set
+    var maxComponentElements = 0; set
+    var maxComponentDepth = 0; set
 
-    protected var hheaVersion = Fixed(0, 0)
-    var ascender = 0; protected set
-    var descender = 0; protected set
-    var lineGap = 0; protected set
-    var advanceWidthMax = 0; protected set
-    var minLeftSideBearing = 0; protected set
-    var minRightSideBearing = 0; protected set
-    var xMaxExtent = 0; protected set
-    var caretSlopeRise = 0; protected set
-    var caretSlopeRun = 0; protected set
-    var caretOffset = 0; protected set
-    var metricDataFormat = 0; protected set
-    var numberOfHMetrics = 0; protected set
+    var hheaVersion = Fixed(0, 0)
+    var ascender = 0; set
+    var descender = 0; set
+    var lineGap = 0; set
+    var advanceWidthMax = 0; set
+    var minLeftSideBearing = 0; set
+    var minRightSideBearing = 0; set
+    var xMaxExtent = 0; set
+    var caretSlopeRise = 0; set
+    var caretSlopeRun = 0; set
+    var caretOffset = 0; set
+    var metricDataFormat = 0; set
+    var numberOfHMetrics = 0; set
 
-    protected var locs = IntArray(0)
+    var locs = IntArray(0)
 
-    protected var fontRev = Fixed(0, 0)
-    var unitsPerEm = 128; protected set
+    var fontRev = Fixed(0, 0)
+    var unitsPerEm = 128; set
     // Coordinates have to be divided between unitsPerEm and multiplied per font size
-    protected var xMin = 0
-    protected var yMin = 0
-    protected var xMax = 0
-    protected var yMax = 0
-    protected var macStyle = 0
-    protected var lowestRecPPEM = 0
-    protected var fontDirectionHint = 0
+    var xMin = 0
+    var yMin = 0
+    var xMax = 0
+    var yMax = 0
+    var macStyle = 0
+    var lowestRecPPEM = 0
+    var fontDirectionHint = 0
 
-    protected var indexToLocFormat = 0
-    protected var glyphDataFormat = 0
+    var indexToLocFormat = 0
+    var glyphDataFormat = 0
 
-    protected var horMetrics = listOf<HorMetric>()
+    var horMetrics = listOf<HorMetric>()
     @KorimInternal
     val characterMaps = LinkedHashMap<Int, Int>()
     @KorimInternal
     val characterMapsReverse = LinkedHashMap<Int, Int>()
-    protected val glyphCache = IntMap<Glyph>(512)
-    protected fun getCharacterMapOrNull(key: Int): Int? = characterMaps[key]
+    val glyphCache = IntMap<Glyph>(512)
+    fun getCharacterMapOrNull(key: Int): Int? = characterMaps[key]
 
-    protected fun addCharacterMap(codePoint: Int, glyphID: Int) {
+    fun addCharacterMap(codePoint: Int, glyphID: Int) {
         characterMaps[codePoint] = glyphID
         characterMapsReverse[glyphID] = codePoint
     }
 
-    protected fun addCharacterMapOld(codePoint: Int, glyphID: Int) {
+    fun addCharacterMapOld(codePoint: Int, glyphID: Int) {
         //println("addCharacterMapOld: $codePoint -> $glyphID")
     }
 
@@ -234,12 +234,12 @@ abstract class BaseTtfFont(
     var bitmapGlyphInfos = LinkedHashMap<Int, BitmapGlyphInfo>()
 
     // Color extension
-    protected var colrv0LayerInfos = arrayOf<ColrLayerInfo>()
-    protected val colrGlyphInfos = IntMap<ColrGlyphInfo>()
+    var colrv0LayerInfos = arrayOf<ColrLayerInfo>()
+    val colrGlyphInfos = IntMap<ColrGlyphInfo>()
     var palettes = listOf<Palette>()
-    protected var colrv1: COLRv1 = COLRv1()
+    var colrv1: COLRv1 = COLRv1()
 
-    protected var frozen = false
+    var frozen = false
 
     class SubstitutionInfo(val maxSequence: Int, val map: Map<WString, IntArray>)
 
@@ -250,7 +250,7 @@ abstract class BaseTtfFont(
     val substitutionsCodePoints = IntMap<SubstitutionInfo>()
 
     lateinit var fontMetrics1px: FontMetrics; private set
-    protected val nonExistantGlyphMetrics1px = GlyphMetrics(1.0, false, 0, Rectangle(), 0.0)
+    val nonExistantGlyphMetrics1px = GlyphMetrics(1.0, false, 0, Rectangle(), 0.0)
     var isOpenType = false
 
     val ttfName: String get() = namesi.ttfName
@@ -364,7 +364,7 @@ abstract class BaseTtfFont(
 	internal fun openTable(name: String): FastByteArrayInputStream? = getTable(name)?.open()
 
 
-    protected abstract fun readHeaderTables()
+    abstract fun readHeaderTables()
 
     companion object {
         fun readNamesSection(s: FastByteArrayInputStream, info: NamesInfo) = s.run {
@@ -436,11 +436,11 @@ abstract class BaseTtfFont(
         }
     }
 
-    protected inline fun runTableUnit(name: String, callback: FastByteArrayInputStream.() -> Unit) {
+    inline fun runTableUnit(name: String, callback: FastByteArrayInputStream.() -> Unit) {
 		openTable(name)?.callback()
 	}
 
-    protected inline fun <T> runTable(name: String, callback: FastByteArrayInputStream.(Table) -> T): T? {
+    inline fun <T> runTable(name: String, callback: FastByteArrayInputStream.(Table) -> T): T? {
         val table = getTable(name) ?: return null
         return callback(table.open(), table)
     }
@@ -481,14 +481,14 @@ abstract class BaseTtfFont(
     fun getName(nameId: Int): String? = namesi.getName(nameId)
     fun getName(nameId: NameId): String? = getName(nameId.id)
 
-    protected fun readNames() = runTableUnit("name") {
+    fun readNames() = runTableUnit("name") {
         readNamesSection(this, namesi)
 	}
 
     data class NameInfo(val offset: Int, val length: Int, val charset: Charset)
 
     // https://docs.microsoft.com/en-us/typography/opentype/spec/loca
-    protected fun readLoca() = runTableUnit("loca") {
+    fun readLoca() = runTableUnit("loca") {
 		val bytesPerEntry = when (indexToLocFormat) {
 			0 -> 2
 			1 -> 4
@@ -510,7 +510,7 @@ abstract class BaseTtfFont(
 		//println("locs: ${locs.toList()}")
 	}
 
-    protected fun readHead() = runTableUnit("head") {
+    fun readHead() = runTableUnit("head") {
 		readU16BE().apply { if (this != 1) invalidOp("Invalid TTF") }
 		readU16BE().apply { if (this != 0) invalidOp("Invalid TTF") }
 		fontRev = readFixed()
@@ -536,7 +536,7 @@ abstract class BaseTtfFont(
 		//println("bounds: ($xMin, $yMin)-($xMax, $yMax)")
 	}
 
-    protected fun readMaxp() = runTableUnit("maxp") {
+    fun readMaxp() = runTableUnit("maxp") {
 		val version = readFixed()
 		numGlyphs = readU16BE()
 		maxPoints = readU16BE()
@@ -554,7 +554,7 @@ abstract class BaseTtfFont(
 		maxComponentDepth = readU16BE()
 	}
 
-    protected fun readHhea() = runTableUnit("hhea") {
+    fun readHhea() = runTableUnit("hhea") {
 		hheaVersion = readFixed()
 		ascender = readS16BE()
 		descender = readS16BE()
@@ -574,7 +574,7 @@ abstract class BaseTtfFont(
 		numberOfHMetrics = readU16BE()
 	}
 
-    protected fun readHmtx() = runTableUnit("hmtx") {
+    fun readHmtx() = runTableUnit("hmtx") {
 		val firstMetrics = (0 until numberOfHMetrics).map {
             HorMetric(
                 readU16BE(),
@@ -592,7 +592,7 @@ abstract class BaseTtfFont(
 		horMetrics = firstMetrics + compressedMetrics
 	}
 
-    protected fun readCpal() = runTableUnit("CPAL") {
+    fun readCpal() = runTableUnit("CPAL") {
         val version = readU16BE()
         when (version) {
             0, 1 -> {
@@ -621,7 +621,7 @@ abstract class BaseTtfFont(
         }
     }
 
-    //protected fun readPost() = runTableUnit("post") {
+    //fun readPost() = runTableUnit("post") {
     //    val versionHi = readU16BE()
     //    val versionLo = readU16BE()
     //    when (versionHi) {
@@ -677,7 +677,7 @@ abstract class BaseTtfFont(
         val pad2: Int = 0,
     )
 
-    protected fun FastByteArrayInputStream.readSibLineMetrics(): SbitLineMetrics = SbitLineMetrics(
+    fun FastByteArrayInputStream.readSibLineMetrics(): SbitLineMetrics = SbitLineMetrics(
         readS8(), readS8(), readU8(), readS8(), readS8(), readS8(),
         readS8(), readS8(), readS8(), readS8(), readS8(), readS8()
     )
@@ -719,7 +719,7 @@ abstract class BaseTtfFont(
     //fun ColorGlyphInfo.getBytes(): FastByteArrayInputStream = tablesByName["CBDT"]!!.open().sliceWithSize(offset, size)
 
     // https://docs.microsoft.com/en-us/typography/opentype/spec/eblc
-    protected fun readCblc() = runTableUnit("CBLC") { // Color Bitmap Location Table
+    fun readCblc() = runTableUnit("CBLC") { // Color Bitmap Location Table
         val majorVersion = readU16BE()
         val minorVersion = readU16BE()
         when (majorVersion) {
@@ -787,7 +787,7 @@ abstract class BaseTtfFont(
         }
     }
 
-    protected fun readCbdt() = runTableUnit("CBDT") { // Color Bitmap Data Table
+    fun readCbdt() = runTableUnit("CBDT") { // Color Bitmap Data Table
         //println("readCbdt")
         val majorVersion = readU16BE()
         val minorVersion = readU16BE()
@@ -821,7 +821,7 @@ abstract class BaseTtfFont(
     }
 
     // https://docs.microsoft.com/en-us/typography/opentype/spec/sbix
-    protected fun readSbix() = runTableUnit("sbix") { // Standard Bitmap Graphics Table
+    fun readSbix() = runTableUnit("sbix") { // Standard Bitmap Graphics Table
         val version = readU16BE()
         val flags = readU16BE()
         val numStrikes = readS32BE()
@@ -926,7 +926,7 @@ abstract class BaseTtfFont(
     class ColorStop(var stopOffset: Double, var paletteIndex: Int, var alpha: Double)
 
     // https://docs.microsoft.com/en-us/typography/opentype/spec/colr
-    protected fun interpretColrv1(glyphID: Int, s: FastByteArrayInputStream, c: Context2d, pal: Int, level: Int) {
+    fun interpretColrv1(glyphID: Int, s: FastByteArrayInputStream, c: Context2d, pal: Int, level: Int) {
         val nodeFormat = s.readU8()
         val isVar = nodeFormat % 2 == 1
         val indent = "  ".repeat(level)
@@ -1239,7 +1239,7 @@ abstract class BaseTtfFont(
         override fun toString(): String = "CoverageTable(${glyphIDs})"
     }
 
-    protected fun FastByteArrayInputStream.readCoverageTable(): CoverageTable {
+    fun FastByteArrayInputStream.readCoverageTable(): CoverageTable {
         //https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#coverage-table
         val coverageFormat = readU16BE()
         val out = CoverageTable()
@@ -1304,7 +1304,7 @@ abstract class BaseTtfFont(
         }
     }
 
-    protected fun readGsub() = runTableUnit("GSUB") {
+    fun readGsub() = runTableUnit("GSUB") {
         val totalLength = length
         val majorVersion = readU16BE()
         val minorVersion = readU16BE()
@@ -1448,7 +1448,7 @@ abstract class BaseTtfFont(
         //println("glyphSubstitution=$glyphSubstitution")
     }
 
-    protected fun readColr() = runTableUnit("COLR") {
+    fun readColr() = runTableUnit("COLR") {
         val version = readU16BE()
         when (version) {
             0, 1 -> { // COLRv0, COLRv1
@@ -1528,7 +1528,7 @@ abstract class BaseTtfFont(
         }
     }
 
-	protected fun readCmap() = runTableUnit("cmap") {
+	fun readCmap() = runTableUnit("cmap") {
 		data class EncodingRecord(val platformId: Int, val encodingId: Int, val offset: Int)
 
 		val version = readU16BE()
@@ -1942,8 +1942,8 @@ abstract class BaseTtfFont(
 	) : Glyph(index, xMin, yMin, xMax, yMax, advanceWidth) {
         override fun toString(): String = "SimpleGlyph${if (dummy) "Dummy" else ""}[$index](advance=$advanceWidth) : $path"
         val npoints: Int get() = xPos.size
-        protected fun onCurve(n: Int) = (flags[n] and 1) != 0
-		protected fun contour(n: Int, out: Contour = Contour()) = out.apply {
+        fun onCurve(n: Int) = (flags[n] and 1) != 0
+		fun contour(n: Int, out: Contour = Contour()) = out.apply {
 			x = xPos[n]
 			y = yPos[n]
 			onCurve = onCurve(n)
@@ -2011,7 +2011,7 @@ abstract class BaseTtfFont(
 
         override val paths = listOf(path)
 
-        protected inline fun forEachContour(block: (cstart: Int, cend: Int, csize: Int) -> Unit) {
+        inline fun forEachContour(block: (cstart: Int, cend: Int, csize: Int) -> Unit) {
             for (n in 0 until contoursIndices.size - 1) {
                 val cstart = contoursIndices[n] + 1
                 val cend = contoursIndices[n + 1]
@@ -2021,14 +2021,14 @@ abstract class BaseTtfFont(
         }
     }
 
-    protected fun FastByteArrayInputStream.readF2DOT14(): Float {
+    fun FastByteArrayInputStream.readF2DOT14(): Float {
 		val v = readS16BE()
 		val i = v.extractSigned(14, 2)
 		val f = v.extract(0, 14)
 		return i.toFloat() + f.toFloat() / 16384f
 	}
 
-    protected fun FastByteArrayInputStream.readFIXED3(): Float {
+    fun FastByteArrayInputStream.readFIXED3(): Float {
         val v = readS32BE()
         val i = v.extractSigned(16, 16)
         val f = v.extract(0, 16)
@@ -2036,7 +2036,7 @@ abstract class BaseTtfFont(
     }
 
 	@Suppress("FunctionName")
-    protected fun FastByteArrayInputStream.readMixBE(signed: Boolean, word: Boolean): Int {
+    fun FastByteArrayInputStream.readMixBE(signed: Boolean, word: Boolean): Int {
 		return when {
 			!word && signed -> readS8()
 			!word && !signed -> readU8()
@@ -2046,7 +2046,7 @@ abstract class BaseTtfFont(
 		}
 	}
 
-    protected fun FastByteArrayInputStream.readGlyph(index: Int): Glyph {
+    fun FastByteArrayInputStream.readGlyph(index: Int): Glyph {
 		val ncontours = readS16BE()
 		val xMin = readS16BE()
 		val yMin = readS16BE()

@@ -47,28 +47,28 @@ abstract class TimelineState(pool: SingleObjectPool<out TimelineState>) : BaseOb
     var targetSlot: Slot? = null
     var targetIKConstraint: IKConstraint? = null
 
-	protected var _isTween: Boolean = false
-	protected var _valueOffset: Int = 0
-	protected var _frameValueOffset: Int = 0
-	protected var _frameOffset: Int = 0
-	protected var _frameRate: Int = 0
-	protected var _frameCount: Int = 0
-	protected var _frameIndex: Int = -1
-	protected var _frameRateR: Double = 0.0
-	protected var _position: Double = 0.0
-	protected var _duration: Double = 0.0
-	protected var _timeScale: Double = 1.0
-	protected var _timeOffset: Double = 0.0
-	protected var _animationData: AnimationData? = null
-	protected var _timelineData: TimelineData? = null
-	protected var _armature: Armature? = null
-	protected var _animationState: AnimationState? = null
-	protected var _actionTimeline: TimelineState? = null
+	var _isTween: Boolean = false
+	var _valueOffset: Int = 0
+	var _frameValueOffset: Int = 0
+	var _frameOffset: Int = 0
+	var _frameRate: Int = 0
+	var _frameCount: Int = 0
+	var _frameIndex: Int = -1
+	var _frameRateR: Double = 0.0
+	var _position: Double = 0.0
+	var _duration: Double = 0.0
+	var _timeScale: Double = 1.0
+	var _timeOffset: Double = 0.0
+	var _animationData: AnimationData? = null
+	var _timelineData: TimelineData? = null
+	var _armature: Armature? = null
+	var _animationState: AnimationState? = null
+	var _actionTimeline: TimelineState? = null
 
-	protected var _timelineArray:  Uint16Buffer? = null
-	protected var _frameArray:  Int16Buffer? = null
-	protected var _valueArray:  Float32Buffer? = null
-	protected var _frameIndices:  IntArrayList? = null
+	var _timelineArray:  Uint16Buffer? = null
+	var _frameArray:  Int16Buffer? = null
+	var _valueArray:  Float32Buffer? = null
+	var _frameIndices:  IntArrayList? = null
 
 	override fun _onClear() {
 		this.dirty = false
@@ -104,10 +104,10 @@ abstract class TimelineState(pool: SingleObjectPool<out TimelineState>) : BaseOb
 		this._frameIndices = null //
 	}
 
-	protected abstract fun _onArriveAtFrame()
-	protected abstract fun _onUpdateFrame()
+	abstract fun _onArriveAtFrame()
+	abstract fun _onUpdateFrame()
 
-	protected fun _setCurrentTime(passedTime: Double): Boolean {
+	fun _setCurrentTime(passedTime: Double): Boolean {
 		var passedTime = passedTime
 		val prevState = this.playState
 		val prevPlayTimes = this.currentPlayTimes
@@ -292,13 +292,13 @@ abstract class TweenTimelineState(pool: SingleObjectPool<out TweenTimelineState>
 		}
 	}
 
-	protected var _tweenType: TweenType = TweenType.None
-	protected var _curveCount: Int = 0
-	protected var _framePosition: Double = 0.0
-	protected var _frameDurationR: Double = 0.0
-	protected var _tweenEasing: Double = 0.0
-	protected var _tweenProgress: Double = 0.0
-	protected var _valueScale: Double = 1.0
+	var _tweenType: TweenType = TweenType.None
+	var _curveCount: Int = 0
+	var _framePosition: Double = 0.0
+	var _frameDurationR: Double = 0.0
+	var _tweenEasing: Double = 0.0
+	var _tweenProgress: Double = 0.0
+	var _valueScale: Double = 1.0
 
 	override fun _onClear() {
 		super._onClear()
@@ -377,9 +377,9 @@ abstract class TweenTimelineState(pool: SingleObjectPool<out TweenTimelineState>
  * @internal
  */
 abstract class SingleValueTimelineState(pool: SingleObjectPool<out SingleValueTimelineState>) :  TweenTimelineState(pool) {
-	protected var _current: Double = 0.0
-	protected var _difference: Double = 0.0
-	protected var _result: Double = 0.0
+	var _current: Double = 0.0
+	var _difference: Double = 0.0
+	var _result: Double = 0.0
 
 	override fun _onClear() {
 		super._onClear()
@@ -432,12 +432,12 @@ abstract class SingleValueTimelineState(pool: SingleObjectPool<out SingleValueTi
  * @internal
  */
 abstract class DoubleValueTimelineState(pool: SingleObjectPool<out DoubleValueTimelineState>) :  TweenTimelineState(pool) {
-	protected var _currentA: Double = 0.0
-	protected var _currentB: Double = 0.0
-	protected var _differenceA: Double = 0.0
-	protected var _differenceB: Double = 0.0
-	protected var _resultA: Double = 0.0
-	protected var _resultB: Double = 0.0
+	var _currentA: Double = 0.0
+	var _currentB: Double = 0.0
+	var _differenceA: Double = 0.0
+	var _differenceB: Double = 0.0
+	var _resultA: Double = 0.0
+	var _resultB: Double = 0.0
 
 	override fun _onClear() {
 		super._onClear()
@@ -501,8 +501,8 @@ abstract class DoubleValueTimelineState(pool: SingleObjectPool<out DoubleValueTi
  * @internal
  */
 abstract class MutilpleValueTimelineState(pool: SingleObjectPool<out MutilpleValueTimelineState>) :  TweenTimelineState(pool) {
-	protected var _valueCount: Int = 0
-	protected var _rd:  DoubleArray = DoubleArray(0)
+	var _valueCount: Int = 0
+	var _rd:  DoubleArray = DoubleArray(0)
 
 	override fun _onClear() {
 		super._onClear()

@@ -22,8 +22,8 @@ class UIText(
     companion object {
         val DEFAULT_SIZE = Size(128, 18)
     }
-    protected var bover by uiObservable(false) { updateState() }
-    protected var bpressing by uiObservable(false) { updateState() }
+    var bover by uiObservable(false) { updateState() }
+    var bpressing by uiObservable(false) { updateState() }
 
     private val background = solidRect(size, Colors.TRANSPARENT)
     private val textView = text(text, font = DefaultTtfFontAsBitmap)

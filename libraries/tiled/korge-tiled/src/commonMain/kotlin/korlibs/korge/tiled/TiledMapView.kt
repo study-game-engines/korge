@@ -26,7 +26,7 @@ class TiledMapView(val tiledMap: TiledMap, showShapes: Boolean = true, smoothing
     }
 
     override val customHitShape get() = true
-    protected fun hitTestShapeInternal(shape: Shape2D, matrix: MMatrix, direction: HitTestDirection): View? {
+    fun hitTestShapeInternal(shape: Shape2D, matrix: MMatrix, direction: HitTestDirection): View? {
         // @TODO: Use shape
         val p = matrix.transform(shape.center)
         return globalPixelHitTest(p, direction)
@@ -34,7 +34,7 @@ class TiledMapView(val tiledMap: TiledMap, showShapes: Boolean = true, smoothing
         //return super.hitTestShapeInternal(shape, matrix, direction)
     }
 
-    //protected override fun hitTestInternal(x: Double, y: Double, direction: HitTestDirection): View? = globalPixelHitTest(x, y, direction)
+    //override fun hitTestInternal(x: Double, y: Double, direction: HitTestDirection): View? = globalPixelHitTest(x, y, direction)
 
     //fun globalPixelHitTest(globalXY: IPoint, direction: HitTestDirection = HitTestDirection.ANY): View? = globalPixelHitTest(globalXY.x, globalXY.y, direction)
 

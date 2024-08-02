@@ -208,7 +208,7 @@ abstract class View internal constructor(
             onStageSet()
         }
 
-    open protected fun onStageSet() {
+    open fun onStageSet() {
     }
 
     var _invalidateNotifier: InvalidateNotifier? = null
@@ -221,7 +221,7 @@ abstract class View internal constructor(
 
     open val _invalidateNotifierForChildren: InvalidateNotifier? get() = _invalidateNotifier
 
-    protected open fun setInvalidateNotifier() {
+    open fun setInvalidateNotifier() {
         _invalidateNotifier = _parent?._invalidateNotifierForChildren
     }
 
@@ -255,8 +255,8 @@ abstract class View internal constructor(
     /** Computed [speed] combining all the speeds from ancestors */
     val globalSpeed: Double get() = if (parent != null) parent!!.globalSpeed * speed else speed
 
-    protected var _x: Double = 0.0
-    protected var _y: Double = 0.0
+    var _x: Double = 0.0
+    var _y: Double = 0.0
     private var _scaleX: Double = 1.0
     private var _scaleY: Double = 1.0
     private var _skewX: Angle = Angle.ZERO
@@ -494,7 +494,7 @@ abstract class View internal constructor(
             this.colorMul = value
         }
 
-    protected fun ensureTransform() {
+    fun ensureTransform() {
         if (validLocalProps) return
         validLocalProps = true
         val t = this._localMatrix.toTransform()
@@ -673,7 +673,7 @@ abstract class View internal constructor(
     /**
      * The concatenated version of [colorTransform] having into account all the color transformations of the ancestors
      */
-    protected val renderColorTransform: ColorTransformMul get() {
+    val renderColorTransform: ColorTransformMul get() {
         updateRenderColorTransformIfRequired()
         return _renderColorTransform
     }
@@ -729,7 +729,7 @@ abstract class View internal constructor(
         invalidate()
     }
 
-    protected var dirtyVertices = true
+    var dirtyVertices = true
 
     private var _version = 0
     private var _versionColor = 0
@@ -755,7 +755,7 @@ abstract class View internal constructor(
         }
     }
 
-    protected open fun onParentChanged() {
+    open fun onParentChanged() {
         onAncestorChanged()
     }
 
@@ -764,7 +764,7 @@ abstract class View internal constructor(
         onAncestorChanged()
     }
 
-    protected open fun onAncestorChanged() {
+    open fun onAncestorChanged() {
     }
 
     override fun invalidateRender() {
@@ -858,7 +858,7 @@ abstract class View internal constructor(
         }
     }
 
-    protected open fun renderDebugAnnotationsInternal(ctx: RenderContext) {
+    open fun renderDebugAnnotationsInternal(ctx: RenderContext) {
         //println("DEBUG ANNOTATE VIEW!")
         //ctx.flush()
         val local = getLocalBounds()
@@ -897,7 +897,7 @@ abstract class View internal constructor(
     }
 
     /** Method that all views must override in order to control how the view is going to be rendered */
-    protected abstract fun renderInternal(ctx: RenderContext)
+    abstract fun renderInternal(ctx: RenderContext)
 
     @Suppress("RemoveCurlyBracesFromTemplate")
     override fun toString(): String {
@@ -914,8 +914,8 @@ abstract class View internal constructor(
         return out
     }
 
-    protected val Float.str get() = this.toStringDecimal(2, skipTrailingZeros = true)
-    protected val Double.str get() = this.toStringDecimal(2, skipTrailingZeros = true)
+    val Float.str get() = this.toStringDecimal(2, skipTrailingZeros = true)
+    val Double.str get() = this.toStringDecimal(2, skipTrailingZeros = true)
 
     // Version with root-most object as reference
     /** Converts the global point [p] (using root/stage as reference) into the local coordinate system. Allows to define [out] to avoid allocation. */
@@ -1001,7 +1001,7 @@ abstract class View internal constructor(
     }
 
     open val customHitShape get() = false
-    protected open fun hitTestShapeInternal(shape: Shape2D, matrix: Matrix, direction: HitTestDirection): View? {
+    open fun hitTestShapeInternal(shape: Shape2D, matrix: Matrix, direction: HitTestDirection): View? {
         //println("View.hitTestShapeInternal: $this, $shape")
         if (Shape2D.intersects(this.hitShape2d, getGlobalMatrixWithAnchor(), shape, matrix)) {
             //println(" -> true")
@@ -1057,7 +1057,7 @@ abstract class View internal constructor(
     var hitTestUsingShapes: Boolean? = null
 
     /** [x] and [y] coordinates are global */
-    protected open fun hitTestInternal(p: Point, direction: HitTestDirection = HitTestDirection.ANY): View? {
+    open fun hitTestInternal(p: Point, direction: HitTestDirection = HitTestDirection.ANY): View? {
         if (!hitTestEnabled) return null
 
         //println("x,y: $x,$y")
@@ -1121,7 +1121,7 @@ abstract class View internal constructor(
     }
 
     /** [x] and [y] are global, while [sLeft], [sTop], [sRight], [sBottom] are local */
-    protected fun checkGlobalBounds(
+    fun checkGlobalBounds(
         gp: Point,
         lrect: Rectangle,
     ): Boolean {
@@ -1129,7 +1129,7 @@ abstract class View internal constructor(
         return checkLocalBounds(lp, lrect)
     }
 
-    protected fun checkLocalBounds(lp: Point, lrect: Rectangle): Boolean = lp in lrect
+    fun checkLocalBounds(lp: Point, lrect: Rectangle): Boolean = lp in lrect
 
     /**
      * Resets the View properties to an identity state.
@@ -1257,7 +1257,7 @@ abstract class View internal constructor(
         return getBounds(target, false, inclusive, includeFilters)
     }
 
-    protected fun _getBounds(concat: Matrix, doAnchoring: Boolean = true, includeFilters: Boolean = false): Rectangle {
+    fun _getBounds(concat: Matrix, doAnchoring: Boolean = true, includeFilters: Boolean = false): Rectangle {
         var out = getLocalBounds(doAnchoring, includeFilters)
 
         if (concat.isNotNIL && !concat.isIdentity) {
@@ -1314,7 +1314,7 @@ abstract class View internal constructor(
 
     open fun getLocalBoundsInternal(): Rectangle = Rectangle.NIL
 
-    protected open fun createInstance(): View =
+    open fun createInstance(): View =
         throw MustOverrideException("Must Override ${this::class}.createInstance()")
 
     /**

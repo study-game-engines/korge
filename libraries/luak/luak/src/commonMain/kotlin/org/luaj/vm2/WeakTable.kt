@@ -65,10 +65,10 @@ class WeakTable(
         }
     }
 
-    abstract class WeakSlot protected constructor(
-        protected var key: Any?,
-        protected var value: Any?,
-        protected var next: Slot?
+    abstract class WeakSlot constructor(
+        var key: Any?,
+        var value: Any?,
+        var next: Slot?
     ) : Slot {
 
         abstract override fun keyindex(hashMask: Int): Int
@@ -141,7 +141,7 @@ class WeakTable(
 
         open fun strongkey(): LuaValue? = key as LuaValue?
         open fun strongvalue(): LuaValue? = value as LuaValue?
-        protected abstract fun copy(next: Slot?): WeakSlot
+        abstract fun copy(next: Slot?): WeakSlot
     }
 
     class WeakKeySlot : WeakSlot {
@@ -152,7 +152,7 @@ class WeakTable(
             keyhash = key.hashCode()
         }
 
-        protected constructor(copyFrom: WeakKeySlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {
+        constructor(copyFrom: WeakKeySlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {
             this.keyhash = copyFrom.keyhash
         }
 
@@ -166,7 +166,7 @@ class WeakTable(
 
         constructor(key: LuaValue, value: LuaValue, next: Slot?) : super(key, weaken(value), next) {}
 
-        protected constructor(copyFrom: WeakValueSlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {}
+        constructor(copyFrom: WeakValueSlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {}
 
         override fun keyindex(mask: Int): Int = LuaTable.hashSlot(strongkey()!!, mask)
 
@@ -187,7 +187,7 @@ class WeakTable(
             keyhash = key.hashCode()
         }
 
-        protected constructor(copyFrom: WeakKeyAndValueSlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {
+        constructor(copyFrom: WeakKeyAndValueSlot, next: Slot?) : super(copyFrom.key, copyFrom.value, next) {
             keyhash = copyFrom.keyhash
         }
 
@@ -273,7 +273,7 @@ class WeakTable(
          * @param value value to convert
          * @return [LuaValue] that is a strong or weak reference, depending on type of `value`
          */
-        protected fun weaken(value: LuaValue): LuaValue = when (value.type()) {
+        fun weaken(value: LuaValue): LuaValue = when (value.type()) {
             LuaValue.TFUNCTION, LuaValue.TTHREAD, LuaValue.TTABLE -> WeakValue(value)
             LuaValue.TUSERDATA -> WeakUserdata(value)
             else -> value
@@ -285,7 +285,7 @@ class WeakTable(
          * @return LuaValue or null
          * @see .weaken
          */
-        protected fun strengthen(ref: Any?): LuaValue? {
+        fun strengthen(ref: Any?): LuaValue? {
             var ref = ref
             if (ref is WeakReference<*>) ref = ref.get()
             return if (ref is WeakValue) ref.strongvalue() else ref as LuaValue?

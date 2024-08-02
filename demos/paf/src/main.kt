@@ -19,6 +19,6 @@ suspend fun main() = Korge(
 		.mapPrototype { TitleScene(/*get()*/) }
 		.mapPrototype { GameScene(/*get()*/) }
 
-	sceneContainer().changeTo<LoadingScene>()
+	sceneContainer().changeTo(LoadingScene::class)
 	//sceneContainer().changeTo<GameScene>()
 }

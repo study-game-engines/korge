@@ -64,35 +64,35 @@ open class UniformBlock(val fixedLocation: Int) {
     val uniformCount: Int get() = uniforms.size
 
     // @TODO: Fix alignment
-    //protected fun bool(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool1, 4, 4)
-    //protected fun bool2(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool2, 8, 8)
-    //protected fun bool3(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool3, 12, 16)
-    //protected fun bool4(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool4, 16, 16)
-    //protected fun ubyte4(name: String? = null): Gen<Int> = gen(name, VarType.UByte4, 4, 4)
-    //protected fun short(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short1, 2, 2)
-    //protected fun short2(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short2, 4, 4)
-    //protected fun short3(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short3, 6, 2)
-    //protected fun short4(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short4, 8, 2)
-    //@Deprecated("") protected fun sampler2D(name: String? = null): Gen<Int> = gen(name, VarType.Sampler2D, 4, 4)
+    //fun bool(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool1, 4, 4)
+    //fun bool2(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool2, 8, 8)
+    //fun bool3(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool3, 12, 16)
+    //fun bool4(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Bool4, 16, 16)
+    //fun ubyte4(name: String? = null): Gen<Int> = gen(name, VarType.UByte4, 4, 4)
+    //fun short(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short1, 2, 2)
+    //fun short2(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short2, 4, 4)
+    //fun short3(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short3, 6, 2)
+    //fun short4(name: String? = null): Gen<List<Boolean>> = gen(name, VarType.Short4, 8, 2)
+    //@Deprecated("") fun sampler2D(name: String? = null): Gen<Int> = gen(name, VarType.Sampler2D, 4, 4)
 
-    protected fun int(name: String? = null): Gen<Int> = gen(name, VarType.SInt1, 4, 4)
-    protected fun float(name: String? = null): Gen<Float> = gen(name, VarType.Float1, 4, 4)
+    fun int(name: String? = null): Gen<Int> = gen(name, VarType.SInt1, 4, 4)
+    fun float(name: String? = null): Gen<Float> = gen(name, VarType.Float1, 4, 4)
 
-    protected fun ivec2(name: String? = null): Gen<Vector2I> = gen(name, VarType.SInt2, 8, 8)
-    protected fun vec2(name: String? = null): Gen<Vector2F> = gen(name, VarType.Float2, 8, 8)
+    fun ivec2(name: String? = null): Gen<Vector2I> = gen(name, VarType.SInt2, 8, 8)
+    fun vec2(name: String? = null): Gen<Vector2F> = gen(name, VarType.Float2, 8, 8)
 
     // @TODO: Some drivers get this wrong
-    //protected fun ivec3(name: String? = null): Gen<Vector3> = gen(name, VarType.Float3, 16, 16)
-    //protected fun vec3(name: String? = null): Gen<Vector3> = gen(name, VarType.Float3, 16, 16)
+    //fun ivec3(name: String? = null): Gen<Vector3> = gen(name, VarType.Float3, 16, 16)
+    //fun vec3(name: String? = null): Gen<Vector3> = gen(name, VarType.Float3, 16, 16)
 
-    protected fun ivec4(name: String? = null): Gen<Vector4I> = gen(name, VarType.SInt4, 16, 16)
-    protected fun vec4(name: String? = null): Gen<Vector4F> = gen(name, VarType.Float4, 16, 16)
+    fun ivec4(name: String? = null): Gen<Vector4I> = gen(name, VarType.SInt4, 16, 16)
+    fun vec4(name: String? = null): Gen<Vector4F> = gen(name, VarType.Float4, 16, 16)
 
     // @TODO: Some problems implementing mat3 layout in UBOs
-    protected fun mat3(name: String? = null): Gen<Matrix4> = gen(name, VarType.Mat3, 48, 16)
-    protected fun mat4(name: String? = null): Gen<Matrix4> = gen(name, VarType.Mat4, 64, 16)
+    fun mat3(name: String? = null): Gen<Matrix4> = gen(name, VarType.Mat3, 48, 16)
+    fun mat4(name: String? = null): Gen<Matrix4> = gen(name, VarType.Mat4, 64, 16)
 
-    protected fun <T> array(size: Int, gen: () -> Gen<T>): Gen<Array<T>> {
+    fun <T> array(size: Int, gen: () -> Gen<T>): Gen<Array<T>> {
         val offset = layout.offset
         val maxAlign = layout.maxAlign
         val dgen = try {
@@ -109,7 +109,7 @@ open class UniformBlock(val fixedLocation: Int) {
     }
 
     /** Last element in a BufferBlock can be variable in size like `float variable_array[];` */
-    protected fun <T> lastVariadicArray(gen: () -> Gen<T>): Gen<Array<T>> = array(-1, gen)
+    fun <T> lastVariadicArray(gen: () -> Gen<T>): Gen<Array<T>> = array(-1, gen)
 
     fun <T> gen(name: String? = null, type: VarType, size: Int, align: Int = size): Gen<T> =
         Gen(this, name, layout.rawAlloc(size, align), lastIndex++, type, 1, size, align)
@@ -149,7 +149,7 @@ class UniformsRef(
     )
 
     val blockSize: Int = block.totalSize
-    protected fun getOffset(uniform: TypedUniform<*>): Int = (index * blockSize) + uniform.voffset
+    fun getOffset(uniform: TypedUniform<*>): Int = (index * blockSize) + uniform.voffset
 
     fun <T : UniformBlock> copyFrom(ref: UniformBlockBuffer<T>) {
         arraycopy(ref.buffer, 0, this.buffer, (index * blockSize), blockSize)

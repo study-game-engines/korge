@@ -1953,15 +1953,15 @@ class LexState(internal var L: LuaC.CompileState, internal var z: LuaBinInput  /
 
     companion object {
 
-        protected val RESERVED_LOCAL_VAR_FOR_CONTROL = "(for control)"
-        protected val RESERVED_LOCAL_VAR_FOR_STATE = "(for state)"
-        protected val RESERVED_LOCAL_VAR_FOR_GENERATOR = "(for generator)"
-        protected val RESERVED_LOCAL_VAR_FOR_STEP = "(for step)"
-        protected val RESERVED_LOCAL_VAR_FOR_LIMIT = "(for limit)"
-        protected val RESERVED_LOCAL_VAR_FOR_INDEX = "(for index)"
+        val RESERVED_LOCAL_VAR_FOR_CONTROL = "(for control)"
+        val RESERVED_LOCAL_VAR_FOR_STATE = "(for state)"
+        val RESERVED_LOCAL_VAR_FOR_GENERATOR = "(for generator)"
+        val RESERVED_LOCAL_VAR_FOR_STEP = "(for step)"
+        val RESERVED_LOCAL_VAR_FOR_LIMIT = "(for limit)"
+        val RESERVED_LOCAL_VAR_FOR_INDEX = "(for index)"
 
         // keywords array
-        protected val RESERVED_LOCAL_VAR_KEYWORDS = arrayOf(
+        val RESERVED_LOCAL_VAR_KEYWORDS = arrayOf(
             RESERVED_LOCAL_VAR_FOR_CONTROL,
             RESERVED_LOCAL_VAR_FOR_GENERATOR,
             RESERVED_LOCAL_VAR_FOR_INDEX,

@@ -56,7 +56,7 @@ abstract class ShaderFilter : FilterWithFiltering {
     open class BaseProgramProvider : ProgramProvider {
         companion object : BaseProgramProvider()
 
-        protected fun createProgram(vertex: VertexShader, fragment: FragmentShader): Program {
+        fun createProgram(vertex: VertexShader, fragment: FragmentShader): Program {
             return Program(vertex, fragment.appending {
                 // Required for shape masks:
                 IF(out["a"] le 0f.lit) { DISCARD() }
@@ -64,10 +64,10 @@ abstract class ShaderFilter : FilterWithFiltering {
         }
 
         /** The [VertexShader] used this [Filter] */
-        protected open val vertex: VertexShader = BatchBuilder2D.PROGRAM.vertex
+        open val vertex: VertexShader = BatchBuilder2D.PROGRAM.vertex
 
         /** The [FragmentShader] used this [Filter]. This is usually overriden. */
-        protected open val fragment: FragmentShader = ShaderFilter.DEFAULT_FRAGMENT
+        open val fragment: FragmentShader = ShaderFilter.DEFAULT_FRAGMENT
 
         private val _program: Program by lazy { createProgram(vertex, fragment) }
 
@@ -96,14 +96,14 @@ abstract class ShaderFilter : FilterWithFiltering {
     private val oldTextureUnits = AGTextureUnits()
     private var resetTex: Int = 0
 
-    protected fun setTex(ctx: RenderContext, sampler: Sampler, texture: AGTexture?, info: AGTextureUnitInfo = AGTextureUnitInfo.DEFAULT) {
+    fun setTex(ctx: RenderContext, sampler: Sampler, texture: AGTexture?, info: AGTextureUnitInfo = AGTextureUnitInfo.DEFAULT) {
         oldTextureUnits.copyFrom(ctx.textureUnits, sampler)
         ctx.textureUnits.set(sampler, texture, info)
         resetTex = resetTex or (1 shl sampler.index)
     }
 
     //@CallSuper
-    protected open fun updateUniforms(ctx: RenderContext, filterScale: Double) {
+    open fun updateUniforms(ctx: RenderContext, filterScale: Double) {
     }
 
     private fun _restoreUniforms(ctx: RenderContext, filterScale: Double) {

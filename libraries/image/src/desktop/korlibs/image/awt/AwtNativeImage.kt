@@ -137,7 +137,7 @@ abstract class BaseAwtNativeImage(
 //    override val name: String get() = "BitmapAwtNativeImage"
 //}
 
-class AwtNativeImage private constructor(val awtImage: BufferedImage, dummy: Unit) : BaseAwtNativeImage(awtImage.width, awtImage.height, awtImage, premultiplied = (awtImage.type == BufferedImage.TYPE_INT_ARGB_PRE)) {
+class AwtNativeImage (val awtImage: BufferedImage, dummy: Unit) : BaseAwtNativeImage(awtImage.width, awtImage.height, awtImage, premultiplied = (awtImage.type == BufferedImage.TYPE_INT_ARGB_PRE)) {
     init {
         check((awtImage.type == BufferedImage.TYPE_INT_ARGB_PRE) || (awtImage.type == BufferedImage.TYPE_INT_ARGB))
     }

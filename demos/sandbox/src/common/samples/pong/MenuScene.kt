@@ -21,7 +21,7 @@ class MenuScene() : Scene() {
 			text = "Play"
 			position(sceneWidth / 2 - 128, sceneHeight / 2 - 64)
 			onClickSuspend {
-				sceneContainer.changeTo<PlayScene>()
+				sceneContainer.changeTo(PlayScene::class)
 			}
 		}
 		var exitButton = uiButton(size = Size(256.0, 32.0)) {

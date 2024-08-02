@@ -43,7 +43,7 @@ class ParseException : Exception {
     /**
      * The end of line string for this machine.
      */
-    protected var eol = JSystem.getProperty("line.separator", "\n")
+    var eol = JSystem.getProperty("line.separator", "\n")
 
     /**
      * This constructor is used by the method "generateParseException"

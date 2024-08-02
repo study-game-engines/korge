@@ -43,7 +43,7 @@ import org.luaj.vm2.Varargs
  *
  * @see CoerceLuaToJava
  */
-internal class JavaMethod private constructor(val method: Method) :
+internal class JavaMethod (val method: Method) :
     JavaMember(method.parameterTypes, method.modifiers) {
 
     init {

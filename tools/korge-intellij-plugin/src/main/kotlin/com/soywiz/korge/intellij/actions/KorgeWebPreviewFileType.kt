@@ -75,7 +75,7 @@ object KorgeWebPreviewUtils {
     }
 }
 
-class KorgeWebPreviewFileType private constructor() : FakeFileType() {
+class KorgeWebPreviewFileType () : FakeFileType() {
     override fun getName(): String = "KorgeWebPreview"
     override fun getDisplayName(): String = IdeBundle.message("filetype.web.preview.display.name")
     override fun getDescription(): String = IdeBundle.message("filetype.web.preview.description")

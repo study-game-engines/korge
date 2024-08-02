@@ -44,7 +44,7 @@ import org.luaj.vm2.lib.VarArgFunction
  *
  * @see CoerceLuaToJava
  */
-internal class JavaConstructor private constructor(val constructor: Constructor<*>) :
+internal class JavaConstructor (val constructor: Constructor<*>) :
     JavaMember(constructor.parameterTypes, constructor.modifiers) {
 
     override fun invoke(args: Varargs): Varargs {

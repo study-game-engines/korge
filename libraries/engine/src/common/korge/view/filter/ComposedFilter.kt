@@ -10,7 +10,7 @@ import korlibs.math.geom.*
 /**
  * Allows to create a single [Filter] that will render several [filters] in order.
  */
-open class ComposedFilter private constructor(
+open class ComposedFilter (
     @ViewProperty
     @ViewPropertySubTree
     val filters: FastArrayList<Filter>,
@@ -145,6 +145,6 @@ open class ComposedFilter private constructor(
     }
     */
 
-    protected open fun stepBefore() {
+    open fun stepBefore() {
     }
 }

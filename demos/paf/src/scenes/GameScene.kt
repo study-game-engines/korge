@@ -168,7 +168,7 @@ class GameScene() : SceneBase() {
                         escenario = escenario + 1
                         println("FINISHED!")
                         delay(2.seconds)
-                        sceneContainer.changeTo<GameScene>()
+                        sceneContainer.changeTo(GameScene::class)
                     }
 
                     //if (key(key_select)==1)then  inicio();end     //si pulsas la tecla esc, saldremos del juego hacia la presentacion con la llamada a inicio()
@@ -553,7 +553,7 @@ class GameScene() : SceneBase() {
                             println("GAME OVER")
                             currentGameState.pauseBalls = true
                             delay(1.seconds)
-                            sceneContainer.changeTo<TitleScene>()
+                            sceneContainer.changeTo(TitleScene::class)
                             //inicio()
                         }     //comprueba si vidas es menor o igual a -1, si es igual o menor a -1 quiere decir que te han quitado todas las vidas y volveras a inicio del programa con la llamada inicio()
                     }

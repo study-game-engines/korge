@@ -57,7 +57,7 @@ class TokenMgrError : Error {
          * equivalents in the given string
          */
 
-        protected fun addEscapes(str: String): String {
+        fun addEscapes(str: String): String {
             val retval = StringBuilder()
             var ch: Char
             loop@for (i in 0 until str.length) {
@@ -102,7 +102,7 @@ class TokenMgrError : Error {
          * Note: You can customize the lexical error message by modifying this method.
          */
 
-        protected fun LexicalError(
+        fun LexicalError(
             EOFSeen: Boolean, lexState: Int,
             errorLine: Int, errorColumn: Int, errorAfter: String,
             curChar: Char

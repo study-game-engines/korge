@@ -7,7 +7,7 @@ import korlibs.io.lang.IOException
 import korlibs.io.net.http.Http
 import kotlinx.coroutines.channels.Channel
 
-abstract class WebSocketClient protected constructor(val url: String, val protocols: List<String>?, debug: Boolean) {
+abstract class WebSocketClient constructor(val url: String, val protocols: List<String>?, debug: Boolean) {
 	val onOpen = Signal<Unit>()
 	val onError = Signal<Throwable>()
 	val onClose = Signal<CloseInfo>()

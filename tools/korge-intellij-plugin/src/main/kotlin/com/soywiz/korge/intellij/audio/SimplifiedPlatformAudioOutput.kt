@@ -19,11 +19,11 @@ abstract class SimplifiedPlatformAudioOutput(
         start()
     }
 
-    protected abstract val isAvailable: Boolean
-    protected abstract fun doClose()
-    protected abstract fun doPrepare(): Boolean
-    protected abstract fun doGetSamplesPerChunk(): Int
-    protected abstract fun doWrite(buff: AudioSamples, frames: Int)
+    abstract val isAvailable: Boolean
+    abstract fun doClose()
+    abstract fun doPrepare(): Boolean
+    abstract fun doGetSamplesPerChunk(): Int
+    abstract fun doWrite(buff: AudioSamples, frames: Int)
 
     final override fun start() {
         running = true

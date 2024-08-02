@@ -7,7 +7,7 @@ import org.luaj.vm2.io.*
 /** Token Manager.  */
 class LuaParserTokenManager
 /** Constructor.  */
-    (protected var input_stream: SimpleCharStream) : LuaParserConstants {
+    (var input_stream: SimpleCharStream) : LuaParserConstants {
 
     /** Debug output.  */
     @kotlin.jvm.JvmField
@@ -18,7 +18,7 @@ class LuaParserTokenManager
     private var image: StringBuilder? = jjimage
     private var jjimageLen: Int = 0
     private val lengthOfMatch: Int = 0
-    protected var curChar: Char = ' '
+    var curChar: Char = ' '
 
     internal var curLexState = 0
     internal var defaultLexState = 0
@@ -1685,7 +1685,7 @@ class LuaParserTokenManager
             curLexState = lexState
     }
 
-    protected fun jjFillToken(): Token {
+    fun jjFillToken(): Token {
         val t: Token
         val curTokenImage: String
         val beginLine: Int

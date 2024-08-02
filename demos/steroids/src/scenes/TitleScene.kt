@@ -71,7 +71,7 @@ class TitleScene() : SceneBase() {
             loop {
                 if (key != 0) {
                     currentGameState = GameState()
-                    sceneContainer.changeTo<GameScene>()
+                    sceneContainer.changeTo(GameScene::class)
                 }
 
                 frame()

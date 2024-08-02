@@ -5,7 +5,7 @@ import korlibs.io.file.VfsFile
 import korlibs.io.file.normalize
 import korlibs.io.file.pathInfo
 
-class JailVfs private constructor(val jailRoot: VfsFile, dummy: Unit) : Vfs.Proxy() {
+class JailVfs (val jailRoot: VfsFile, dummy: Unit) : Vfs.Proxy() {
     companion object {
         operator fun invoke(jailRoot: VfsFile): VfsFile = JailVfs(jailRoot, Unit).root
     }

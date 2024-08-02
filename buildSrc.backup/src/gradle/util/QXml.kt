@@ -30,7 +30,7 @@ fun NodeList.toFlatNodeList(): List<Node> = this.flatMap {
     }
 }
 
-class QXml private constructor(val nodes: List<Node>, dummy: Boolean) : Iterable<QXml> {
+class QXml (val nodes: List<Node>, dummy: Boolean) : Iterable<QXml> {
 	override fun iterator(): Iterator<QXml> = list.iterator()
 
 	companion object {

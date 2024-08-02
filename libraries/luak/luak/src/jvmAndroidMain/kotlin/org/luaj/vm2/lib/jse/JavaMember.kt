@@ -45,7 +45,7 @@ import kotlin.math.*
  *
  * @see CoerceLuaToJava
  */
-internal abstract class JavaMember protected constructor(params: Array<Class<*>>, modifiers: Int) : VarArgFunction() {
+internal abstract class JavaMember constructor(params: Array<Class<*>>, modifiers: Int) : VarArgFunction() {
 
     private val isvarargs = modifiers and METHOD_MODIFIERS_VARARGS != 0
     @kotlin.jvm.JvmField
@@ -64,7 +64,7 @@ internal abstract class JavaMember protected constructor(params: Array<Class<*>>
         return s
     }
 
-    protected fun convertArgs(args: Varargs): Array<Any> {
+    fun convertArgs(args: Varargs): Array<Any> {
         val a: Array<Any?> = if (varargs == null) {
             Array(fixedargs.size) { fixedargs[it].coerce(args.arg(it + 1)) }
         } else {

@@ -141,7 +141,7 @@ open class Container(
         }
     }
 
-    protected open fun onChildAdded(view: View) {
+    open fun onChildAdded(view: View) {
     }
 
     open fun onChildChangedSize(view: View) {
@@ -404,7 +404,7 @@ open class Container(
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Base methods that update the collection
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected fun invalidateContainer() {
+    fun invalidateContainer() {
         stage?.views?.invalidatedView(this)
     }
 

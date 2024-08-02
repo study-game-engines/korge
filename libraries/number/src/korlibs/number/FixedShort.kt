@@ -18,7 +18,7 @@ import kotlin.math.*
  * 11~12 bits of integer
  * 3~5 bits of decimal
  */
-inline class FixedShort private constructor(val raw: Short) : Comparable<FixedShort> {
+inline class FixedShort (val raw: Short) : Comparable<FixedShort> {
     companion object {
         const val SCALE_DIGITS = 1
         const val SCALE = 10

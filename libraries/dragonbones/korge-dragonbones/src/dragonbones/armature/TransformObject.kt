@@ -89,7 +89,7 @@ abstract class TransformObject(pool: SingleObjectPool<out TransformObject>) : Ba
 	 * @private
 	 */
 	var userData: Any? = null
-	protected var _globalDirty: Boolean = false
+	var _globalDirty: Boolean = false
 	/**
 	 * @internal
 	 */

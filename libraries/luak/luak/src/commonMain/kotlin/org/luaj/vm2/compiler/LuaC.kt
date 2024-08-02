@@ -77,7 +77,7 @@ import org.luaj.vm2.lib.BaseLib
  *
  * @see Prototype
  */
-class LuaC protected constructor() : Constants(), Globals.Compiler, Globals.Loader {
+class LuaC constructor() : Constants(), Globals.Compiler, Globals.Loader {
 
     /** Compile lua source into a Prototype.
      * @param stream InputStream representing the text source conforming to lua source syntax.

@@ -29,11 +29,11 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
         this.jar = "jar:" + zip.toExternalForm() + "!/"
     }
 
-    protected fun pathOfFile(file: String): String = "$jar$dir/$file"
-    protected fun inputStreamOfPath(path: String): LuaBinInput = URL(path).readBytes().toLuaBinInput()
-    protected fun inputStreamOfFile(file: String): LuaBinInput = inputStreamOfPath(pathOfFile(file))
+    fun pathOfFile(file: String): String = "$jar$dir/$file"
+    fun inputStreamOfPath(path: String): LuaBinInput = URL(path).readBytes().toLuaBinInput()
+    fun inputStreamOfFile(file: String): LuaBinInput = inputStreamOfPath(pathOfFile(file))
 
-    protected open fun doTest(file: String) {
+    open fun doTest(file: String) {
         try {
             // load source from jar
             val path = pathOfFile(file)
@@ -69,7 +69,7 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
 
     }
 
-    protected fun bytesFromJar(path: String): ByteArray {
+    fun bytesFromJar(path: String): ByteArray {
         val `is` = inputStreamOfPath(path)
         val baos = ByteArrayOutputStream()
         val buffer = ByteArray(2048)
@@ -83,11 +83,11 @@ abstract class AbstractUnitTests(zipdir: String, zipfile: String, private val di
         return baos.toByteArray()
     }
 
-    protected fun loadFromBytes(bytes: ByteArray, script: String): Prototype {
+    fun loadFromBytes(bytes: ByteArray, script: String): Prototype {
         return globals!!.loadPrototype(BytesLuaBinInput(bytes), script, "b")
     }
 
-    protected fun protoToString(p: Prototype): String {
+    fun protoToString(p: Prototype): String {
         val baos = ByteArrayLuaBinOutput()
         val ps = LuaWriterBinOutput(baos)
         Print.ps = ps

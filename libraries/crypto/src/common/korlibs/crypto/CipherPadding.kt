@@ -34,9 +34,9 @@ abstract class CipherPadding {
         return result.copyOf(size)
     }
 
-    protected open fun paddingSize(dataSize: Int, blockSize: Int): Int = blockSize - dataSize % blockSize
-    protected open fun addInternal(result: ByteArray, dataSize: Int, paddingSize: Int) : Unit = Unit
-    protected open fun removeInternal(data: ByteArray) : Int = data.size - (data[data.size - 1].toInt() and 0xFF)
+    open fun paddingSize(dataSize: Int, blockSize: Int): Int = blockSize - dataSize % blockSize
+    open fun addInternal(result: ByteArray, dataSize: Int, paddingSize: Int) : Unit = Unit
+    open fun removeInternal(data: ByteArray) : Int = data.size - (data[data.size - 1].toInt() and 0xFF)
 }
 
 private object CipherPaddingNo : CipherPadding() {

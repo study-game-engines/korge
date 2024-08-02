@@ -28,9 +28,9 @@ import java.io.*
 import java.net.*
 import kotlin.test.*
 
-abstract class ScriptDrivenTest protected constructor(private val platform: PlatformType, private val subdir: String) :
+abstract class ScriptDrivenTest constructor(private val platform: PlatformType, private val subdir: String) :
     ResourceFinder {
-    protected lateinit var globals: Globals
+    lateinit var globals: Globals
 
     enum class PlatformType {
         JME, JSE, LUAJIT
@@ -122,7 +122,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
     // */
-    protected suspend fun runTest(testName: String) {
+    suspend fun runTest(testName: String) {
         try {
             // override print()
             val output = ByteArrayLuaBinOutput()
@@ -155,7 +155,7 @@ abstract class ScriptDrivenTest protected constructor(private val platform: Plat
     }
 
     @Throws(IOException::class)
-    protected fun loadScript(name: String, globals: Globals): LuaValue {
+    fun loadScript(name: String, globals: Globals): LuaValue {
         val script = this.findResource("$name.lua") ?: throw AssertionError("Could not load script for test case: $name")
 
         return try {

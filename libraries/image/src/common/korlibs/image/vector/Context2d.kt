@@ -25,22 +25,22 @@ open class Context2d(
             renderer.debug = value
         }
 
-    protected open val rendererWidth get() = renderer.width
-    protected open val rendererHeight get() = renderer.height
-    protected open fun rendererRender(state: State, fill: Boolean, winding: Winding? = null) =
+    open val rendererWidth get() = renderer.width
+    open val rendererHeight get() = renderer.height
+    open fun rendererRender(state: State, fill: Boolean, winding: Winding? = null) =
         renderer.render(state, fill, winding)
 
-    protected open fun rendererDrawImage(
+    open fun rendererDrawImage(
         image: Bitmap,
         pos: Point,
         size: Size = image.size.toFloat(),
         transform: Matrix = Matrix.IDENTITY
     ) = renderer.drawImage(image, pos, size, transform)
 
-    protected open fun rendererDispose() = renderer.dispose()
-    protected open fun rendererBufferingStart() = renderer.bufferingStart()
-    protected open fun rendererBufferingEnd() = renderer.bufferingEnd()
-    protected open fun rendererRenderSystemText(
+    open fun rendererDispose() = renderer.dispose()
+    open fun rendererBufferingStart() = renderer.bufferingStart()
+    open fun rendererBufferingEnd() = renderer.bufferingEnd()
+    open fun rendererRenderSystemText(
         state: State,
         font: Font?,
         fontSize: Double,

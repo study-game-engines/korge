@@ -40,17 +40,17 @@ open class BaseKorgeBinaryFile(
 	override fun getDescription(): String = _description
 }
 
-open class TMXLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_TMX", "text/tmx") {
+open class TMXLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_TMX", "text/tmx") {
 	companion object {
 		@JvmField val INSTANCE = TMXLanguage()
 	}
 }
-open class TSXLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_TSX", "text/tsx") {
+open class TSXLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_TSX", "text/tsx") {
 	companion object {
 		@JvmField val INSTANCE = TSXLanguage()
 	}
 }
-open class PEXLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_PEX", "text/pex") {
+open class PEXLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_PEX", "text/pex") {
 	companion object {
 		@JvmField val INSTANCE = PEXLanguage()
 	}
@@ -64,23 +64,23 @@ class KtreeFile internal constructor(viewProvider: FileViewProvider) : XmlFileIm
 	}
 }
 
-open class KTREELanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_KTREE", "text/ktree") {
+open class KTREELanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_KTREE", "text/ktree") {
 
 	companion object {
 		@JvmField val INSTANCE = KTREELanguage()
 	}
 }
-open class SCMLLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_SCML", "text/scml") {
+open class SCMLLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_SCML", "text/scml") {
 	companion object {
 		@JvmField val INSTANCE = SCMLLanguage()
 	}
 }
-open class SCONLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_SCON", "text/scon") {
+open class SCONLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_SCON", "text/scon") {
 	companion object {
 		@JvmField val INSTANCE = SCONLanguage()
 	}
 }
-open class FNTLanguage protected constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_FNT", "text/fnt") {
+open class FNTLanguage constructor() : XMLLanguage(XMLLanguage.INSTANCE, "KORGE_FNT", "text/fnt") {
 	companion object {
 		@JvmField val INSTANCE = FNTLanguage()
 	}

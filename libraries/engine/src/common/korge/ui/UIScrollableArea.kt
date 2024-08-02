@@ -78,7 +78,7 @@ open class UIScrollableArea(
         verScrollBar.visible = verticalScroll
     }
 
-    protected open fun onMoved() {
+    open fun onMoved() {
         container.x = -horScrollBar.current
         container.y = -verScrollBar.current
     }

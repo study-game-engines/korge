@@ -13,7 +13,7 @@ class SplashScene : Scene() {
     override suspend fun Container.sceneInit() {
         text("Dungeon")
         solidRect(100.0, 100.0, Colors.RED).position(100, 100).onClick {
-            launchImmediately { sceneContainer.changeTo<SplashScene>() }
+            launchImmediately { sceneContainer.changeTo(SplashScene::class) }
         }
     }
 }

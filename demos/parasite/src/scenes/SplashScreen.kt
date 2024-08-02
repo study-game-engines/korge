@@ -31,7 +31,7 @@ class SplashScreen : Scene() {
         bg.tween(bg::alpha[1.0], time = 1.seconds)
         delay(2.seconds)
         bg.tween(bg::alpha[0.0], time = .5.seconds)
-        sceneContainer.changeTo<LoadingProxyScene>(LoadingProxyScene::class::class,
+        sceneContainer.changeTo(LoadingProxyScene::class::class,
                 LoadingProxyScene.NextScreen(MainScene::class),
                 time = .5.seconds)
     }

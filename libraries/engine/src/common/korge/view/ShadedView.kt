@@ -48,7 +48,7 @@ open class ShadedView(
             //computeVertices()
         }
 
-    protected override fun computeVertices() {
+    override fun computeVertices() {
         val L = (sLeft - padding.left).toFloat()
         val T = (sTop - padding.top).toFloat()
         val R = (bwidth + padding.leftPlusRight).toFloat()
@@ -88,7 +88,7 @@ open class ShadedView(
         )
     }
 
-    open protected fun updateUniforms(ctx: RenderContext) {
+    open fun updateUniforms(ctx: RenderContext) {
     }
 
 

@@ -8,7 +8,7 @@ abstract class SparseChunkedStackedArray2<TStackedArray2 : IStackedArray2Base>()
         fun idiv(x: Int, y: Int): Int = if (x < 0) (x - y + 1) / y else (x / y)
     }
 
-    override var contentVersion: Int = 0 ; protected set
+    override var contentVersion: Int = 0 ; set
     var minX = 0
     var minY = 0
     var maxX = 0
@@ -19,7 +19,7 @@ abstract class SparseChunkedStackedArray2<TStackedArray2 : IStackedArray2Base>()
     var first: TStackedArray2? = null
     var last: TStackedArray2? = null
 
-    protected abstract fun setEmptyFromChunk(chunk: TStackedArray2)
+    abstract fun setEmptyFromChunk(chunk: TStackedArray2)
 
     fun putChunk(chunk: TStackedArray2): TStackedArray2 {
         if (first == null) {
@@ -50,11 +50,11 @@ abstract class SparseChunkedStackedArray2<TStackedArray2 : IStackedArray2Base>()
     override val height: Int get() = maxY - minY
 
     fun findAllChunks(): List<TStackedArray2> = bvh.findAllValues()
-    protected var lastSearchChunk: TStackedArray2? = null
+    var lastSearchChunk: TStackedArray2? = null
 
-    protected fun TStackedArray2.chunkX(x: Int): Int = x - this.startX
-    protected fun TStackedArray2.chunkY(y: Int): Int = y - this.startY
-    protected fun TStackedArray2.containsChunk(x: Int, y: Int): Boolean {
+    fun TStackedArray2.chunkX(x: Int): Int = x - this.startX
+    fun TStackedArray2.chunkY(y: Int): Int = y - this.startY
+    fun TStackedArray2.containsChunk(x: Int, y: Int): Boolean {
         return x in startX until endX && y in startY until endY
     }
 

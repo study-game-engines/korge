@@ -1,10 +1,14 @@
 package samples
 
-import korlibs.image.color.*
-import korlibs.korge.input.*
-import korlibs.korge.scene.*
+import korlibs.image.color.Colors
+import korlibs.korge.input.onClickSuspend
+import korlibs.korge.input.onOut
+import korlibs.korge.input.onOver
+import korlibs.korge.scene.Scene
+import korlibs.korge.scene.sceneContainer
 import korlibs.korge.view.*
-import korlibs.korge.view.align.*
+import korlibs.korge.view.align.alignTopToBottomOf
+import korlibs.korge.view.align.centerXOn
 
 class MainScenes : Scene() {
     override suspend fun SContainer.sceneMain() {
@@ -12,8 +16,7 @@ class MainScenes : Scene() {
             .mapInstance(MyDependency("HELLO WORLD"))
             .mapPrototype { MyScene1(get()) }
             .mapPrototype { MyScene2(get()) }
-
-        sceneContainer().changeTo<MyScene1>()
+        sceneContainer().changeTo(MyScene1::class)
     }
 
 
@@ -40,7 +43,7 @@ class MainScenes : Scene() {
                 onOver { alpha = 1.0 }
                 onOut { alpha = 0.7 }
                 onClickSuspend {
-                    sceneContainer.changeTo<MyScene2>()
+                    sceneContainer.changeTo(MyScene2::class)
                 }
             }
             solidRect(100, 100, Colors.BLUE) {
@@ -49,7 +52,7 @@ class MainScenes : Scene() {
                 onOver { alpha = 1.0 }
                 onOut { alpha = 0.7 }
                 onClickSuspend {
-                    sceneContainer.changeTo<MyScene2>()
+                    sceneContainer.changeTo(MyScene2::class)
                 }
             }
         }
@@ -65,7 +68,7 @@ class MainScenes : Scene() {
             val blueSquare = solidRect(100, 100, Colors.BLUE) {
                 position(200, 200)
                 onClickSuspend {
-                    sceneContainer.changeTo<MyScene1>(MyDependency("From MyScene2"))
+                    sceneContainer.changeTo(MyScene1::class, MyDependency("From MyScene2"))
                 }
             }
 

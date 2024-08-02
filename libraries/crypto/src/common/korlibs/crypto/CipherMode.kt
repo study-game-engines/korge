@@ -196,15 +196,15 @@ private abstract class CipherModeIV(name: String) : CipherModeBase(name) {
         return padding.remove(pData)
     }
 
-    protected abstract fun coreEncrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
-    protected abstract fun coreDecrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
+    abstract fun coreEncrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
+    abstract fun coreDecrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
 }
 
 private abstract class CipherModeIVDE(name: String) : CipherModeIV(name) {
     final override fun coreEncrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray) = coreCrypt(pData, cipher, ivb)
     final override fun coreDecrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray) = coreCrypt(pData, cipher, ivb)
 
-    protected abstract fun coreCrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
+    abstract fun coreCrypt(pData: ByteArray, cipher: Cipher, ivb: ByteArray)
 }
 
 private fun arrayxor(data: ByteArray, offset: Int, xor: ByteArray) {

@@ -8,7 +8,7 @@ import kotlin.math.*
 // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 //@KormaValueApi
 data class Quaternion(val x: Float, val y: Float, val z: Float, val w: Float) : IsAlmostEqualsF<Quaternion> {
-//inline class Quaternion private constructor(val data: Float4Pack) {
+//inline class Quaternion (val data: Float4Pack) {
 //    constructor(x: Float, y: Float, z: Float, w: Float) : this(float4PackOf(x, y, z, w))
 //    val x: Float get() = data.f0
 //    val y: Float get() = data.f1

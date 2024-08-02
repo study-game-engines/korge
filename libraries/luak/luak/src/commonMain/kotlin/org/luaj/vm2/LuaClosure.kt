@@ -194,14 +194,14 @@ class LuaClosure
         return execute(stack, if (p.is_vararg != 0) varargs.subargs(p.numparams + 1) else LuaValue.NONE)
     }
 
-    protected fun execute(stack: Array<LuaValue>, varargs: Varargs): Varargs {
+    fun execute(stack: Array<LuaValue>, varargs: Varargs): Varargs {
         //Exception().printStackTrace()
         return runBlockingNoSuspensions {
             executeSuspend(stack, varargs)
         }
     }
 
-    protected suspend fun executeSuspend(stack: Array<LuaValue>, varargs: Varargs): Varargs {
+    suspend fun executeSuspend(stack: Array<LuaValue>, varargs: Varargs): Varargs {
         // loop through instructions
         var i: Int
         var a: Int
@@ -732,8 +732,8 @@ class LuaClosure
         return null
     }
 
-    protected fun getUpvalue(i: Int): LuaValue? = upValues[i]?.value
-    protected fun setUpvalue(i: Int, v: LuaValue) { upValues[i]?.value = v }
+    fun getUpvalue(i: Int): LuaValue? = upValues[i]?.value
+    fun setUpvalue(i: Int, v: LuaValue) { upValues[i]?.value = v }
     override fun name(): String = "<" + p.shortsource() + ":" + p.linedefined + ">"
 
     companion object {

@@ -131,7 +131,7 @@ object NewBinPacker {
                 _dirty++
             }
 
-        protected var _rot: Boolean = rot
+        var _rot: Boolean = rot
 
         /**
          * If the rectangle is rotated
@@ -162,7 +162,7 @@ object NewBinPacker {
 
             }
 
-        protected var _allowRotation: Boolean? = allowRotation
+        var _allowRotation: Boolean? = allowRotation
 
         /**
          * If the rectangle allow rotation
@@ -185,7 +185,7 @@ object NewBinPacker {
                 }
             }
 
-        protected var _data: IBinPackerData? = null
+        var _data: IBinPackerData? = null
 
         var data: IBinPackerData?
             get() = this._data
@@ -199,7 +199,7 @@ object NewBinPacker {
                 this._dirty++
             }
 
-        protected var _dirty: Int = 0
+        var _dirty: Int = 0
         val dirty: Boolean get() = this._dirty > 0
         fun setDirty(value: Boolean = true): Unit {
             this._dirty = if (value) this._dirty + 1 else 0
@@ -243,7 +243,7 @@ object NewBinPacker {
         override var data: IBinPackerData? = null
         override var tag: String? = null
 
-        protected var _dirty: Int = 0
+        var _dirty: Int = 0
 
         val dirty: Boolean get() = this._dirty > 0 || this.rects.any { it.dirty }
         /**
@@ -263,7 +263,7 @@ object NewBinPacker {
         abstract fun clone(): Bin
     }
 
-    class OversizedElementBin private constructor(
+    class OversizedElementBin (
         override var width: Int,
         override var height: Int,
         override var data: IBinPackerData? = null,

@@ -4,7 +4,7 @@ import korlibs.Serializable
 import kotlin.time.*
 
 /** [DateTime] with an associated [TimezoneOffset] */
-class DateTimeTz private constructor(
+class DateTimeTz (
     /** The [adjusted] part */
     private val adjusted: DateTime,
     /** The [offset] part */

@@ -111,7 +111,7 @@ abstract class BaseAwtGameWindow(
         popupMenu.show(contentComponent, mouseX, mouseY)
     }
 
-    protected open fun ensureContext() {
+    open fun ensureContext() {
     }
 
     fun framePaint(g: Graphics) {
@@ -270,8 +270,8 @@ abstract class BaseAwtGameWindow(
 
     var reshaped = false
 
-    protected var mouseX: Int = 0
-    protected var mouseY: Int = 0
+    var mouseX: Int = 0
+    var mouseY: Int = 0
 
     override suspend fun loop(entry: suspend GameWindow.() -> Unit) {
         launchImmediately(getCoroutineDispatcherWithCurrentContext() + CoroutineName("BaseAwtGameWindow.loop")) {

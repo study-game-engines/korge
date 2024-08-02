@@ -9,9 +9,9 @@ open class CacheMap<K, V>(
 open class BaseCacheMap<K, V>() : BaseMutableMap<K, V> {
     val map: LinkedHashMap<K, V> = LinkedHashMap<K, V>()
 
-    protected open fun mustFree(key: K, value: V): Boolean = false
-    protected open fun keyToRemove(key: K, value: V): K = map.keys.first()
-    protected open fun freed(key: K, value: V): Unit {
+    open fun mustFree(key: K, value: V): Boolean = false
+    open fun keyToRemove(key: K, value: V): K = map.keys.first()
+    open fun freed(key: K, value: V): Unit {
     }
 
     override val size: Int get() = map.size
@@ -38,7 +38,7 @@ open class BaseCacheMap<K, V>() : BaseMutableMap<K, V> {
         return oldValue
     }
 
-    protected open fun putNew(key: K, value: V) {
+    open fun putNew(key: K, value: V) {
     }
 
     override fun clear() {

@@ -137,7 +137,7 @@ open class MathLib : TwoArgFunction() {
             return LuaValue.valueOf(call(arg.checkdouble()))
         }
 
-        protected abstract fun call(d: Double): Double
+        abstract fun call(d: Double): Double
     }
 
     abstract class BinaryOp : TwoArgFunction() {
@@ -145,7 +145,7 @@ open class MathLib : TwoArgFunction() {
             return LuaValue.valueOf(call(x.checkdouble(), y.checkdouble()))
         }
 
-        protected abstract fun call(x: Double, y: Double): Double
+        abstract fun call(x: Double, y: Double): Double
     }
 
     internal class abs : UnaryOp() {
@@ -345,7 +345,7 @@ open class MathLib : TwoArgFunction() {
          * Default JME version computes using longhand heuristics.
          */
 
-        protected fun dpow_default(a: Double, b: Double): Double {
+        fun dpow_default(a: Double, b: Double): Double {
             var a = a
             var b = b
             if (b < 0)

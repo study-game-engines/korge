@@ -9,8 +9,7 @@ typealias Ray2 = Ray
 /** Represents an infinite [Ray] starting at [point] in the specified [direction] with an [angle] */
 //inline class Ray(val data: Float4Pack) {
 data class Ray2D
-/** Constructs a [Ray] starting from [point] in the specified [direction] */
-private constructor(
+/** Constructs a [Ray] starting from [point] in the specified [direction] */(
     /** Starting point */
     val point: Point,
     /** Normalized direction of the ray starting at [point] */
@@ -31,7 +30,7 @@ private constructor(
     /** Constructs a [Ray] starting from [point] in the specified [angle] */
     constructor(point: Point, angle: Angle) : this(point, Vector2D.polar(angle), Unit)
 
-    //private constructor(point: Point, normalizedDirection: Vector2, unit: Unit) : this(point.x, point.y, normalizedDirection.x, normalizedDirection.y)
+    //(point: Point, normalizedDirection: Vector2, unit: Unit) : this(point.x, point.y, normalizedDirection.x, normalizedDirection.y)
 
     /** Checks if [this] and [other]are equals with an [epsilon] difference */
     override fun isAlmostEquals(other: Ray, epsilon: Double): Boolean =

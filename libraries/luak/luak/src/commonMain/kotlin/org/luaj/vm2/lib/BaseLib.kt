@@ -387,7 +387,7 @@ open class BaseLib : TwoArgFunction(), ResourceFinder {
         override fun call(table: LuaValue, metatable: LuaValue): LuaValue {
             val mt0 = table.checktable()!!.getmetatable()
             if (mt0 != null && !mt0.rawget(LuaValue.METATABLE).isnil())
-                LuaValue.error("cannot change a protected metatable")
+                LuaValue.error("cannot change a metatable")
             return table.setmetatable(if (metatable.isnil()) null else metatable.checktable())
         }
     }

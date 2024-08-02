@@ -132,7 +132,7 @@ abstract class UIBaseContainer(size: Size) : UIView(size) {
         }
     }
 
-    protected abstract fun relayoutInternal()
+    abstract fun relayoutInternal()
 
     var deferredRendering: Boolean? = true
     //var deferredRendering: Boolean? = false
@@ -233,7 +233,7 @@ inline fun Container.uiHorizontalFill(
 ) = UIHorizontalFill(size, padding.toDouble()).addTo(this).apply(block)
 
 abstract class UIHorizontalVerticalFill(size: Size = Size(128, 128), var padding: Double = UI_DEFAULT_PADDING) : UIContainer(size) {
-    protected inline fun _relayoutInternal(dimension: Double, block: (it: View, pos: Double, elementSize: Double) -> Unit) {
+    inline fun _relayoutInternal(dimension: Double, block: (it: View, pos: Double, elementSize: Double) -> Unit) {
         var pos = 0.0
         val padding = this.padding
         val numSpaces = maxOf(0, numChildren - 1)

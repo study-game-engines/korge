@@ -77,17 +77,17 @@ abstract class BaseFactory(val pool: BaseObjectPool, dataParser: DataParser = Ob
 
 	private val _binaryDataParser by lazy { BinaryDataParser(pool) }
 
-	protected val _dragonBonesDataMap: FastStringMap<DragonBonesData> = FastStringMap()
-	protected val _textureAtlasDataMap: FastStringMap<FastArrayList<TextureAtlasData>> = FastStringMap()
-	protected lateinit var _dragonBones: DragonBones
-	protected var _dataParser: DataParser = dataParser
+	val _dragonBonesDataMap: FastStringMap<DragonBonesData> = FastStringMap()
+	val _textureAtlasDataMap: FastStringMap<FastArrayList<TextureAtlasData>> = FastStringMap()
+	lateinit var _dragonBones: DragonBones
+	var _dataParser: DataParser = dataParser
 
 
-	protected fun _isSupportMesh(): Boolean {
+	fun _isSupportMesh(): Boolean {
 		return true
 	}
 
-	protected fun _getTextureData(textureAtlasName: String, textureName: String): TextureData? {
+	fun _getTextureData(textureAtlasName: String, textureName: String): TextureData? {
 		if (textureAtlasName in this._textureAtlasDataMap) {
 			this._textureAtlasDataMap[textureAtlasName]!!.fastForEach { textureAtlasData ->
 				val textureData = textureAtlasData.getTexture(textureName)
@@ -318,9 +318,9 @@ abstract class BaseFactory(val pool: BaseObjectPool, dataParser: DataParser = Ob
 		return display!!
 	}
 
-	protected abstract fun _buildTextureAtlasData(textureAtlasData: TextureAtlasData?, textureAtlas: Any?): TextureAtlasData
-	protected abstract fun _buildArmature(dataPackage: BuildArmaturePackage): Armature
-	protected abstract fun _buildSlot(dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot
+	abstract fun _buildTextureAtlasData(textureAtlasData: TextureAtlasData?, textureAtlas: Any?): TextureAtlasData
+	abstract fun _buildArmature(dataPackage: BuildArmaturePackage): Armature
+	abstract fun _buildSlot(dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot
 	/**
 	 * - Parse the raw data to a DragonBonesData instance and cache it to the factory.
 	 * @param rawData - The raw data.

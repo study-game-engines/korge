@@ -3,7 +3,7 @@ package korlibs.image.util
 import korlibs.datastructure.*
 import korlibs.math.range.*
 
-class NinePatchSlices private constructor(val ranges: List<DoubleRangeExclusive>, dummy: Unit) {
+class NinePatchSlices (val ranges: List<DoubleRangeExclusive>, dummy: Unit) {
     constructor(ranges: List<DoubleRangeExclusive>) : this(ranges.sortedBy { it.start }, Unit)
     constructor(vararg ranges: DoubleRangeExclusive) : this(ranges.sortedBy { it.start }, Unit)
     companion object {

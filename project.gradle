@@ -7,8 +7,8 @@
 //module("korge:pacoman") { "demos/pacoman" }
 //module("korge:paf") { "demos/paf" }
 //module("korge:parasite") { "demos/parasite" }
-module("korge:puzzle2048") { "demos/puzzle2048" }
-//module("korge:sandbox") { "demos/sandbox" }
+//module("korge:puzzle2048") { "demos/puzzle2048" }
+module("korge:sandbox") { "demos/sandbox" }
 //module("korge:steroids") { "demos/steroids" }
 
 // libraries
