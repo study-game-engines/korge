@@ -20,6 +20,6 @@ source {
     include project(":korge:string")
     include project(":korge:serialization")
     include project(":korge:io-fs")
-    include "com.soywiz:korlibs-checksum:6.0.0"
+    include project(":korge:checksum")
     include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

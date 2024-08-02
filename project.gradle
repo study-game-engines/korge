@@ -16,6 +16,7 @@ module("korge:annotations") { "libraries/annotations" }
 module("korge:audio") { "libraries/audio" }
 module("korge:audio-core") { "libraries/audio-core" }
 module("korge:bignumber") { "libraries/bignumber" }
+module("korge:checksum") { "libraries/checksum" }
 module("korge:compression") { "libraries/compression" }
 module("korge:concurrent") { "libraries/concurrent" }
 module("korge:core") { "libraries/core" }

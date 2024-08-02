@@ -5,5 +5,5 @@ source {
  include project(":korge:concurrent")
  include project(":korge:math-core")
  include project(":korge:datastructure-core")
- // com.soywiz:korlibs-checksum:6.0.0
+ include project(":korge:checksum")
 }

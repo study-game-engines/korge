@@ -4,10 +4,6 @@ import korlibs.io.async.*
 import kotlin.contracts.*
 import kotlin.coroutines.cancellation.*
 
-interface AutoCloseable {
-    fun close()
-}
-
 @OptIn(ExperimentalStdlibApi::class)
 object DummyAutoCloseable : AutoCloseable {
     override fun close() = Unit
