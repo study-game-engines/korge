@@ -30,7 +30,7 @@ class LinuxJoyEventAdapter @OptIn(SyncIOAPI::class) constructor(val syncIO: Sync
         const val JS_EVENT_INIT = 0x80    /* initial state of device */
     }
 
-    data class DeviceInfo(val namedDevice: String, val finalDevice: String) : Extra by ExtraMixin() {
+    data class DeviceInfo(val namedDevice: String, val finalDevice: String) : Extra by Extra.Mixin() {
         val baseName = PathInfo(namedDevice).baseName.removePrefix("usb-").removeSuffix("-joystick").replace("_", " ")
         val id: Int = Regex("\\d+$").find(finalDevice)?.value?.toInt() ?: -1
         override fun toString(): String = "DeviceInfo[$id]($baseName)"

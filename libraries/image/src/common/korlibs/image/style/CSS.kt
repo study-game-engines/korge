@@ -43,7 +43,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
     data class UnknownSelector(val token: Token) : Selector {
         override val str: String get() = token.str
     }
-    data class Expression(val expr: List<Token>) : Extra by ExtraMixin() {
+    data class Expression(val expr: List<Token>) : Extra by Extra.Mixin() {
         val exprStr = this.expr.joinToString(" ") { it.str }
     }
 
@@ -51,7 +51,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
     }
     interface IRuleSet
 
-    data class Declarations(val declarations: List<Declaration>) : Extra by ExtraMixin() {
+    data class Declarations(val declarations: List<Declaration>) : Extra by Extra.Mixin() {
         val declarationsMap = declarations.associate { it.property.lowercase() to it.expr }
         operator fun get(prop: String): Expression? = declarationsMap[prop]
     }

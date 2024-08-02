@@ -57,7 +57,7 @@ open class SyncStreamBase : AutoCloseable, SyncRAInputStream, SyncRAOutputStream
 class SyncStream(
     val base: SyncStreamBase,
     position: Long = 0L
-) : Extra by ExtraMixin(), AutoCloseable, SyncInputStream, SyncPositionStream, SyncOutputStream, SyncLengthStream, MarkableSyncInputStream {
+) : Extra by Extra.Mixin(), AutoCloseable, SyncInputStream, SyncPositionStream, SyncOutputStream, SyncLengthStream, MarkableSyncInputStream {
     private val smallTemp = base.smallTemp
     private val separateReadWrite = base.separateReadWrite
 
@@ -138,7 +138,7 @@ class SyncStream(
 
 
 //fun SyncStream(base: SyncStreamBase, position: Long = 0L): SyncStream = SyncStreamWithBase(base, position)
-//abstract class SyncStream : Extra by ExtraMixin(), AutoCloseable, SyncInputStream, SyncPositionStream, SyncOutputStream, SyncLengthStream, MarkableSyncInputStream {
+//abstract class SyncStream : Extra by Extra.Mixin(), AutoCloseable, SyncInputStream, SyncPositionStream, SyncOutputStream, SyncLengthStream, MarkableSyncInputStream {
 //    abstract override fun write(buffer: ByteArray, offset: Int, len: Int)
 //    abstract override fun read(buffer: ByteArray, offset: Int, len: Int): Int
 //

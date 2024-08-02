@@ -54,7 +54,7 @@ fun VectorFont.withFallback(vararg other: VectorFont?): VectorFontList = when (t
 /** When getting glyphs, it first tries to resolve with [first], then this [this] */
 fun VectorFont.asFallbackOf(first: VectorFont): VectorFontList = first.withFallback(this)
 
-data class VectorFontList(val list: List<VectorFont>) : VectorFont, Extra by ExtraMixin() {
+data class VectorFontList(val list: List<VectorFont>) : VectorFont, Extra by Extra.Mixin() {
     constructor(vararg fonts: VectorFont?) : this(fonts.filterNotNull())
 
     override val name: String = list.joinToString(", ") { it.name }

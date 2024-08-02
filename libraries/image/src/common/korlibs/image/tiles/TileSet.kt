@@ -11,7 +11,7 @@ import kotlin.time.*
 data class TileSetAnimationFrame(
     val tileId: Int,
     val fastDuration: FastDuration,
-) : Extra by ExtraMixin() {
+) : Extra by Extra.Mixin() {
     val duration get() = fastDuration.toDuration()
 
     companion object {
@@ -25,7 +25,7 @@ data class TileSetTileInfo(
     val slice: BmpSlice,
     val frames: List<TileSetAnimationFrame> = emptyList(),
     val collision: TileShapeInfo? = null,
-) : Extra by ExtraMixin() {
+) : Extra by Extra.Mixin() {
     val width get() = slice.width
     val height get() = slice.height
     val name: String? get() = slice.name

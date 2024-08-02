@@ -8,7 +8,7 @@ import korlibs.io.lang.*
 data class RichTextData(
     val lines: List<Line>,
     val defaultStyle: Style = lines.firstOrNull()?.defaultStyle ?: Style.DEFAULT
-) : List<RichTextData.Line> by lines, Extra by ExtraMixin() {
+) : List<RichTextData.Line> by lines, Extra by Extra.Mixin() {
     constructor(vararg lines: Line) : this(lines.toList())
 
     constructor(text: String, style: Style) : this(text.split("\n").map { Line(TextNode(it, style = style)) })
@@ -45,8 +45,8 @@ data class RichTextData(
         )
     }
 
-    //data class Line(val nodes: List<Node>) : List<RichTextData.Node> by nodes, Extra by ExtraMixin() {
-    data class Line(val nodes: List<Node>, val defaultLineStyle: Style? = null) : Extra by ExtraMixin() {
+    //data class Line(val nodes: List<Node>) : List<RichTextData.Node> by nodes, Extra by Extra.Mixin() {
+    data class Line(val nodes: List<Node>, val defaultLineStyle: Style? = null) : Extra by Extra.Mixin() {
         constructor(vararg nodes: Node) : this(nodes.toList())
         val defaultStyle: Style by lazy { nodes.filterIsInstance<TextNode>().firstOrNull()?.style ?: defaultLineStyle ?: Style.DEFAULT }
         val defaultLastStyle: Style by lazy { nodes.filterIsInstance<TextNode>().lastOrNull()?.style ?: defaultLineStyle ?: Style.DEFAULT }
@@ -127,7 +127,7 @@ data class RichTextData(
     data class TextNode(
         override val text: String,
         val style: Style = Style.DEFAULT,
-    ) : Node, Extra by ExtraMixin() {
+    ) : Node, Extra by Extra.Mixin() {
         init {
             require(!text.contains('\n')) { "Single RichTextData nodes cannot have line breaks" }
         }

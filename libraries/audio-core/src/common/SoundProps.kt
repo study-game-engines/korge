@@ -30,7 +30,7 @@ interface SoundProps : Extra, ReadonlySoundProps {
     override var panning: Double
     override var position: Vector3
 
-    object Dummy : SoundProps, Extra by ExtraMixin() {
+    object Dummy : SoundProps, Extra by Extra.Mixin() {
         override var volume: Double
             get() = 1.0
             set(v) = Unit

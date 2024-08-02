@@ -1,15 +1,15 @@
 // demos
-module("korge:candyCrush") { "demos/candyCrush" }
-module("korge:chess") { "demos/chess" }
-module("korge:dungeon") { "demos/dungeon" }
-module("korge:hitClack") { "demos/hitClack" }
-module("korge:magicMazeIsland") { "demos/magicMazeIsland" }
-module("korge:pacoman") { "demos/pacoman" }
-module("korge:paf") { "demos/paf" }
-module("korge:parasite") { "demos/parasite" }
-module("korge:puzzle2048") { "demos/puzzle2048" }
-module("korge:sandbox") { "demos/sandbox" }
-module("korge:steroids") { "demos/steroids" }
+//module("korge:candyCrush") { "demos/candyCrush" }
+//module("korge:chess") { "demos/chess" }
+//module("korge:dungeon") { "demos/dungeon" }
+//module("korge:hitClack") { "demos/hitClack" }
+//module("korge:magicMazeIsland") { "demos/magicMazeIsland" }
+//module("korge:pacoman") { "demos/pacoman" }
+//module("korge:paf") { "demos/paf" }
+//module("korge:parasite") { "demos/parasite" }
+//module("korge:puzzle2048") { "demos/puzzle2048" }
+//module("korge:sandbox") { "demos/sandbox" }
+//module("korge:steroids") { "demos/steroids" }
 
 // libraries
 module("korge:annotations") { "libraries/annotations" }

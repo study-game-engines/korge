@@ -53,7 +53,7 @@ class Views(
     val bp: BoundsProvider = korlibs.korge.render.BoundsProvider.Base(),
     val stageBuilder: (Views) -> Stage = { Stage(it) }
 ) : BaseEventListener(),
-    Extra by ExtraMixin(),
+    Extra by Extra.Mixin(),
     CoroutineScope, ViewsContainer,
     BoundsProvider by bp,
     DialogInterfaceProvider by gameWindow,

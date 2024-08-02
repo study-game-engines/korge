@@ -105,14 +105,14 @@ open class GameWindow :
     CoroutineContext.Element,
     AGWindow,
     GameWindowConfig,
-    Extra by ExtraMixin() {
+    Extra by Extra.Mixin() {
     open val androidContextAny: Any? get() = null
 
     sealed interface ICursor
 
     override val dialogInterface: DialogInterface get() = DialogInterface.Unsupported
 
-    data class CustomCursor(val shape: Shape, val name: String = "custom") : ICursor, Extra by ExtraMixin() {
+    data class CustomCursor(val shape: Shape, val name: String = "custom") : ICursor, Extra by Extra.Mixin() {
         val bounds: Rectangle = this.shape.bounds
         fun createBitmap(size: Size? = null, native: Boolean = true) = shape.renderWithHotspot(fit = size, native = native)
     }
@@ -239,20 +239,20 @@ open class GameWindow :
     fun queue(callback: Runnable) = coroutineDispatcher.queue(callback)
     fun <T> queueBlocking(callback: () -> T) = coroutineDispatcher.queueBlocking(callback)
 
-    protected val pauseEvent = PauseEvent()
-    protected val resumeEvent = ResumeEvent()
-    protected val stopEvent = StopEvent()
-    protected val destroyEvent = DestroyEvent()
-    protected val updateEvent = UpdateEvent()
-    protected val renderEvent = RenderEvent()
-    protected val initEvent = InitEvent()
-    protected val disposeEvent = DisposeEvent()
-    protected val fullScreenEvent = FullScreenEvent()
-    private val reshapeEvent = ReshapeEvent()
-    protected val keyEvent = KeyEvent()
-    protected val mouseEvent = MouseEvent()
-    protected val gestureEvent = GestureEvent()
-    protected val dropFileEvent = DropFileEvent()
+    val pauseEvent = PauseEvent()
+    val resumeEvent = ResumeEvent()
+    val stopEvent = StopEvent()
+    val destroyEvent = DestroyEvent()
+    val updateEvent = UpdateEvent()
+    val renderEvent = RenderEvent()
+    val initEvent = InitEvent()
+    val disposeEvent = DisposeEvent()
+    val fullScreenEvent = FullScreenEvent()
+    val reshapeEvent = ReshapeEvent()
+    val keyEvent = KeyEvent()
+    val mouseEvent = MouseEvent()
+    val gestureEvent = GestureEvent()
+    val dropFileEvent = DropFileEvent()
 
     /** Happens on the updater thread */
     fun onUpdateEvent(block: (UpdateEvent) -> Unit): AutoCloseable {

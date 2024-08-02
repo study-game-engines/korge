@@ -1,6 +1,7 @@
 package korlibs.image.format
 
 import korlibs.datastructure.Extra
+import korlibs.datastructure.Extra.Mixin
 import korlibs.datastructure.fastArrayListOf
 import korlibs.datastructure.iterators.fastForEach
 import korlibs.image.atlas.AtlasPacker
@@ -15,7 +16,7 @@ open class ImageData constructor(
     val layers: List<ImageLayer> = fastArrayListOf(),
     val animations: List<ImageAnimation> = fastArrayListOf(),
     val name: String? = null,
-) : Extra by ExtraMixin() {
+) : Extra by Extra.Mixin() {
     companion object {
         // Creates an ImageData with a single Bitmap frame.
         // When `returnBitmapInPlace` is set to true, `mainBitmap` will return the same Bitmap that

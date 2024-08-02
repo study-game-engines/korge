@@ -240,7 +240,7 @@ internal open class NativeUiFactory {
 internal val awtToWrappersMap = WeakMap<Component, AwtComponent>()
 internal fun Component.toAwt(): AwtComponent? = awtToWrappersMap[this]
 
-internal open class AwtComponent(override val factory: NativeUiFactory, override val component: Component) : NativeUiFactory.NativeComponent, Extra by ExtraMixin() {
+internal open class AwtComponent(override val factory: NativeUiFactory, override val component: Component) : NativeUiFactory.NativeComponent, Extra by Extra.Mixin() {
     init {
         awtToWrappersMap[component] = this
     }

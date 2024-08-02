@@ -27,7 +27,7 @@ class VectorPath(
     val data: DoubleArrayList = DoubleArrayList(),
     var winding: Winding = Winding.DEFAULT,
     var optimize: Boolean = true,
-) : AbstractShape2D(), IVectorPath, Extra by ExtraMixin() {
+) : AbstractShape2D(), IVectorPath, Extra by Extra.Mixin() {
     var assumeConvex: Boolean = false
     var version: Int = 0
 

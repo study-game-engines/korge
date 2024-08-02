@@ -46,7 +46,7 @@ class RenderContext(
     val batchMaxQuads: Int = BatchBuilder2D.DEFAULT_BATCH_QUADS,
     val windowConfig: GameWindowConfig = GameWindowConfig.Impl()
 ) :
-    Extra by ExtraMixin(),
+    Extra by Extra.Mixin(),
     BoundsProvider by bp,
     AGFeatures by ag,
     DeviceDimensionsProvider by deviceDimensionsProvider,

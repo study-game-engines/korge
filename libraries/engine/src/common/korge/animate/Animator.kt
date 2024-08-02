@@ -176,7 +176,7 @@ open class Animator @PublishedApi internal constructor(
         return this
     }
 
-    inline fun parallel(
+    fun parallel(
         time: Duration = this.defaultTime,
         speed: Double = this.defaultSpeed,
         easing: Easing = this.defaultEasing,
@@ -185,7 +185,7 @@ open class Animator @PublishedApi internal constructor(
         callback: @AnimatorDslMarker Animator.() -> Unit
     ): Animator = Animator(root, time.fast, speed, easing, true, looped, level = level + 1, parent = this, startImmediately = startImmediately).also { callback(it) }.also { addNode(it.rootAnimationNode) }
 
-    inline fun sequence(
+    fun sequence(
         defaultTime: Duration = this.defaultTime,
         defaultSpeed: Double = this.defaultSpeed,
         easing: Easing = this.defaultEasing,

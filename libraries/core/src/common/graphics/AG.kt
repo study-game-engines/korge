@@ -41,7 +41,7 @@ interface AGFeatures {
     ) : AGFeatures
 }
 
-abstract class AG : AGFeatures, Extra by ExtraMixin() {
+abstract class AG : AGFeatures, Extra by Extra.Mixin() {
     companion object {
         val logger = Logger("AG")
         const val defaultPixelsPerInch : Double = 96.0

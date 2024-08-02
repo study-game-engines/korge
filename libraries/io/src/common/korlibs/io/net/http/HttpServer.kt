@@ -20,7 +20,7 @@ open class HttpServer protected constructor() : AsyncCloseable {
 	abstract class BaseRequest(
 		val uri: String,
 		val headers: Http.Headers
-	) : Extra by ExtraMixin() {
+	) : Extra by Extra.Mixin() {
 		private val parts by lazy { uri.split('?', limit = 2) }
 		val path: String by lazy { parts[0] }
 		val queryString: String by lazy { parts.getOrElse(1) { "" } }
@@ -89,7 +89,7 @@ open class HttpServer protected constructor() : AsyncCloseable {
 
 	data class RequestConfig(
 		val beforeSendHeadersInterceptors: MutableMap<String, suspend (Request) -> Unit> = LinkedHashMap()
-	) : Extra by ExtraMixin() {
+	) : Extra by Extra.Mixin() {
 		// TODO:
 		fun registerComponent(component: Any, dependsOn: List<Any>): Unit = TODO()
 	}

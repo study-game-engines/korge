@@ -18,7 +18,7 @@ class TouchEvents(val view: View) {
         var global: Point = Point(),
         var startGlobal: Point = Point(),
         var time: DateTime = DateTime.EPOCH,
-    ) : Extra by ExtraMixin() {
+    ) : Extra by Extra.Mixin() {
         val elapsedTime get() = time - startTime
 
         lateinit var views: Views

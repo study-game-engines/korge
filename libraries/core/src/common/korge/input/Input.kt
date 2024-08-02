@@ -19,7 +19,7 @@ import kotlin.time.*
 
 //@Singleton
 @OptIn(KorgeInternal::class)
-class Input : Extra by ExtraMixin() {
+class Input : Extra by Extra.Mixin() {
     companion object {
         const val KEYCODES = 0x100
     }

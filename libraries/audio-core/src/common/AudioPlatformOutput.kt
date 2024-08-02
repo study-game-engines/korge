@@ -24,7 +24,7 @@ class AudioPlatformOutput(
             delay(1L)
         }
     }
-) : AutoCloseable, SoundProps, Extra by ExtraMixin() {
+) : AutoCloseable, SoundProps, Extra by Extra.Mixin() {
     var paused: Boolean = false
 
     private val lock = reentrantLock()

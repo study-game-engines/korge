@@ -90,7 +90,7 @@ fun IPointList.toPointArrayList(): PointArrayList {
     return out
 }
 
-open class PointArrayList(capacity: Int = 7) : PointList, Extra by ExtraMixin() {
+open class PointArrayList(capacity: Int = 7) : PointList, Extra by Extra.Mixin() {
     override var closed: Boolean = false
     private val data = DoubleArrayList(capacity * 2)
     override val size: Int get() = data.size / 2
@@ -294,7 +294,7 @@ sealed interface PointIntList {
     fun get(index: Int): PointInt = PointInt(getX(index), getY(index))
 }
 
-open class PointIntArrayList(capacity: Int = 7) : PointIntList, Extra by ExtraMixin() {
+open class PointIntArrayList(capacity: Int = 7) : PointIntList, Extra by Extra.Mixin() {
     override var closed: Boolean = false
     private val xList = IntArrayList(capacity)
     private val yList = IntArrayList(capacity)
@@ -437,7 +437,7 @@ fun DoubleVectorList.getZ(index: Int): Double = get(index, 2)
 class DoubleVectorArrayList(
     override val dimensions: Int,
     capacity: Int = 7,
-) : DoubleVectorList, Extra by ExtraMixin() {
+) : DoubleVectorList, Extra by Extra.Mixin() {
     val data = DoubleArrayList(capacity * dimensions)
 
     override var closed: Boolean = false

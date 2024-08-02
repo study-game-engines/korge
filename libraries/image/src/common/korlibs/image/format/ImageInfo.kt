@@ -3,7 +3,7 @@ package korlibs.image.format
 import korlibs.datastructure.*
 import korlibs.math.geom.*
 
-open class ImageInfo : Sizeable, Extra by ExtraMixin() {
+open class ImageInfo : Sizeable, Extra by Extra.Mixin() {
 	var width: Int = 0
 	var height: Int = 0
 	var bitsPerPixel: Int = 8

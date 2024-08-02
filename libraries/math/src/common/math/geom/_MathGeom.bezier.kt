@@ -1638,7 +1638,7 @@ fun List<Bezier>.toCurves(closed: Boolean) = Curves(this, closed)
 fun Curves.toCurves(closed: Boolean) = this
 fun Bezier.toCurves(closed: Boolean) = Curves(listOf(this), closed)
 
-data class Curves(val beziers: List<Bezier>, val closed: Boolean) : Curve, Extra by ExtraMixin() {
+data class Curves(val beziers: List<Bezier>, val closed: Boolean) : Curve, Extra by Extra.Mixin() {
     var assumeConvex: Boolean = false
 
     /**
