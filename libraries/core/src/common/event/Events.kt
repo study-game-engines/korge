@@ -196,7 +196,7 @@ data class Touch(
     var status: Status = Status.KEEP,
     var kind: Kind = Kind.FINGER,
     var button: MouseButton = MouseButton.LEFT,
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     val x: Double get() = p.x
     val y: Double get() = p.y
 

@@ -38,7 +38,7 @@ class RenderContext2D(
     val batch: BatchBuilder2D,
     @property:KorgeInternal
     val agBitmapTextureManager: AgBitmapTextureManager
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
 	init { logger.trace { "RenderContext2D[0]" } }
 
     val ctx: RenderContext get() = batch.ctx

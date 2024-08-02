@@ -105,14 +105,14 @@ open class GameWindow :
     CoroutineContext.Element,
     AGWindow,
     GameWindowConfig,
-    Extra by Extra.Mixin() {
+    Extra by ExtraMixin() {
     open val androidContextAny: Any? get() = null
 
     sealed interface ICursor
 
     override val dialogInterface: DialogInterface get() = DialogInterface.Unsupported
 
-    data class CustomCursor(val shape: Shape, val name: String = "custom") : ICursor, Extra by Extra.Mixin() {
+    data class CustomCursor(val shape: Shape, val name: String = "custom") : ICursor, Extra by ExtraMixin() {
         val bounds: Rectangle = this.shape.bounds
         fun createBitmap(size: Size? = null, native: Boolean = true) = shape.renderWithHotspot(fit = size, native = native)
     }

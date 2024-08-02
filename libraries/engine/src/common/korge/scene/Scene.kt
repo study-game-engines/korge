@@ -32,7 +32,7 @@ import kotlin.time.*
  * - NEW: [sceneAfterInit] - DO NOT BLOCK - Similar to [sceneMain] but after the transition.
  * - ## New scene is returned
  */
-abstract class Scene : InjectorAsyncDependency, ViewsContainer, CoroutineScope, ResourcesContainer, Extra by Extra.Mixin() {
+abstract class Scene : InjectorAsyncDependency, ViewsContainer, CoroutineScope, ResourcesContainer, Extra by ExtraMixin() {
     /** A child [Injector] for this instance. Set by the [init] method. */
 	lateinit var injector: Injector
     /** The [Views] singleton of the application. Set by the [init] method. */

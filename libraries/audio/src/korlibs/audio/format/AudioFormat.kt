@@ -20,7 +20,7 @@ open class AudioFormat(vararg exts: String) {
     var duration: Duration? = 0.seconds,
     var channels: Int = 2,
     var decodingTime: Duration? = null
-	) : Extra by Extra.Mixin() {
+	) : Extra by ExtraMixin() {
     val durationNotNull: Duration get() = duration ?: 0.seconds
 		override fun toString(): String = "Info(duration=${durationNotNull.milliseconds.niceStr}ms, channels=$channels)"
 	}
@@ -60,7 +60,7 @@ data class AudioDecodingProps(
     val formats: AudioFormat? = null,
     val maxSamples: Int = 15 * 60 * 44100,
     val dispatcher: CoroutineDispatcher? = null,
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     //var readInMemory: Boolean = true
 
     companion object {
@@ -74,7 +74,7 @@ fun AudioFormat.toProps(): AudioDecodingProps = AudioDecodingProps(formats = thi
 data class AudioEncodingProps(
     val quality: Double = 0.84,
     val filename: String? = null
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     companion object {
         val DEFAULT = AudioEncodingProps()
     }

@@ -5,7 +5,7 @@ import korlibs.time.*
 
 //val NativeThread.extra: Extra get() {
 //    if (this.userData == null) {
-//        this.userData = Extra.Mixin()
+//        this.userData = ExtraMixin()
 //    }
 //    return this.userData as Extra
 //}

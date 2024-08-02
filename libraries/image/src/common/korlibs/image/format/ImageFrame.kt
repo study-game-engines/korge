@@ -18,7 +18,7 @@ open class ImageFrame(
     val index: Int,
     val fastTime: FastDuration = 0.fastSeconds,
     val layerData: List<ImageFrameLayer> = emptyList(),
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     val time get() = fastTime.toDuration()
 
     constructor(

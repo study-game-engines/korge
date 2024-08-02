@@ -72,7 +72,7 @@ abstract class BaseTtfFont(
     protected val extName: String? = null,
     protected val onlyReadMetadata: Boolean = false,
     protected val enableLigatures: Boolean = true,
-) : VectorFont, Extra by Extra.Mixin() {
+) : VectorFont, Extra by ExtraMixin() {
     constructor(
         d: ByteArray,
         extName: String? = null,

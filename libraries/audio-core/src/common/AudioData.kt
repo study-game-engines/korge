@@ -8,7 +8,7 @@ class AudioData(
     val rate: Int,
     val samples: AudioSamples,
     val name: String? = null,
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     inline val frequency: Int get() = rate
 
     companion object {

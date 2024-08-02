@@ -13,7 +13,7 @@ class LazyBitmapFont(
     val font: VectorFont,
     override val fontSize: Double,
     override val distanceField: String? = null,
-) : BitmapFont, Extra by Extra.Mixin() {
+) : BitmapFont, Extra by ExtraMixin() {
     val atlas = MutableAtlasUnit(border = 2, width = 1024, height = 1024).also {
         if (distanceField != null) it.bitmap else it.bitmap.mipmaps()
     }

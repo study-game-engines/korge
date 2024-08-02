@@ -212,7 +212,7 @@ internal class BitmapFontImpl constructor(
     override val kernings: IntMap<BitmapFont.Kerning>,
     override val name: String = "BitmapFont",
     override val distanceField: String? = null,
-) : BitmapFont, Extra by Extra.Mixin() {
+) : BitmapFont, Extra by ExtraMixin() {
     override fun getOrNull() = this
     override suspend fun get() = this
 

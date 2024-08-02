@@ -7,7 +7,7 @@ import kotlin.coroutines.*
 
 suspend fun SystemFont(name: String): SystemFont = SystemFont(name, coroutineContext)
 
-class SystemFont constructor(override val name: String, val coroutineContext: CoroutineContext) : VectorFont, Resourceable<Font>, Extra by Extra.Mixin() {
+class SystemFont constructor(override val name: String, val coroutineContext: CoroutineContext) : VectorFont, Resourceable<Font>, Extra by ExtraMixin() {
     override fun hashCode(): Int = name.hashCode()
     override fun equals(other: Any?): Boolean = other is SystemFont && this.name == other.name
     override fun toString(): String = "SystemFont(name=$name)"

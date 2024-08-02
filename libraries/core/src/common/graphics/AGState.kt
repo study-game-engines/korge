@@ -746,7 +746,7 @@ interface AGContainer {
 data class AGVertexArrayObject(
     val list: FastArrayList<AGVertexData>,
     val isDynamic: Boolean = true
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     constructor(vararg datas: AGVertexData, isDynamic: Boolean = true) : this(fastArrayListOf(*datas), isDynamic = isDynamic)
 }
 

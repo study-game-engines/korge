@@ -15,7 +15,7 @@ open class ImageData constructor(
     val layers: List<ImageLayer> = fastArrayListOf(),
     val animations: List<ImageAnimation> = fastArrayListOf(),
     val name: String? = null,
-) : Extra by Extra.Mixin() {
+) : Extra by ExtraMixin() {
     companion object {
         // Creates an ImageData with a single Bitmap frame.
         // When `returnBitmapInPlace` is set to true, `mainBitmap` will return the same Bitmap that

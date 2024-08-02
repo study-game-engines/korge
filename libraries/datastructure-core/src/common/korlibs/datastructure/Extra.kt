@@ -27,13 +27,14 @@ class ExtraObject : MutableMap<String, Any?> {
 typealias ExtraType = ExtraObject?
 fun ExtraTypeCreate() = ExtraObject()
 
-interface Extra {
-    var extra: ExtraType
+open class ExtraMixin(override var extra: ExtraObject? = null) : Extra
 
-    open class Mixin(override var extra: ExtraType = null) : Extra
+interface Extra {
+
+    var extra: ExtraObject?
 
     companion object {
-        operator fun invoke() = Mixin()
+        operator fun invoke() = ExtraMixin()
     }
 
     @Suppress("UNCHECKED_CAST")

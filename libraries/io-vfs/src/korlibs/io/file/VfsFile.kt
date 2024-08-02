@@ -18,7 +18,7 @@ import kotlin.coroutines.*
 data class VfsFile(
 	val vfs: Vfs,
 	val path: String
-) : VfsNamed(path.pathInfo), AsyncInputOpenable, Extra by Extra.Mixin() {
+) : VfsNamed(path.pathInfo), AsyncInputOpenable, Extra by ExtraMixin() {
     var cachedStat: VfsStat? = null
 
 	suspend fun isCaseSensitive(): Boolean = vfs.isCaseSensitive(path)

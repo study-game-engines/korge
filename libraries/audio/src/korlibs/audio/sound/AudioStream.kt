@@ -1,16 +1,19 @@
 package korlibs.audio.sound
 
-import korlibs.audio.format.*
-import korlibs.io.file.*
-import korlibs.time.*
-import kotlin.math.*
-import kotlin.time.*
+import korlibs.audio.format.AudioDecodingProps
+import korlibs.audio.format.AudioEncodingProps
+import korlibs.audio.format.AudioFormat
+import korlibs.audio.format.defaultAudioFormats
+import korlibs.io.file.VfsFile
+import korlibs.io.file.VfsOpenMode
+import korlibs.io.file.baseName
+import korlibs.io.lang.AutoCloseable
+import korlibs.time.seconds
+import kotlin.math.min
+import kotlin.time.Duration
 
-abstract class AudioStream(
-    val rate: Int,
-    val channels: Int,
-    val name: String? = null,
-) : AudioStreamable, AutoCloseable {
+abstract class AudioStream(val rate: Int, val channels: Int, val name: String? = null) : AudioStreamable, AutoCloseable {
+
     open val finished = false
     open val totalLengthInSamples: Long? = null
     val totalLength get() = ((totalLengthInSamples ?: 0L).toDouble() / rate.toDouble()).seconds
@@ -34,7 +37,8 @@ abstract class AudioStream(
             GeneratorAudioStream(rate, channels, seek, generateChunk)
     }
 
-    internal class GeneratorAudioStream(rate: Int, channels: Int, val seek: suspend (Duration) -> Unit = { }, val generateChunk: suspend AudioSamplesDeque.(step: Int) -> Boolean) : AudioStream(rate, channels) {
+    internal class GeneratorAudioStream(rate: Int, channels: Int, val seek: suspend (Duration) -> Unit = { }, val generateChunk: suspend AudioSamplesDeque.(step: Int) -> Boolean) :
+        AudioStream(rate, channels) {
         val deque = AudioSamplesDeque(channels)
         val availableRead get() = deque.availableRead
         override var finished: Boolean = false
@@ -86,7 +90,8 @@ suspend fun AudioStream.toData(maxSamples: Int = DEFAULT_MAX_SAMPLES): AudioData
 }
 
 suspend fun AudioStream.playAndWait(params: PlaybackParameters = PlaybackParameters.DEFAULT) = nativeSoundProvider.playAndWait(this, params)
-suspend fun AudioStream.playAndWait(times: PlaybackTimes = 1.playbackTimes, startTime: Duration = 0.seconds, bufferTime: Duration = 0.1.seconds) = nativeSoundProvider.createStreamingSound(this).playAndWait(PlaybackParameters(times, startTime, bufferTime))
+suspend fun AudioStream.playAndWait(times: PlaybackTimes = 1.playbackTimes, startTime: Duration = 0.seconds, bufferTime: Duration = 0.1.seconds) =
+    nativeSoundProvider.createStreamingSound(this).playAndWait(PlaybackParameters(times, startTime, bufferTime))
 
 suspend fun AudioStream.toSound(closeStream: Boolean = false, name: String = "Unknown"): Sound =
     nativeSoundProvider.createStreamingSound(this, closeStream, name)
@@ -94,12 +99,18 @@ suspend fun AudioStream.toSound(closeStream: Boolean = false, name: String = "Un
 suspend fun AudioStream.toSound(closeStream: Boolean = false, name: String = "Unknown", onComplete: (suspend () -> Unit)? = null): Sound =
     nativeSoundProvider.createStreamingSound(this, closeStream, name, onComplete)
 
-suspend fun VfsFile.readAudioStreamOrNull(formats: AudioFormat = defaultAudioFormats + nativeSoundProvider.audioFormats, props: AudioDecodingProps = AudioDecodingProps.DEFAULT) = formats.decodeStream(this.open(), props)
+suspend fun VfsFile.readAudioStreamOrNull(formats: AudioFormat = defaultAudioFormats + nativeSoundProvider.audioFormats, props: AudioDecodingProps = AudioDecodingProps.DEFAULT) =
+    formats.decodeStream(this.open(), props)
+
 suspend fun VfsFile.readAudioStream(formats: AudioFormat = defaultAudioFormats + nativeSoundProvider.audioFormats, props: AudioDecodingProps = AudioDecodingProps.DEFAULT) =
     readAudioStreamOrNull(formats, props)
         ?: error("Can't decode audio stream")
 
-suspend fun VfsFile.writeAudio(data: AudioData, formats: AudioFormat = defaultAudioFormats + nativeSoundProvider.audioFormats, props: AudioEncodingProps = AudioEncodingProps.DEFAULT) =
+suspend fun VfsFile.writeAudio(
+    data: AudioData,
+    formats: AudioFormat = defaultAudioFormats + nativeSoundProvider.audioFormats,
+    props: AudioEncodingProps = AudioEncodingProps.DEFAULT
+) =
     this.openUse(VfsOpenMode.CREATE_OR_TRUNCATE) {
         formats.encode(data, this, this@writeAudio.baseName, props)
     }

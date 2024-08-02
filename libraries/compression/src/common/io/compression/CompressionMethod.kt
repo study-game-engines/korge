@@ -26,7 +26,7 @@ interface CompressionMethod {
 	}
 }
 
-data class CompressionMethodWithConfig(val method: CompressionMethod, override val level: Int) : CompressionMethod by method, Extra by Extra.Mixin()
+data class CompressionMethodWithConfig(val method: CompressionMethod, override val level: Int) : CompressionMethod by method, Extra by ExtraMixin()
 
 fun CompressionMethod.withLevel(level: Int): CompressionMethodWithConfig = CompressionMethodWithConfig(this, level)
 

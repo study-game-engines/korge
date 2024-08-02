@@ -89,7 +89,7 @@ fun SoundProps.copySoundPropsFromCombined(l: ReadonlySoundProps, r: ReadonlySoun
     this.panning = r.panning
 }
 
-class SoundChannelGroup(volume: Double = 1.0, pitch: Double = 1.0, panning: Double = 0.0) : SoundChannelBase, SoundChannelPlay, Extra by Extra.Mixin() {
+class SoundChannelGroup(volume: Double = 1.0, pitch: Double = 1.0, panning: Double = 0.0) : SoundChannelBase, SoundChannelPlay, Extra by ExtraMixin() {
     private val channels = arrayListOf<SoundChannelBase>()
 
     override val state: SoundChannelState get() = when {
@@ -221,7 +221,7 @@ val SoundChannelBase.playingOrPaused: Boolean get() = state.playingOrPaused
 @Deprecated("Use channel.play() instead")
 fun <T : SoundChannelBase> T.attachTo(group: SoundChannelGroup): T = this.apply { group.add(this) }
 
-abstract class SoundChannel(val sound: Sound) : SoundChannelBase, Extra by Extra.Mixin() {
+abstract class SoundChannel(val sound: Sound) : SoundChannelBase, Extra by ExtraMixin() {
     private var startTime = DateTime.now()
     override var volume = 1.0
     override var pitch = 1.0
@@ -292,7 +292,7 @@ interface SoundPlay {
     suspend fun playAndWait(times: PlaybackTimes = 1.playbackTimes, startTime: Duration = 0.seconds, progress: SoundChannel.(current: Duration, total: Duration) -> Unit = { current, total -> }): Unit = play(times, startTime).await(progress)
 }
 
-abstract class Sound(val creationCoroutineContext: CoroutineContext) : SoundProps, SoundPlay, AudioStreamable, Extra by Extra.Mixin() {
+abstract class Sound(val creationCoroutineContext: CoroutineContext) : SoundProps, SoundPlay, AudioStreamable, Extra by ExtraMixin() {
     var defaultCoroutineContext = creationCoroutineContext
 
     open val name: String = "UnknownNativeSound"

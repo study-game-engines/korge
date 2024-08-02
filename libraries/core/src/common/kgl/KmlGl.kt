@@ -11,7 +11,7 @@ import korlibs.image.bitmap.*
 import korlibs.io.lang.*
 import korlibs.memory.*
 
-open class KmlGl : Extra by Extra.Mixin(), AGFeatures {
+open class KmlGl : Extra by ExtraMixin(), AGFeatures {
     @Deprecated("Replace with variant")
     open val gles: Boolean get() = false
 

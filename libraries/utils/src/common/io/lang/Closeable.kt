@@ -1,10 +1,12 @@
-@file:OptIn(ExperimentalStdlibApi::class)
-
 package korlibs.io.lang
 
 import korlibs.io.async.*
 import kotlin.contracts.*
 import kotlin.coroutines.cancellation.*
+
+interface AutoCloseable {
+    fun close()
+}
 
 @OptIn(ExperimentalStdlibApi::class)
 object DummyAutoCloseable : AutoCloseable {
@@ -42,7 +44,10 @@ fun Iterable<Cancellable>.cancel(e: Throwable = CancellationException("")): Unit
 
 fun Iterable<Cancellable>.cancellable() = Cancellable { this.cancel() }
 
-fun Iterable<AutoCloseable>.close() { for (c in this) c.close() }
+fun Iterable<AutoCloseable>.close() {
+    for (c in this) c.close()
+}
+
 fun Iterable<AutoCloseable>.closeable() = AutoCloseable { this.close() }
 
 fun AutoCloseable.cancellable() = Cancellable { this.close() }
@@ -65,16 +70,41 @@ interface CloseableCancellable : AutoCloseable, Cancellable {
 class CancellableGroup() : CloseableCancellable {
     private val cancellables = arrayListOf<Cancellable>()
 
-    constructor(vararg items: Cancellable) : this() { items.fastForEach { this += it } }
-    constructor(items: Iterable<Cancellable>) : this() { for (it in items) this += it }
+    constructor(vararg items: Cancellable) : this() {
+        items.fastForEach { this += it }
+    }
 
-    operator fun plusAssign(c: CloseableCancellable) { cancellables += c }
-    operator fun plusAssign(c: Cancellable) { cancellables += c }
-    operator fun plusAssign(c: AutoCloseable) { cancellables += c.cancellable() }
-    fun addCancellable(c: Cancellable) { cancellables += c }
-    fun addCloseable(c: AutoCloseable) { cancellables += c.cancellable() }
-    override fun close() { cancel(kotlin.coroutines.cancellation.CancellationException()) }
-    override fun cancel(e: Throwable) { cancellables.cancel(e) }
+    constructor(items: Iterable<Cancellable>) : this() {
+        for (it in items) this += it
+    }
+
+    operator fun plusAssign(c: CloseableCancellable) {
+        cancellables += c
+    }
+
+    operator fun plusAssign(c: Cancellable) {
+        cancellables += c
+    }
+
+    operator fun plusAssign(c: AutoCloseable) {
+        cancellables += c.cancellable()
+    }
+
+    fun addCancellable(c: Cancellable) {
+        cancellables += c
+    }
+
+    fun addCloseable(c: AutoCloseable) {
+        cancellables += c.cancellable()
+    }
+
+    override fun close() {
+        cancel(kotlin.coroutines.cancellation.CancellationException())
+    }
+
+    override fun cancel(e: Throwable) {
+        cancellables.cancel(e)
+    }
 
     companion object {
         inline operator fun <T> invoke(callback: (CancellableGroup) -> T): T {
@@ -98,16 +128,15 @@ private inline fun <T> Array<T>.fastForEach(callback: (T) -> Unit) {
     while (n < size) callback(this[n++])
 }
 
-
-@OptIn(ExperimentalContracts::class)
-@Deprecated("", ReplaceWith("use(block)"))
-inline fun <T : AutoCloseable?, TR> T.useIt(block: (T) -> TR): TR {
-    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return use(block)
-}
-
-@OptIn(ExperimentalContracts::class)
-inline fun <T : AutoCloseable?, TR> T.useThis(block: T.() -> TR): TR {
-    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return use(block)
-}
+//@OptIn(ExperimentalContracts::class)
+//@Deprecated("", ReplaceWith("use(block)"))
+//inline fun <T : AutoCloseable?, TR> T.useIt(block: (T) -> TR): TR {
+//    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+//    return use(block)
+//}
+//
+//@OptIn(ExperimentalContracts::class)
+//inline fun <T : AutoCloseable?, TR> T.useThis(block: T.() -> TR): TR {
+//    contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+//    return use(block)
+//}

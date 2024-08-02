@@ -9,7 +9,7 @@ import korlibs.math.geom.*
 
 //fun NativeUiFactory.createApp() = UiApplication(this)
 
-internal open class UiApplication constructor(val factory: NativeUiFactory) : Extra by Extra.Mixin() {
+internal open class UiApplication constructor(val factory: NativeUiFactory) : Extra by ExtraMixin() {
     fun wrapContainer(native: Any?): UiContainer = UiContainer(this, factory.wrapNativeContainer(native)).also { container ->
         container.onResize {
             //println("wrapContainer.container.onResize: ${container.bounds}")
@@ -20,7 +20,7 @@ internal open class UiApplication constructor(val factory: NativeUiFactory) : Ex
 
 internal var NativeUiFactory.NativeComponent.uiComponent by Extra.PropertyThis<NativeUiFactory.NativeComponent, UiComponent?> { null }
 
-internal open class UiComponent(val app: UiApplication, val component: NativeUiFactory.NativeComponent) : Extra by Extra.Mixin(), LengthExtensions {
+internal open class UiComponent(val app: UiApplication, val component: NativeUiFactory.NativeComponent) : Extra by ExtraMixin(), LengthExtensions {
     val nativeComponent get() = component.component
     init {
         component.uiComponent = this

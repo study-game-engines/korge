@@ -28,7 +28,7 @@ private var Views.mouseDebugHandlerOnce by Extra.Property { Once() }
 private var Views.mouseDebugLastFrameClicked by Extra.Property { false }
 
 @OptIn(KorgeInternal::class)
-class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
+class MouseEvents(val view: View) : Extra by ExtraMixin(), AutoCloseable {
     init {
         view.mouseEnabled = true
     }
@@ -443,7 +443,7 @@ class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
         }
     }
 
-    inner class MouseEventsUpdate(val view: View) : Extra by Extra.Mixin() {
+    inner class MouseEventsUpdate(val view: View) : Extra by ExtraMixin() {
         init {
             view.addUpdaterWithViews { views, dt ->
                 this@MouseEvents.update(views, dt)

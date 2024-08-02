@@ -27,7 +27,7 @@ abstract class Bitmap(
     val bpp: Int,
     premultiplied: Boolean,
     val backingArray: Any?
-) : SizeableInt, Extra by Extra.Mixin() {
+) : SizeableInt, Extra by ExtraMixin() {
     val rect: RectangleInt = RectangleInt(0, 0, width, height)
     override val size: SizeInt get() = SizeInt(width, height)
     var bitmapName: String? = null
