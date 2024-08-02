@@ -1,25 +1,13 @@
-import com.soywiz.klock.*
-import com.soywiz.korev.*
-import com.soywiz.korge.*
-import com.soywiz.korge.animate.*
-import com.soywiz.korge.input.*
-import com.soywiz.korge.service.storage.*
-import com.soywiz.korge.tween.*
-import com.soywiz.korge.ui.*
-import com.soywiz.korge.view.*
-import com.soywiz.korim.color.*
-import com.soywiz.korim.font.*
-import com.soywiz.korim.format.*
-import com.soywiz.korim.text.TextAlignment
-import com.soywiz.korio.async.*
-import com.soywiz.korio.async.ObservableProperty
-import com.soywiz.korio.file.std.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.interpolation.*
+import korlibs.image.color.RGBA
+import korlibs.image.font.BitmapFont
+import korlibs.image.font.readBitmapFont
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.Korge
+import korlibs.korge.view.views
 import kotlin.collections.set
 import kotlin.properties.*
 import kotlin.random.*
+import korlibs.io.async.ObservableProperty
 
 var cellSize: Double = 0.0
 var fieldSize: Double = 0.0
@@ -44,11 +32,15 @@ var freeId = 0
 var isAnimationRunning = false
 var isGameOver = false
 
-suspend fun main() = Korge(
+suspend fun main() = Korge (
     width = 480,
     height = 640,
     title = "2048",
     bgcolor = RGBA(253, 247, 240),
+    /**
+        `gameId` is associated with the location of storage, which contains `history` and `best`.
+        see [Views.realSettingsFolder]
+     */
     /**
         `gameId` is associated with the location of storage, which contains `history` and `best`.
         see [Views.realSettingsFolder]

@@ -108,16 +108,16 @@ class SceneContainer(
 
     // Async versions
     /** Async variant returning a [Deferred] for [changeTo] */
-	inline fun <reified T : Scene> changeToAsync(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
-        CoroutineScope(coroutineContext).async { changeTo<T>(*injects, time = time, transition = transition) }
+//	inline fun <reified T : Scene> changeToAsync(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
+//        CoroutineScope(coroutineContext).async { changeTo<T>(*injects, time = time, transition = transition) }
 
     /** Async variant returning a [Deferred] for [changeTo] */
     fun <T : Scene> changeToAsync(clazz: KClass<T>, vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
         CoroutineScope(coroutineContext).async { changeTo(clazz, *injects, time = time, transition = transition) }
 
     /** Async variant returning a [Deferred] for [pushTo] */
-	inline fun <reified T : Scene> pushToAsync(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
-        CoroutineScope(coroutineContext).async { pushTo<T>(*injects, time = time, transition = transition) }
+//	inline fun <reified T : Scene> pushToAsync(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
+//        CoroutineScope(coroutineContext).async { pushTo<T>(*injects, time = time, transition = transition) }
 
     /** Async variant returning a [Deferred] for [pushTo] */
     fun <T : Scene> pushToAsync(clazz: KClass<T>, vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): Deferred<T> =
@@ -135,8 +135,8 @@ class SceneContainer(
      * Changes to the [T] [Scene], with a set of optional [injects] instances during [time] time, and with [transition].
      * This method waits until the [transition] has been completed, and returns the [T] created instance.
      */
-	suspend inline fun <reified T : Scene> changeTo(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): T =
-        changeTo(T::class, *injects, time = time, transition = transition)
+//	suspend inline fun <reified T : Scene> changeTo(vararg injects: Any, time: Duration = 0.seconds, transition: Transition = defaultTransition): T =
+//        changeTo(T::class, *injects, time = time, transition = transition)
 
     /**
      * Pushes the [T] [Scene], with a set of optional [injects] instances during [time] time, and with [transition].

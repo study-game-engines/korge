@@ -346,7 +346,7 @@ open class ViewsForTesting(
             injector.configureInjector()
 
             val container = sceneContainer(views)
-            container.changeTo<S>()
+            container.changeTo(S::class)
 
             with(container.currentScene as S) {
                 block()

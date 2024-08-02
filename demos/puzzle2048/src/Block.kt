@@ -1,6 +1,8 @@
 import Number.*
-import com.soywiz.korge.view.*
-import com.soywiz.korim.color.*
+import korlibs.korge.view.*
+import korlibs.image.color.*
+import korlibs.image.color.Colors
+import korlibs.korge.view.Container
 
 fun Container.block(number: Number) = Block(number).addTo(this)
 
