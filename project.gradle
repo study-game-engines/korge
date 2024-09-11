@@ -10,6 +10,7 @@
 //module("korge:puzzle2048") { "demos/puzzle2048" }
 module("korge:sandbox") { "demos/sandbox" }
 //module("korge:steroids") { "demos/steroids" }
+// test youtrack integration
 
 // libraries
 module("korge:annotations") { "libraries/annotations" }
