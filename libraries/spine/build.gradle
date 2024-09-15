@@ -1,0 +1,5 @@
+artifact "korge:spine"
+
+source {
+    include project(":korge:engine")
+}
