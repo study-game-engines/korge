@@ -1,0 +1,17 @@
+artifact "korge:fleks"
+
+source {
+    include project(":korge:engine")
+    include project(":korge:parallax")
+    include project(":korge:asset-manager")
+    include project(":korge:ldtk")
+    include project(":korge:tiled")
+}
+
+apply plugin: "kotlinx-serialization"
+
+//artifact "korge:fleks-examples"
+//
+//source {
+//    include project(":korge:fleks")
+//}

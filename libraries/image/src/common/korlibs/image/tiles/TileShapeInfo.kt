@@ -12,7 +12,7 @@ interface TileShapeInfo : HitTestable {
 
 data class TileShapeInfoImpl(
     val type: HitTestDirectionFlags,
-    val shape: Shape2D,
+    val shape: SimpleShape2D,
     val transform: Matrix,
     //val path: VectorPath
 ) : TileShapeInfo {
@@ -25,5 +25,5 @@ data class TileShapeInfoImpl(
     }
 
     override fun hitTestAny(shape2d: Shape2D, matrix: Matrix, direction: HitTestDirection): Boolean =
-        Shape2D.intersects(shape, transform, shape2d, matrix) && type.matches(direction)
+        Shape2D.intersects(shape as Shape2D, transform, shape2d, matrix) && type.matches(direction)
 }

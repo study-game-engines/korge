@@ -11,7 +11,7 @@ import korlibs.math.interpolation.*
 import kotlin.math.*
 
 interface WithHitShape2D {
-    val hitShape2d: Shape2D
+    val hitShape2d: SimpleShape2D
 }
 
 abstract class AbstractShape2D : Shape2D {

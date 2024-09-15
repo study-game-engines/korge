@@ -1,0 +1,7 @@
+artifact "korge:collision"
+
+source {
+    include project(":korge:engine")
+}
+
+apply plugin: "kotlinx-serialization"

@@ -7,6 +7,7 @@ import korlibs.image.vector.ShapeBuilder
 import korlibs.image.vector.buildShape
 import korlibs.math.geom.*
 import korlibs.math.geom.shape.Shape2D
+import korlibs.math.geom.shape.SimpleShape2D
 import korlibs.math.geom.shape.toShape2d
 import korlibs.math.geom.vector.VectorPath
 import kotlin.jvm.JvmOverloads
@@ -67,7 +68,7 @@ open class CpuGraphics @JvmOverloads constructor(
     private var hitShape2dVersion = -1
 
     private var tempVectorPaths = arrayListOf<VectorPath>()
-    private var customHitShape2d: Shape2D? = null
+    private var customHitShape2d: SimpleShape2D? = null
     private var customHitShapes: List<VectorPath>? = null
 
     override var hitShape: VectorPath?
@@ -101,7 +102,7 @@ open class CpuGraphics @JvmOverloads constructor(
             return tempVectorPaths
         }
 
-    override var hitShape2d: Shape2D
+    override var hitShape2d: SimpleShape2D
         set(value) {
             customHitShape2d = value
         }

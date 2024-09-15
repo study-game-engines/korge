@@ -1,0 +1,5 @@
+artifact "korge:parallax"
+
+source {
+    include project(":korge:engine")
+}

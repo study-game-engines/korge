@@ -17,6 +17,7 @@ fun interface Easing {
         fun steps(steps: Int, easing: Easing): Easing = Easing({ "steps($steps, $easing)" }) {
             easing((it * steps).toInt().toFloat() / steps)
         }
+
         fun cubic(f: (t: Float, b: Float, c: Float, d: Float) -> Float): Easing = Easing { f(it, 0f, 1f, 1f) }
         fun combine(start: Easing, end: Easing): Easing = Easing { combine(it, start, end) }
         inline fun combine(it: Float, start: Easing, end: Easing): Float =
@@ -24,6 +25,10 @@ fun interface Easing {
 
         val LINEAR = Easing { it }
         val SMOOTH = Easing { it * it * (3 - 2 * it) }
+        val ALL: Map<String, Easing> = mapOf(
+            "linear" to LINEAR,
+            "smooth" to SMOOTH,
+        )
     }
 }
 

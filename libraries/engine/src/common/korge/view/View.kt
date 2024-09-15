@@ -136,14 +136,14 @@ abstract class View internal constructor(
     interface Reference // View that breaks batching Viewport
     interface ColorReference // View that breaks batching Viewport
 
-    private var _hitShape2d: Shape2D? = null
+    private var _hitShape2d: SimpleShape2D? = null
 
     @Deprecated("Use hitShape2d instead")
     open var hitShape: VectorPath? = null
     @Deprecated("Use hitShape2d instead")
     open var hitShapes: List<VectorPath>? = null
 
-    override var hitShape2d: Shape2D
+    override var hitShape2d: SimpleShape2D
         get() {
             if (_hitShape2d == null) {
                 if (_hitShape2d == null && hitShapes != null) _hitShape2d = hitShapes!!.toShape2d()
@@ -980,7 +980,7 @@ abstract class View internal constructor(
                 }
             }
         }
-        val res = hitTestShapeInternal(view.hitShape2d, view.getGlobalMatrixWithAnchor(), direction)
+        val res = hitTestShapeInternal(view.hitShape2d as Shape2D, view.getGlobalMatrixWithAnchor(), direction)
         if (res != null) return res
         return if (this is Stage) this else null
     }
@@ -1003,7 +1003,7 @@ abstract class View internal constructor(
     open val customHitShape get() = false
     open fun hitTestShapeInternal(shape: Shape2D, matrix: Matrix, direction: HitTestDirection): View? {
         //println("View.hitTestShapeInternal: $this, $shape")
-        if (Shape2D.intersects(this.hitShape2d, getGlobalMatrixWithAnchor(), shape, matrix)) {
+        if (Shape2D.intersects(this.hitShape2d as Shape2D, getGlobalMatrixWithAnchor(), shape, matrix)) {
             //println(" -> true")
             return this
         }

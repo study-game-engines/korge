@@ -1,0 +1,8 @@
+artifact "korge:ldtk"
+
+source {
+    include project(":korge:engine")
+    include "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+}
+
+apply plugin: "kotlinx-serialization"

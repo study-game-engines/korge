@@ -1,0 +1,9 @@
+artifact "korge:asset-manager"
+
+source {
+    include project(":korge:parallax")
+    include project(":korge:ldtk")
+    include project(":korge:tiled")
+}
+
+apply plugin: "kotlinx-serialization"
