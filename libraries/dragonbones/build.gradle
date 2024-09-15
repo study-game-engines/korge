@@ -1,0 +1,5 @@
+artifact "korge:dragonbones"
+
+source {
+    include project(":korge:engine")
+}

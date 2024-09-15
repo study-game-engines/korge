@@ -1,13 +1,16 @@
 import com.dragonbones.event.EventObject
-import korlibs.korge.dragonbones.KorgeDbFactory
 import korlibs.datastructure.WeakPropertyThis
 import korlibs.image.bitmap.mipmaps
 import korlibs.image.format.readBitmap
 import korlibs.io.async.*
 import korlibs.io.file.std.resourcesVfs
 import korlibs.io.serialization.json.Json
+import korlibs.io.serialization.json.parseFast
+import korlibs.korge.*
+import korlibs.korge.dragonbones.KorgeDbFactory
 import korlibs.korge.input.MouseEvents
 import korlibs.korge.input.mouse
+import korlibs.korge.scene.*
 import korlibs.korge.scene.Scene
 import korlibs.korge.scene.SceneContainer
 import korlibs.korge.scene.sceneContainer
@@ -25,6 +28,10 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 import kotlin.random.Random
+
+suspend fun main() = Korge(forceRenderEveryFrame = false).start {
+    sceneContainer().changeTo(MainDragonbones::class)
+}
 
 class MainDragonbones : Scene() {
     lateinit var buttonContainer: Container
