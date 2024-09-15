@@ -1,64 +1,63 @@
 // demos
-//module("korge:candyCrush") { "demos/candyCrush" }
-//module("korge:chess") { "demos/chess" }
-//module("korge:dungeon") { "demos/dungeon" }
-//module("korge:hitClack") { "demos/hitClack" }
-//module("korge:magicMazeIsland") { "demos/magicMazeIsland" }
-//module("korge:pacoman") { "demos/pacoman" }
-//module("korge:paf") { "demos/paf" }
-//module("korge:parasite") { "demos/parasite" }
-//module("korge:puzzle2048") { "demos/puzzle2048" }
-module("korge:sandbox") { "demos/sandbox" }
-//module("korge:steroids") { "demos/steroids" }
-// test youtrack integration
+//module("demos/candyCrush")
+//module("demos/chess")
+//module("demos/dungeon")
+//module("demos/hitClack")
+//module("demos/magicMazeIsland")
+//module("demos/pacoman")
+//module("demos/paf")
+//module("demos/parasite")
+//module("demos/puzzle2048")
+module("demos/sandbox")
+//module("demos/steroids")
 
 // libraries
-module("korge:annotations") { "libraries/annotations" }
-module("korge:audio") { "libraries/audio" }
-module("korge:audio-core") { "libraries/audio-core" }
-module("korge:bignumber") { "libraries/bignumber" }
-module("korge:checksum") { "libraries/checksum" }
-module("korge:compression") { "libraries/compression" }
-module("korge:concurrent") { "libraries/concurrent" }
-module("korge:core") { "libraries/core" }
-module("korge:crypto") { "libraries/crypto" }
-module("korge:datastructure") { "libraries/datastructure" }
-module("korge:datastructure-core") { "libraries/datastructure-core" }
-module("korge:dragonbones") { "libraries/dragonbones" }
-module("korge:dyn") { "libraries/dyn" }
-module("korge:encoding") { "libraries/encoding" }
-module("korge:engine") { "libraries/engine" }
-module("korge:ffi") { "libraries/ffi" }
-//module("korge:fleks") { "libraries/fleks" }
-module("korge:image") { "libraries/image" }
-module("korge:image-core") { "libraries/image-core" }
-module("korge:inject") { "libraries/inject" }
-module("korge:io") { "libraries/io" }
-module("korge:io-fs") { "libraries/io-fs" }
-module("korge:io-network-core") { "libraries/io-network-core" }
-module("korge:io-nodejs") { "libraries/io-nodejs" }
-module("korge:io-stream") { "libraries/io-stream" }
-module("korge:io-vfs") { "libraries/io-vfs" }
-module("korge:ipc") { "libraries/ipc" }
-module("korge:jseval") { "libraries/jseval" }
-module("korge:logger") { "libraries/logger" }
-//module("korge:luak") { "libraries/luak" }
-module("korge:math") { "libraries/math" }
-module("korge:math-core") { "libraries/math-core" }
-module("korge:math-vector") { "libraries/math-vector" }
-module("korge:memory") { "libraries/memory" }
-module("korge:number") { "libraries/number" }
-//module("korge:particles") { "libraries/particles" }
-module("korge:utils") { "libraries/utils" }
-module("korge:serialization") { "libraries/serialization" }
-//module("korge:spine") { "libraries/spine" }
-module("korge:string") { "libraries/string" }
-module("korge:template") { "libraries/template" }
-//module("korge:tiled") { "libraries/tiled" }
-module("korge:time") { "libraries/time" }
-module("korge:time-core") { "libraries/time-core" }
-module("korge:wasm") { "libraries/wasm" }
+module("libraries/annotations")
+module("libraries/audio")
+module("libraries/audio-core")
+module("libraries/bignumber")
+module("libraries/checksum")
+module("libraries/compression")
+module("libraries/concurrent")
+module("libraries/core")
+module("libraries/crypto")
+module("libraries/datastructure")
+module("libraries/datastructure-core")
+module("libraries/dragonbones")
+module("libraries/dyn")
+module("libraries/encoding")
+module("libraries/engine")
+module("libraries/ffi")
+//module("libraries/fleks")
+module("libraries/image")
+module("libraries/image-core")
+module("libraries/inject")
+module("libraries/io")
+module("libraries/io-fs")
+module("libraries/io-network-core")
+module("libraries/io-nodejs")
+module("libraries/io-stream")
+module("libraries/io-vfs")
+module("libraries/ipc")
+module("libraries/jseval")
+module("libraries/logger")
+//module("libraries/luak")
+module("libraries/math")
+module("libraries/math-core")
+module("libraries/math-vector")
+module("libraries/memory")
+module("libraries/number")
+//module("libraries/particles")
+module("libraries/utils")
+module("libraries/serialization")
+//module("libraries/spine")
+module("libraries/string")
+module("libraries/template")
+//module("libraries/tiled")
+module("libraries/time")
+module("libraries/time-core")
+module("libraries/wasm")
 
 // tools
-module("korge:editor") { "libraries/editor" }
-//module("korge:korge-intellij-plugin") { "libraries/korge-intellij-plugin" }
+module("libraries/editor")
+//module("libraries/korge-intellij-plugin")

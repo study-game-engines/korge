@@ -1,4 +1,4 @@
-artifact "korge:image_core"
+artifact "korge:image-core"
 
 source {
     common {

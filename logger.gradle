@@ -25,10 +25,13 @@ class Logger extends BuildAdapter implements TaskExecutionListener {
                 println("build for $targets completed in $elapsedTime seconds")
             } else if (firstTask.startsWith("compile")) {
                 String targets = tasks.findAll { it.startsWith("compile") }.collect { it.replaceFirst("compile", "").replaceFirst("Kotlin", "").replaceFirst("Debug", "").toLowerCase() }.findAll { !it.isEmpty() }.join(", ")
-                println("compilation for $targets completed in $elapsedTime seconds")
+                println("$targets targets compiled in $elapsedTime seconds")
             } else if (firstTask.endsWith("installShadowDist")) {
                 String targets = tasks.findAll { it.endsWith("installShadowDist") }.collect { it.replace(":installShadowDist", "") }.findAll { !it.isEmpty() }.join(", ")
-                println("installation for $targets completed in $elapsedTime seconds")
+                println("$targets installed in $elapsedTime seconds")
+            } else if (firstTask.endsWith("publishToMavenLocal")) {
+                String targets = tasks.findAll { it.endsWith("publishToMavenLocal") }.collect { it.replace(":publishToMavenLocal", "") }.findAll { !it.isEmpty() }.join(", ")
+                println("$targets published in $elapsedTime seconds")
             }
         }
         tasks.clear()

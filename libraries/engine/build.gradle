@@ -6,6 +6,6 @@ source {
         include "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$kotlinx_coroutines_version"
     }
     desktop {
-        include project(":korge:ipc")
+        include project(":korge:ipc-desktop")
     }
 }

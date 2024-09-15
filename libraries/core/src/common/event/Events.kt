@@ -44,8 +44,10 @@ operator fun <T : Event> T.invoke(block: T.() -> Unit): T {
 
 @Deprecated("")
 fun Event.preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
+
 @Deprecated("")
 fun preventDefault(reason: Any? = null): Nothing = throw PreventDefaultException(reason)
+
 @Deprecated("")
 class PreventDefaultException(val reason: Any? = null) : Exception()
 class StopPropagatingException(val reason: Any? = null) : Exception()
@@ -533,59 +535,65 @@ open class RenderEvent : TypedEvent<RenderEvent>(RENDER_EVENT) {
     override fun toString(): String = "RenderEvent(update=$update, render=$render)"
 }
 
-open class InitEvent : TypedEvent<InitEvent>(InitEvent) {
-    companion object : InitEvent(), EventType<InitEvent>
+val INIT_EVENT: EventType<InitEvent> = object : EventType<InitEvent> {}
 
+open class InitEvent : TypedEvent<InitEvent>(INIT_EVENT) {
     fun copyFrom(other: InitEvent) {
     }
 }
 
-class ResumeEvent() : TypedEvent<ResumeEvent>(ResumeEvent) {
-    companion object : EventType<ResumeEvent>
+val RESUME_EVENT: EventType<ResumeEvent> = object : EventType<ResumeEvent> {}
 
+class ResumeEvent() : TypedEvent<ResumeEvent>(RESUME_EVENT) {
     fun copyFrom(other: ResumeEvent) {
     }
 }
 
-class PauseEvent() : TypedEvent<PauseEvent>(PauseEvent) {
-    companion object : EventType<PauseEvent>
+val PAUSE_EVENT: EventType<PauseEvent> = object : EventType<PauseEvent> {}
 
+class PauseEvent() : TypedEvent<PauseEvent>(PAUSE_EVENT) {
     fun copyFrom(other: PauseEvent) {
     }
 }
 
-class StopEvent() : TypedEvent<StopEvent>(StopEvent) {
-    companion object : EventType<StopEvent>
+val STOP_EVENT: EventType<StopEvent> = object : EventType<StopEvent> {}
 
+class StopEvent() : TypedEvent<StopEvent>(STOP_EVENT) {
     fun copyFrom(other: StopEvent) {
     }
 }
 
-class DestroyEvent() : TypedEvent<DestroyEvent>(DestroyEvent) {
-    companion object : EventType<DestroyEvent>
+val DESTROY_EVENT: EventType<DestroyEvent> = object : EventType<DestroyEvent> {}
 
+class DestroyEvent() : TypedEvent<DestroyEvent>(DESTROY_EVENT) {
     fun copyFrom(other: DestroyEvent) {
     }
 }
 
-class DisposeEvent() : TypedEvent<DisposeEvent>(DisposeEvent) {
-    companion object : EventType<DisposeEvent>
+val DISPOSE_EVENT: EventType<DisposeEvent> = object : EventType<DisposeEvent> {}
 
+class DisposeEvent() : TypedEvent<DisposeEvent>(DISPOSE_EVENT) {
     fun copyFrom(other: DisposeEvent) {
     }
 }
 
 data class DropFileEvent(override var type: Type = Type.START, var files: List<VfsFile>? = null) : Event(), TEvent<DropFileEvent> {
+
     enum class Type : EventType<DropFileEvent> {
-        START, END, DROP;
+
+        START,
+        END,
+        DROP;
 
         companion object {
-            val ALL = values()
+            val ALL: Array<Type> = Type.entries.toTypedArray()
         }
+
     }
 
     fun copyFrom(other: DropFileEvent) {
         this.type = other.type
         this.files = other.files?.toList()
     }
+
 }

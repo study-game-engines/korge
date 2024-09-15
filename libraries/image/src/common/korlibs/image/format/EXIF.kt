@@ -28,7 +28,8 @@ import korlibs.memory.*
 // https://zpl.fi/exif-orientation-in-different-formats/
 // https://exiftool.org/TagNames/EXIF.html
 object EXIF {
-    private val logger = Logger("EXIF")
+
+    private val logger: Logger = Logger("EXIF")
 
     suspend fun readExifFromJpeg(s: VfsFile, info: ImageInfo = ImageInfo(), debug: Boolean = false): ImageInfo = s.openUse(VfsOpenMode.READ) {
         readExifFromJpeg(this, info, debug)
@@ -140,10 +141,8 @@ object EXIF {
         return info
     }
 
-    enum class DataFormat(
-        val id: Int,
-        val indexBytes: (Int) -> Int,
-    ) {
+    enum class DataFormat(val id: Int, val indexBytes: (Int) -> Int) {
+
         UBYTE(1, { it }),
         STRING(2, { 4 }),
         USHORT(3, { it * 2 }),
@@ -159,9 +158,10 @@ object EXIF {
         UNKNOWN(-1, { 0 });
 
         companion object {
-            val BY_ID = values().associateBy { it.id }
+            val BY_ID = DataFormat.entries.associateBy { it.id }
             operator fun get(index: Int): DataFormat =
                 BY_ID[index] ?: UNKNOWN
         }
+
     }
 }

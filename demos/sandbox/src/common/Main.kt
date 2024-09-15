@@ -71,7 +71,7 @@ suspend fun main2() = KorgeCore {
     }
 }
 
-suspend fun main() = Korge(
+suspend fun demos() = Korge(
     windowSize = Korge.DEFAULT_WINDOW_SIZE,
     virtualSize = Korge.DEFAULT_WINDOW_SIZE,
     backgroundColor = DEFAULT_KORGE_BG_COLOR,
@@ -210,7 +210,7 @@ suspend fun main() = Korge(
             Demo(::MainTransition),
             Demo(::MainTilemapTest),
             Demo(::MainTextureIssue),
-            Demo(::MainClipping),
+            // Demo(::MainClipping),
             Demo(::MainTweenPoint),
             Demo(::MainEasing),
             Demo(::MainVectorFill),

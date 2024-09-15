@@ -1,4 +1,5 @@
 artifact "korge:sandbox-desktop"
+mainCall "korge.sandbox.main()"
 
 source {
     include project(":korge:sandbox")

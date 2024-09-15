@@ -1,0 +1,1 @@
+@echo off && gradlew korge:sandbox:dist && java -jar demos/sandbox/dist/sandbox.jar
