@@ -1,17 +1,17 @@
 package de.tfr.game
 
 
-import com.soywiz.klock.TimeSpan
-import com.soywiz.korge.component.UpdateComponent
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Stage
 import de.tfr.game.audio.SoundMachine
 import de.tfr.game.lib.actor.Box2D
 import de.tfr.game.model.GameField
 import de.tfr.game.renderer.DisplayRenderer
 import de.tfr.game.renderer.GameFieldRenderer
 import de.tfr.game.renderer.LogoRenderer
+import korlibs.korge.view.Container
+import korlibs.korge.view.Stage
+import korlibs.time.seconds
 import resolution
+import kotlin.time.Duration
 
 class HitKlack(override val view: Stage) : UpdateComponent {
 
@@ -39,7 +39,7 @@ class HitKlack(override val view: Stage) : UpdateComponent {
         logo = LogoRenderer(center, gameFieldSize).init(container)
     }
 
-    override fun update(dt: TimeSpan) {
+    override fun update(dt: Duration) {
         val deltaTime = dt.seconds
         game.update(deltaTime)
         displayRenderer.render()

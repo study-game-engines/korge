@@ -1,14 +1,13 @@
 package de.tfr.game.renderer
 
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.image
-import com.soywiz.korge.view.tiles.TileSet
-import com.soywiz.korim.bitmap.Bitmap
-import com.soywiz.korim.bitmap.BitmapSlice
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
-
+import korlibs.image.bitmap.Bitmap
+import korlibs.image.bitmap.BitmapSlice
+import korlibs.image.bitmap.BmpSlice
+import korlibs.image.format.readBitmap
+import korlibs.image.tiles.TileSet
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.view.Container
+import korlibs.korge.view.image
 
 class ButtonTiles {
 

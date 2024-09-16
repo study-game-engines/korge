@@ -1,10 +1,7 @@
 package de.tfr.game.util
 
-import com.soywiz.klock.PerformanceCounter
-
+import korlibs.time.PerformanceCounter
 
 class StopWatch(var start: ms = PerformanceCounter.milliseconds.toLong()) {
-
-
     fun getTime(): ms = PerformanceCounter.milliseconds.toLong() - start
 }

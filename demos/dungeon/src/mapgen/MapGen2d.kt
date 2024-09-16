@@ -1,6 +1,6 @@
 package mapgen
 
-import com.soywiz.kds.Deque
+import korlibs.datastructure.Deque
 import mapgen.brush.Brush2d
 import mapgen.predicate.CellPredicate2d
 import math.Matrix2d

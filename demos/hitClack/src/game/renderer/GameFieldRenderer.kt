@@ -1,11 +1,5 @@
 package de.tfr.game.renderer
 
-
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Graphics
-import com.soywiz.korge.view.graphics
-import com.soywiz.korma.geom.vector.circle
-import com.soywiz.korma.geom.vector.rect
 import de.tfr.game.lib.actor.Point
 
 import de.tfr.game.model.Block
@@ -17,7 +11,9 @@ import de.tfr.game.ui.GREEN_LIGHT
 import de.tfr.game.ui.GREEN_LIGHT2
 import de.tfr.game.util.extensions.drawFill
 import de.tfr.game.util.extensions.square
-
+import korlibs.korge.view.Container
+import korlibs.korge.view.Graphics
+import korlibs.korge.view.graphics
 
 class GameFieldRenderer(point: Point, private val field: GameField) : Point by point {
 

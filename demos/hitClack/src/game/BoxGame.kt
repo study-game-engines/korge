@@ -1,6 +1,5 @@
 package de.tfr.game
 
-import com.soywiz.klogger.Logger
 import de.tfr.game.Controller.Control
 import de.tfr.game.audio.ISoundMachine
 import de.tfr.game.audio.NoSounds
@@ -9,6 +8,7 @@ import de.tfr.game.model.GameField
 import de.tfr.game.model.Orientation
 import de.tfr.game.model.Ring
 import de.tfr.game.util.Timer
+import korlibs.logger.Logger
 
 
 class BoxGame(

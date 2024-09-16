@@ -1,21 +1,20 @@
 package de.tfr.game.renderer
 
-import com.soywiz.klogger.Logger
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Text
-import com.soywiz.korge.view.position
-import com.soywiz.korge.view.solidRect
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.font.BitmapFont
-import com.soywiz.korim.font.readBitmapFont
-import com.soywiz.korio.file.std.resourcesVfs
 import de.tfr.game.Display
-
 import de.tfr.game.ui.GRAY_DARK
 import de.tfr.game.ui.GREEN_LIGHT
 import de.tfr.game.ui.GREEN_LIGHT2
 import de.tfr.game.util.extensions.text
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.image.font.BitmapFont
+import korlibs.image.font.readBitmapFont
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.view.Container
+import korlibs.korge.view.Text
+import korlibs.korge.view.position
+import korlibs.korge.view.solidRect
+import korlibs.logger.Logger
 
 
 class DisplayRenderer(private val display: Display) {

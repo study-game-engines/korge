@@ -23,7 +23,7 @@ class MainMenuScene : Scene() {
     override suspend fun SContainer.sceneMain() {
         uiVerticalStack(adjustSize = false) {
             uiButton("START GAME!").onClick {
-                sceneContainer.changeTo({ GameScene() })
+                sceneContainer.changeTo(GameScene::class)
             }
             uiButton("EXIT GAME!").onClick {
                 gameWindow.close()
@@ -162,7 +162,7 @@ class GameScene : PixelatedScene(128 * 8, 128 * 8, sceneSmoothing = true) {
 
         board.each { piecePos, v ->
             val image = piecesContainer.image(v.getImage()).centered.xy(piecePos.toFloat() * Size(128, 128) + Point(64, 64))
-                .scale(0.9)
+                .scale(0.9f)
                 .alpha(
                     when (currentPlayer) {
                         null -> 1f

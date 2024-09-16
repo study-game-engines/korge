@@ -1,12 +1,11 @@
 package de.tfr.game.util.extensions
 
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Text
-import com.soywiz.korge.view.addTo
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.font.Font
-import com.soywiz.korim.font.SystemFontRegistry
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.image.font.Font
+import korlibs.korge.view.Container
+import korlibs.korge.view.Text
+import korlibs.korge.view.addTo
 
 inline fun Container.text(
         text: String,

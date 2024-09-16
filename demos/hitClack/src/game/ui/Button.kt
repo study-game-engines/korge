@@ -1,15 +1,19 @@
 package de.tfr.game.ui
 
-import com.soywiz.korev.KeyEvent
-import com.soywiz.korge.input.keys
-import com.soywiz.korge.input.onDown
-import com.soywiz.korge.input.onUp
-import com.soywiz.korge.view.*
 import de.tfr.game.Controller
 import de.tfr.game.lib.actor.Point
 import de.tfr.game.lib.actor.Point2D
 import de.tfr.game.renderer.ButtonTiles
 import de.tfr.game.toControl
+import korlibs.event.KeyEvent
+import korlibs.korge.input.onDown
+import korlibs.korge.input.onUp
+import korlibs.korge.view.Container
+import korlibs.korge.view.Image
+import korlibs.korge.view.View
+import korlibs.korge.view.anchor
+import korlibs.korge.view.image
+import korlibs.korge.view.position
 
 class Button(val control: Controller.Control,
         center: Point2D,

@@ -1,6 +1,6 @@
 package game.world
 
-import com.soywiz.korge.view.SpriteAnimation
+import korlibs.korge.view.SpriteAnimation
 
 enum class CritterType(
         val hp: Int,

@@ -1,14 +1,13 @@
 package de.tfr.game.util.extensions
 
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Graphics
-import com.soywiz.korge.view.Text
-import com.soywiz.korge.view.position
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.font.Font
-import com.soywiz.korim.font.SystemFontRegistry
-import com.soywiz.korma.geom.vector.VectorPath
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.image.font.Font
+import korlibs.korge.view.Container
+import korlibs.korge.view.Graphics
+import korlibs.korge.view.Text
+import korlibs.korge.view.position
+import korlibs.math.geom.vector.VectorPath
 
 fun Graphics.circle(x: Number, y: Number, radius: Number) {
     this.path { circle(x, y, radius) }

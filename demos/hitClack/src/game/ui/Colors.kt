@@ -1,6 +1,6 @@
 package de.tfr.game.ui
 
-import com.soywiz.korim.color.RGBA
+import korlibs.image.color.RGBA
 
 val GREEN_LIGHT = RGBA(165, 166, 126)
 val GREEN_LIGHT2 = RGBA(161, 162, 127)

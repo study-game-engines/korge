@@ -1,12 +1,11 @@
 package de.tfr.game.audio
 
-import com.soywiz.korau.sound.Sound
-import com.soywiz.korau.sound.readSound
-import com.soywiz.korge.view.Stage
-import com.soywiz.korio.async.launch
-import com.soywiz.korio.file.std.resourcesVfs
 import disableSound
-
+import korlibs.audio.sound.Sound
+import korlibs.audio.sound.readSound
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.view.Stage
+import kotlinx.coroutines.launch
 
 class SoundMachine(private val stage: Stage) : ISoundMachine {
 

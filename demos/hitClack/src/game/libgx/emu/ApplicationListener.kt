@@ -1,7 +1,8 @@
 package de.tfr.game.libgx.emu
 
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.Graphics
+import korlibs.korge.view.Container
+import korlibs.korge.view.Graphics
+
 
 interface ApplicationListener {
     /** Called when the Application is first created.  */

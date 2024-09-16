@@ -1,11 +1,5 @@
 package de.tfr.game
 
-import com.soywiz.korev.Key
-import com.soywiz.korev.KeyEvent
-import com.soywiz.korge.component.KeyComponent
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.View
-import com.soywiz.korge.view.Views
 import de.tfr.game.Controller.Control.*
 import de.tfr.game.lib.actor.Point
 import de.tfr.game.lib.actor.Point2D
@@ -13,6 +7,11 @@ import de.tfr.game.libgx.emu.Input
 import de.tfr.game.renderer.ButtonTiles
 import de.tfr.game.renderer.ButtonTiles.Style
 import de.tfr.game.ui.Button
+import korlibs.event.Key
+import korlibs.event.KeyEvent
+import korlibs.korge.view.Container
+import korlibs.korge.view.View
+import korlibs.korge.view.Views
 
 
 class Controller(point: Point, private val gameRadius: Double, override val view: View) : KeyComponent,

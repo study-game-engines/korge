@@ -1,6 +1,6 @@
 package game.world
 
-import com.soywiz.korge.view.SpriteAnimation
+import korlibs.korge.view.SpriteAnimation
 
 enum class TileType(val blocks: Boolean, val tunnelCost: Double) {
     WALL(true, 8.0),

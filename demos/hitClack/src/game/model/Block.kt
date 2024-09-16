@@ -1,6 +1,6 @@
 package de.tfr.game.model
 
-import com.soywiz.korge.view.Graphics
+import korlibs.korge.view.Graphics
 
 class Block(val ring: Ring, val orientation: Orientation) {
     val row = ring.index

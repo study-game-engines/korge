@@ -1,9 +1,7 @@
-import com.soywiz.korge.*
-import com.soywiz.korge.component.*
-import com.soywiz.korge.input.*
-import com.soywiz.korge.view.*
-import com.soywiz.korgw.*
-import com.soywiz.korim.color.*
+import korlibs.korge.*
+import korlibs.korge.component.*
+import korlibs.korge.input.*
+import korlibs.korge.view.*
 import j4k.candycrush.*
 import j4k.candycrush.audio.*
 import j4k.candycrush.compontens.*
@@ -13,8 +11,12 @@ import j4k.candycrush.level.*
 import j4k.candycrush.lib.*
 import j4k.candycrush.renderer.*
 import j4k.candycrush.renderer.animation.*
+import korlibs.image.color.Colors
 import korlibs.inject.*
 import korlibs.logger.*
+import korlibs.math.geom.Size
+import korlibs.math.geom.Size2D
+import korlibs.render.GameWindow
 
 /**
  *  Main entry point for the game. To start it, run the gradle tasks:
@@ -46,15 +48,17 @@ val logLevel = Logger.Level.DEBUG
 
 suspend fun main() = Korge(
     title = "Candy Crush",
-    virtualHeight = virtualResolution.height, virtualWidth = virtualResolution.width,
-    width = windowResolution.width, height = windowResolution.height, bgcolor = backgroundColor, debug = debug,
+    virtualSize = Size(virtualResolution.width, virtualResolution.height),
+    windowSize = Size(windowResolution.width, windowResolution.height),
+    backgroundColor = backgroundColor,
+    debug = debug,
     quality = GameWindow.Quality.QUALITY
 ) {
     Logger.defaultLevel = logLevel
 
     val candies: CandySprites = donuts() // try: fruits()
 
-    val injector = AsyncInjector().also {
+    val injector = Injector().also {
         it.mapInstance(this)
         it.mapInstance(this as View)
         it.mapInstance(EventBus(this))
@@ -67,7 +71,7 @@ suspend fun main() = Korge(
     }
 
     GameMechanics(injector)
-    Ressources(injector)
+    Resources(injector)
 
     JukeBox(injector)
 

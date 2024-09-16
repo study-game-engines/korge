@@ -1,10 +1,14 @@
 package de.tfr.game.renderer
 
-import com.soywiz.korge.view.*
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.geom.degrees
 import de.tfr.game.lib.actor.Point
+import korlibs.image.format.readBitmap
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.view.Container
+import korlibs.korge.view.anchor
+import korlibs.korge.view.image
+import korlibs.korge.view.position
+import korlibs.korge.view.scale
+import korlibs.math.geom.degrees
 
 import resolution
 
