@@ -1,12 +1,16 @@
 package views
 
-import com.soywiz.klock.seconds
-import com.soywiz.korge.input.mouse
-import com.soywiz.korge.scene.SceneContainer
-import com.soywiz.korge.view.*
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
+import korlibs.image.color.Colors
+import korlibs.image.format.readBitmap
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.input.mouse
+import korlibs.korge.scene.SceneContainer
+import korlibs.korge.view.Container
+import korlibs.korge.view.Image
+import korlibs.korge.view.anchor
+import korlibs.korge.view.image
+import korlibs.korge.view.position
+import korlibs.time.seconds
 import scenes.GameScene
 import util.LoadingProxyScene
 import scenes.MainScene

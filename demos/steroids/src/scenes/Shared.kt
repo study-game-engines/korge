@@ -1,13 +1,17 @@
 package scenes
 
-import com.soywiz.kmem.toIntFloor
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korim.color.Colors
 import gameplay.Process
 import gameplay.getImage
 import gameplay.rand
+import korlibs.image.bitmap.Bitmap32
+import korlibs.image.bitmap.slice
+import korlibs.image.color.Colors
+import korlibs.korge.view.Container
+import korlibs.korge.view.anchor
+import korlibs.korge.view.image
+import korlibs.korge.view.position
+import korlibs.korge.view.scale
+import korlibs.math.toIntFloor
 
 /*
 fun Container.foto(graph:Int, x:Int, y:Int, size_x:Int, z:Int, flags:Int): Image {

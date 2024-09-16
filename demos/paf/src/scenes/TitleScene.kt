@@ -16,19 +16,18 @@ import resources.Resources
 var musicPlaying = 0
 
 
-
 class TitleScene() : SceneBase() {
 
-    lateinit var pafSounds:PafSounds
+    lateinit var pafSounds: PafSounds
 
 
     override suspend fun SContainer.sceneInit() {
 
         Resources(views).loadAll()
 
-        pafSounds = PafSounds(Resources.disparoSound,Resources.botaSound, Resources.pafSound, Resources.music)
+        pafSounds = PafSounds(Resources.disparoSound, Resources.botaSound, Resources.pafSound, Resources.music)
 
-        if(musicPlaying == 0){
+        if (musicPlaying == 0) {
             musicPlaying = 1
             pafSounds.playMusic()
         }
@@ -48,25 +47,25 @@ class TitleScene() : SceneBase() {
         println("AfterDestroy")
     }
 
-    inner class inicio:Process(sceneView) {
+    inner class inicio : Process(sceneView) {
         override suspend fun main() {
-            with(foto(30,160,119,100,100,0)){ //llamada para crear imagen del fondo
+            with(foto(30, 160, 119, 100, 100, 0)) { //llamada para crear imagen del fondo
                 launchAsap {
                     loop {
-                        scaleX = 1f
+                        scaleX = 1.0
                         delay(0.25.seconds)
-                        scaleX = -1f
+                        scaleX = -1.0
                         delay(0.25.seconds)
                     }
                 }
             }
 
-            letraTitulo(10,107,-60)       //llamada al proceso letra_titulo para la letra P
-            letraTitulo(12,146,-80)       //para la letra A
-            letraTitulo(14,187,-100)       //para la letra F
-            letraTitulo(16,220,-120)      //para la letra !
+            letraTitulo(10, 107, -60)       //llamada al proceso letra_titulo para la letra P
+            letraTitulo(12, 146, -80)       //para la letra A
+            letraTitulo(14, 187, -100)       //para la letra F
+            letraTitulo(16, 220, -120)      //para la letra !
 
-            foto(5,160,220,100,100,0)      //llamada para crear imagen del nombre del creador
+            foto(5, 160, 220, 100, 100, 0)      //llamada para crear imagen del nombre del creador
 
             protaDemo()
 
@@ -83,7 +82,7 @@ class TitleScene() : SceneBase() {
             }
 
             loop {
-                if ((key and (BUTTON_A or BUTTON_B or BUTTON_C or BUTTON_START)).toBool()){
+                if ((key and (BUTTON_A or BUTTON_B or BUTTON_C or BUTTON_START)).toBool()) {
                     sceneContainer.changeTo(GameScene::class)
                 }
 
@@ -93,9 +92,9 @@ class TitleScene() : SceneBase() {
     }
 
 
-    inner class pulsaIntro:Process(sceneView) {
+    inner class pulsaIntro : Process(sceneView) {
         override suspend fun main() {
-            position(160,200)
+            position(160, 200)
             anchor(0.5, 0.5)
             smoothing = false
 
@@ -108,44 +107,52 @@ class TitleScene() : SceneBase() {
         }
     }
 
-    inner class letraTitulo(private val initialGraph:Int, private val initialX:Int, private val initialY:Int):Process(sceneView) {
+    inner class letraTitulo(private val initialGraph: Int, private val initialX: Int, private val initialY: Int) : Process(sceneView) {
         override suspend fun main() {
             var anima = 0
             graph = initialGraph
 
-            position(initialX,initialY)
+            position(initialX, initialY)
 
             anchor(0.5, 0.5)
-            scale(1.0,1.0)
+            scale(1.0, 1.0)
             smoothing = false
 
             loop {
-                if (anima==0) {      //comprueba si anima es 0
+                if (anima == 0) {      //comprueba si anima es 0
                     y += 6
                     if (y > 90) {
-                        y = 90f
+                        y = 90.0
                         anima = 1
                         pafSounds.playPaf()
                         //play_wav(sfx1,0);
                     }    //si anima es 0 incremeta la y+6 y comprueba si y es mayor de 90 si es mayor, la variable anima se le da el valor 1 para seguir con otra animacion
                 }
-                if (anima==1) {      //comprueba si anima es 1
+                if (anima == 1) {      //comprueba si anima es 1
                     graph++
-                    scaleAvg = 2f
-                    anima=2     //si anima es 1 hara otra animacion a la anterior y pasara a anima=2 para no volver a repetirlo
+                    scaleAvg = 2.0
+                    anima = 2     //si anima es 1 hara otra animacion a la anterior y pasara a anima=2 para no volver a repetirlo
                 }
-                if (anima==2) {      //comprueba si anima es 2
+                if (anima == 2) {      //comprueba si anima es 2
                     scaleAvg -= 0.2f
                     if (scaleAvg < 0.5) {
-                        scaleAvg = 1f
-                        anima=3
+                        scaleAvg = 1.0
+                        anima = 3
                     }
                 }
-                if (anima==3) {
-                    if (graph==11) { graph=1 }      //comprueba si graph es 11 para cambiarlo a 1
-                    if (graph==13) { graph=2 }      //comprueba si graph es 13 para cambiarlo a 2
-                    if (graph==15) { graph=3 }      //comprueba si graph es 15 para cambiarlo a 3
-                    if (graph==17) { graph=4 }      //comprueba si graph es 17 para cambiarlo a 4
+                if (anima == 3) {
+                    if (graph == 11) {
+                        graph = 1
+                    }      //comprueba si graph es 11 para cambiarlo a 1
+                    if (graph == 13) {
+                        graph = 2
+                    }      //comprueba si graph es 13 para cambiarlo a 2
+                    if (graph == 15) {
+                        graph = 3
+                    }      //comprueba si graph es 15 para cambiarlo a 3
+                    if (graph == 17) {
+                        graph = 4
+                    }      //comprueba si graph es 17 para cambiarlo a 4
                     anima = 4
                 }
 
@@ -155,45 +162,47 @@ class TitleScene() : SceneBase() {
         }
     }
 
-    inner class protaDemo:Process(sceneView) {
+    inner class protaDemo : Process(sceneView) {
         override suspend fun main() {
             var anima = 0
             graph = 22
 
-            position(340,160)
+            position(340, 160)
 
             anchor(0.5, 0.5)
-            scale(1.0,1.0)
+            scale(1.0, 1.0)
             smoothing = false
 
 
             loop {
-                if (anima==0) {       //comprueba si anima es 0
+                if (anima == 0) {       //comprueba si anima es 0
                     graph++
-                    if (graph>25){ graph=22 }        //incrementa graph+1 y comprueba si es mayor de 25 si es mayor inicia al grafico 22
-                    x=x-3
-                    if (x<-20){
-                        x=-20f
-                        anima=1
-                        graph=26
+                    if (graph > 25) {
+                        graph = 22
+                    }        //incrementa graph+1 y comprueba si es mayor de 25 si es mayor inicia al grafico 22
+                    x = x - 3
+                    if (x < -20) {
+                        x = -20.0
+                        anima = 1
+                        graph = 26
                     }     //resta x-3 y comprueba si es menor que -20 y cambia de graph y de anima
                 }
-                if (anima==1) {       //comprueba si anima es 1
+                if (anima == 1) {       //comprueba si anima es 1
                     graph++
-                    if (graph>29) { graph=26 }        //incrementa graph+1 y comprueba si es mayor de 29 si es mayor inicia al grafico 29
-                    x=x+3
-                    if (x>340){
-                        x=340f
-                        anima=0
-                        graph=22
+                    if (graph > 29) {
+                        graph = 26
+                    }        //incrementa graph+1 y comprueba si es mayor de 29 si es mayor inicia al grafico 29
+                    x = x + 3
+                    if (x > 340) {
+                        x = 340.0
+                        anima = 0
+                        graph = 22
                     }     //incrementa x+3 y comprueba si es mayor que 340 y cambia de graph y de anima
                 }
                 frame()
             }
         }
     }
-
-
 
 
     /*
@@ -221,7 +230,6 @@ class TitleScene() : SceneBase() {
             end
         end
      */
-
 
 
     /*

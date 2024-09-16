@@ -1,27 +1,25 @@
 package scenes
 
-import com.soywiz.klock.seconds
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.scene.sleep
-import com.soywiz.korge.tween.get
-import com.soywiz.korge.tween.tween
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.centerXBetween
-import com.soywiz.korge.view.centerYBetween
-import com.soywiz.korge.view.image
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.async.async
-import com.soywiz.korio.async.launchImmediately
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.interpolation.Easing
+import korlibs.concurrent.thread.NativeThread.Companion.sleep
+import korlibs.image.bitmap.BmpSlice
+import korlibs.image.color.Colors
+import korlibs.image.format.readBitmap
+import korlibs.io.async.async
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.scene.Scene
+import korlibs.korge.tween.tween
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.align.centerXBetween
+import korlibs.korge.view.align.centerYBetween
+import korlibs.korge.view.image
+import korlibs.math.interpolation.EASE_IN_OUT
+import korlibs.math.interpolation.Easing
+import korlibs.time.seconds
 import resources.Resources
 
 class LoadingScene() : Scene() {
 
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         views.clearColor = Colors.BLACK
     }
 
@@ -36,7 +34,7 @@ class LoadingScene() : Scene() {
         sceneContainer.changeTo(GameScene::class)
     }
 
-    suspend fun Container.splash() {
+    suspend fun SContainer.splash() {
         val map = resourcesVfs["korge.png"].readBitmap().slice()
         val anim = async {
             logo(map)
@@ -45,7 +43,7 @@ class LoadingScene() : Scene() {
         anim.await()
     }
 
-    suspend fun Container.logo(graph: BmpSlice) {
+    suspend fun SContainer.logo(graph: BmpSlice) {
         val image = image(graph) {
             alpha = 0.0
             centerXBetween(0,640)

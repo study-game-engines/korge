@@ -2,4 +2,6 @@ artifact "korge:parasite"
 
 source {
     include project(":korge:engine")
+    include project(":korge:collision")
+    include project(":korge:audio")
 }

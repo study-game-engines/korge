@@ -3,37 +3,28 @@ package gameplay
 
 import korlibs.image.bitmap.*
 import korlibs.image.color.*
-import korlibs.image.format.readBitmapSlice
 import korlibs.io.async.*
-import korlibs.io.file.VfsFile
-import korlibs.io.resources.Resourceable
 import korlibs.korge.render.*
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.*
-import korlibs.korge.view.Image
-import korlibs.korge.view.property.ViewProperty
-import korlibs.korge.view.property.ViewPropertyFileRef
 import korlibs.math.geom.*
-import korlibs.math.geom.vector.VectorPath
 import korlibs.time.Frequency
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 import resources.Resources
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 private val imageCache = mutableMapOf<Int, BmpSlice>()
-fun getImage(graph:Int): BmpSlice {
+fun getImage(graph: Int): BmpSlice {
     return imageCache.getOrPut(graph) {
-        return if(graph==0) Process.emptyImage.slice() else
-        Resources.pafAtlas["${graph.toString().padStart(3, '0')}.png"]//.texture
+        return if (graph == 0) Process.emptyImage.slice() else
+            Resources.pafAtlas["${graph.toString().padStart(3, '0')}.png"]//.texture
     }
 }
 
-private lateinit var currentScene:Scene
+private lateinit var currentScene: Scene
 
-abstract class SceneBase:Scene()
-{
+abstract class SceneBase : Scene() {
     init {
         currentScene = this
     }
@@ -53,8 +44,8 @@ class ImageData {
     val frameOffsetY: Float get() = baseBitmap.frameOffsetY.toFloat()
     val frameWidth: Float get() = baseBitmap.frameWidth.toFloat()
     val frameHeight: Float get() = baseBitmap.frameHeight.toFloat()
-    val anchorDispXNoOffset: Float get() = (anchor.sx * frameWidth)
-    val anchorDispYNoOffset: Float get() = (anchor.sy * frameHeight)
+    val anchorDispXNoOffset: Float get() = (anchor.sx * frameWidth).toFloat()
+    val anchorDispYNoOffset: Float get() = (anchor.sy * frameHeight).toFloat()
     val anchorDispX: Float get() = (anchorDispXNoOffset - frameOffsetX)
     val anchorDispY: Float get() = (anchorDispYNoOffset - frameOffsetY)
     var smoothing: Boolean = true
@@ -80,7 +71,7 @@ class ImageData {
 //abstract class Process(parent: Container) : OpenImage(emptyImage) {
 abstract class Process(parent: Container) : Container(), Anchorable {
     companion object {
-        val emptyImage = Bitmap32(1,1)
+        val emptyImage = Bitmap32(1, 1)
     }
 
     private val imageData = ImageData()
@@ -90,7 +81,7 @@ abstract class Process(parent: Container) : Container(), Anchorable {
 
     private var _graph = 0
     var graph: Int
-        get() =  _graph
+        get() = _graph
         set(value) {
             _graph = value
             bitmap = getImage(value)
@@ -111,8 +102,8 @@ abstract class Process(parent: Container) : Container(), Anchorable {
 
     open suspend fun main() {}
 
-    inline fun loop(block:()->Unit) {
-        while(true) {
+    inline fun loop(block: () -> Unit) {
+        while (true) {
             block()
         }
     }
@@ -121,7 +112,7 @@ abstract class Process(parent: Container) : Container(), Anchorable {
     private var frameListenerInitialized = false
 
     suspend fun Container.frame() = suspendCoroutine<Unit> { cont ->
-        if(!frameListenerInitialized) {
+        if (!frameListenerInitialized) {
             frameListenerInitialized = true
             addFixedUpdater(Frequency(24.0)) {
                 frameReady.invoke()
@@ -133,24 +124,20 @@ abstract class Process(parent: Container) : Container(), Anchorable {
         }
     }
 
-    fun launch(callback: suspend () -> Unit) = currentScene.launch(callback)
     fun launchImmediately(callback: suspend () -> Unit) = currentScene.launchImmediately(callback)
     fun launchAsap(callback: suspend () -> Unit) = currentScene.launchAsap(callback)
 
-    fun <T>async(callback: suspend () -> T) = currentScene.async(callback)
-    fun <T>asyncImmediately(callback: suspend () -> T) = currentScene.asyncImmediately(callback)
-    fun <T>asyncAsap(callback: suspend () -> T) = currentScene.asyncAsap(callback)
+    fun <T> async(callback: suspend () -> T) = currentScene.async(callback)
+    fun <T> asyncImmediately(callback: suspend () -> T) = currentScene.asyncImmediately(callback)
+    fun <T> asyncAsap(callback: suspend () -> T) = currentScene.asyncAsap(callback)
 
 
 }
 
 
-
-
-
-fun Scene.loop(block:suspend ()->Unit){
+fun Scene.loop(block: suspend () -> Unit) {
     launchImmediately {
-        while(true) {
+        while (true) {
             block()
         }
     }

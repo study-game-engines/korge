@@ -1,11 +1,10 @@
-import com.soywiz.korge.Korge
-import com.soywiz.korge.scene.Module
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.view.Views
-import com.soywiz.korim.color.Colors
-import com.soywiz.korinject.AsyncInjector
-import com.soywiz.korma.geom.SizeInt
 import gameplay.registerProcessSystem
+import korlibs.image.color.Colors
+import korlibs.inject.Injector
+import korlibs.korge.Korge
+import korlibs.korge.scene.Scene
+import korlibs.korge.view.Views
+import korlibs.math.geom.SizeInt
 import scenes.*
 import kotlin.reflect.KClass
 
@@ -22,7 +21,7 @@ object SteroidsGameModule : Module() {
 	override val bgcolor = Colors.BLACK
 	override val mainScene: KClass<out Scene> = GameScene::class
 
-	override suspend fun init(injector: AsyncInjector): Unit = injector.run {
+	override suspend fun init(injector: Injector): Unit = injector.run {
 		//mapInstance(GameState())
 		get<Views>().registerProcessSystem()
 

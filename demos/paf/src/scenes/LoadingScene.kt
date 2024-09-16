@@ -15,6 +15,7 @@ import korlibs.io.async.launchImmediately
 import korlibs.io.file.std.resourcesVfs
 import korlibs.korge.scene.delay
 import korlibs.korge.view.SContainer
+import korlibs.math.interpolation.EASE_IN_OUT
 import korlibs.math.interpolation.Easing
 import resources.Resources
 
@@ -55,7 +56,7 @@ class LoadingScene() : Scene() {
 
     suspend fun Container.logo(graph:BmpSlice) {
         val image = image(graph){
-            alpha = 0f
+            alpha = 0.0
         }
 
         image.tween(image::alpha[1], time = 1.seconds, easing = Easing.EASE_IN_OUT)

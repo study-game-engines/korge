@@ -1,26 +1,35 @@
 package scenes
 
-import com.soywiz.kds.Pool
-import com.soywiz.klock.TimeSpan
-import com.soywiz.klock.seconds
-import com.soywiz.korau.sound.NativeSoundChannel
-import com.soywiz.korau.sound.readMusic
-import com.soywiz.korev.Key
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.tween.get
-import com.soywiz.korge.tween.tween
-import com.soywiz.korge.view.*
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.async.delay
-import com.soywiz.korio.async.launchImmediately
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.geom.Point
-import com.soywiz.korma.interpolation.Easing
+import korlibs.audio.sound.readMusic
+import korlibs.datastructure.Pool
+import korlibs.event.Key
+import korlibs.image.color.Colors
+import korlibs.image.format.readBitmap
+import korlibs.inject.Injector
+import korlibs.io.async.launchImmediately
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.scene.Scene
+import korlibs.korge.scene.delay
+import korlibs.korge.tween.tween
+import korlibs.korge.view.BlendMode
+import korlibs.korge.view.Image
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.addUpdater
+import korlibs.korge.view.anchor
+import korlibs.korge.view.collision.CollisionKind
+import korlibs.korge.view.collision.collidesWith
+import korlibs.korge.view.image
+import korlibs.korge.view.position
+import korlibs.math.geom.Point
+import korlibs.math.geom.Vector2D
+import korlibs.math.interpolation.EASE_OUT
+import korlibs.math.interpolation.Easing
+import korlibs.time.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import views.*
 import kotlin.random.Random
+import kotlin.time.Duration
 
 class GameScene : Scene() {
     
@@ -54,7 +63,7 @@ class GameScene : Scene() {
     private lateinit var enemies: Pool<Enemy>
     private val activeEnemies: MutableList<Enemy> = mutableListOf()
     
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         
         bg = image(resourcesVfs["graphics/game_scene/bg.png"].readBitmap()) {
             smoothing = false
@@ -99,7 +108,6 @@ class GameScene : Scene() {
         gameOverPanel.position(views.virtualWidth, 0.0)
         gameOverPanel.loadPanel()
         addChild(gameOverPanel)
-        
         addUpdater { update(it) }
     }
     
@@ -111,7 +119,7 @@ class GameScene : Scene() {
         player.live()
     }
     
-    private fun update(dt: TimeSpan) {
+    private fun update(dt: Duration) {
         
         checkInput(dt)
         checkShakeScreen(dt)
@@ -123,7 +131,7 @@ class GameScene : Scene() {
         checkActiveEnemies(dt)
     }
     
-    private fun checkInput(dt: TimeSpan) {
+    private fun checkInput(dt: Duration) {
         
         if (views.input.keys.justReleased(Key.P)) paused = !paused
         
@@ -154,7 +162,7 @@ class GameScene : Scene() {
         
     }
     
-    private fun checkShakeScreen(dt: TimeSpan) {
+    private fun checkShakeScreen(dt: Duration) {
         if (shakeScreen) {
             if (shakeScreenTimer <= shakeScreenDuration) {
                 sceneView.position(Random.nextDouble(-3.0, 3.0), Random.nextDouble(-3.0, 3.0))
@@ -166,7 +174,7 @@ class GameScene : Scene() {
         }
     }
     
-    private fun checkTeleportAvailability(dt: TimeSpan) {
+    private fun checkTeleportAvailability(dt: Duration) {
         teleportTimer += dt
         if (teleportTimer.seconds >= teleportActivationPeriod.seconds) {
             teleportSymbol.tint = Colors.DARKMAGENTA
@@ -190,7 +198,7 @@ class GameScene : Scene() {
         }
     }
     
-    private fun checkHordeCreation(dt: TimeSpan) {
+    private fun checkHordeCreation(dt: Duration) {
         if (activeEnemies.isEmpty()) {
             newHordeTimer += dt
         }
@@ -242,7 +250,7 @@ class GameScene : Scene() {
         }
     }
     
-    private fun checkActiveEnemies(dt: TimeSpan) {
+    private fun checkActiveEnemies(dt: Duration) {
         val iterator = activeEnemies.iterator()
         while (iterator.hasNext()) {
             try {
@@ -296,4 +304,5 @@ class GameScene : Scene() {
         bgMusic.stop()
         super.sceneBeforeLeaving()
     }
+
 }

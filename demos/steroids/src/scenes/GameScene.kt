@@ -1,12 +1,23 @@
 package scenes
 
-import com.soywiz.klock.seconds
-import com.soywiz.korge.view.*
-import com.soywiz.korio.async.delay
-import com.soywiz.korio.async.launchImmediately
 import extensions.toBool
 import gameplay.*
 import input.*
+import korlibs.inject.Injector
+import korlibs.io.async.launchImmediately
+import korlibs.korge.time.delay
+import korlibs.korge.view.Container
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.Text
+import korlibs.korge.view.align.alignBottomToBottomOf
+import korlibs.korge.view.align.alignLeftToLeftOf
+import korlibs.korge.view.align.alignRightToRightOf
+import korlibs.korge.view.align.alignTopToBottomOf
+import korlibs.korge.view.align.alignTopToTopOf
+import korlibs.korge.view.align.centerXOn
+import korlibs.korge.view.position
+import korlibs.korge.view.text
+import korlibs.time.seconds
 import resources.Resources
 
 class GameScene() : SceneBase() {
@@ -15,7 +26,7 @@ class GameScene() : SceneBase() {
     lateinit var pointsText : Text
     lateinit var levelText : Text
 
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         Resources(views).loadAll()
 
         steroidsSounds = SteroidsSounds(Resources.tubo5Sound, Resources.tubo8Sound, Resources.fx33Sound, Resources.naveSound)

@@ -1,10 +1,14 @@
 package util
 
-import com.soywiz.klock.seconds
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.time.delay
-import com.soywiz.korge.tween.*
-import com.soywiz.korge.view.*
+import korlibs.korge.scene.Scene
+import korlibs.korge.time.delay
+import korlibs.korge.tween.tween
+import korlibs.korge.view.Image
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.Text
+import korlibs.korge.view.position
+import korlibs.korge.view.text
+import korlibs.time.seconds
 import kotlin.reflect.KClass
 
 class LoadingProxyScene(nextScreen: NextScreen, private val infoImage: Image?) : Scene() {
@@ -13,7 +17,7 @@ class LoadingProxyScene(nextScreen: NextScreen, private val infoImage: Image?) :
     private val text: String = "Loading..."
     private val nextScreen: KClass<*> = nextScreen.nextScreenClass
     
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         infoImage?.let { info ->
             info.anchor(.5, .5)
             info.position(views.virtualWidth / 2, views.virtualHeight / 2)
@@ -28,7 +32,7 @@ class LoadingProxyScene(nextScreen: NextScreen, private val infoImage: Image?) :
         }
     }
     
-    override suspend fun Container.sceneMain() {
+    override suspend fun SContainer.sceneMain() {
         loadingText.tween(loadingText::x[views.virtualWidth - loadingText.width - 20].easeOut(), time = 1.seconds)
         infoImage?.let { delay(3.seconds) }
         sceneContainer.changeTo(clazz = nextScreen as KClass<Scene>, time = .5.seconds)

@@ -14,8 +14,13 @@ import korlibs.korge.animate.tween
 import korlibs.korge.input.SwipeDirection
 import korlibs.korge.input.keys
 import korlibs.korge.input.onClick
+import korlibs.korge.input.onDown
+import korlibs.korge.input.onOut
+import korlibs.korge.input.onOver
 import korlibs.korge.input.onSwipe
+import korlibs.korge.input.onUp
 import korlibs.korge.service.storage.storage
+import korlibs.korge.ui.uiText
 import korlibs.korge.view.*
 import korlibs.korge.view.align.*
 import korlibs.math.geom.RectCorners
@@ -333,7 +338,7 @@ fun Container.showGameOver(onRestart: () -> Unit) = container {
         centerBetween(0.0, 0.0, fieldSize, fieldSize)
         y -= 60
     }
-    uiText("Try again", 120.0, 35.0) {
+    uiText("Try again", Size(120.0, 35.0)) {
         centerBetween(0.0, 0.0, fieldSize, fieldSize)
         y += 20
         textSize = 40.0

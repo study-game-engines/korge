@@ -1,11 +1,10 @@
-import com.soywiz.korge.*
-import com.soywiz.korge.scene.Module
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korinject.AsyncInjector
-import com.soywiz.korma.geom.ScaleMode
-import com.soywiz.korma.geom.SizeInt
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.inject.Injector
+import korlibs.korge.Korge
+import korlibs.korge.scene.Scene
+import korlibs.math.geom.ScaleMode
+import korlibs.math.geom.SizeInt
 import scenes.*
 import util.LoadingProxyScene
 import kotlin.reflect.KClass
@@ -27,7 +26,7 @@ object MainModule : Module() {
     override val bgcolor: RGBA
         get() = Colors.BLACK
     
-    override suspend fun AsyncInjector.configure() {
+    override suspend fun Injector.configure() {
         mapPrototype { MainScene() }
         mapPrototype { GameScene() }
         mapPrototype { SplashScreen() }

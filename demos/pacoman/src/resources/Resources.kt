@@ -1,14 +1,12 @@
 package resources
 
-import com.soywiz.korau.sound.NativeSound
-import com.soywiz.korau.sound.readSound
-import com.soywiz.korge.atlas.Atlas
-import com.soywiz.korge.atlas.readAtlas
-import com.soywiz.korge.view.Views
-import com.soywiz.korim.font.BitmapFont
-import com.soywiz.korim.font.readBitmapFont
-
-import com.soywiz.korio.file.std.resourcesVfs
+import korlibs.audio.sound.readSound
+import korlibs.image.atlas.Atlas
+import korlibs.image.atlas.readAtlas
+import korlibs.image.font.BitmapFont
+import korlibs.image.font.readBitmapFont
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.view.Views
 import kotlin.native.concurrent.*
 
 class Resources(private val views: Views) {

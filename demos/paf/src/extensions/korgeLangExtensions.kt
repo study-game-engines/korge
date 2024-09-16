@@ -1,7 +1,7 @@
 package extensions
 
 import korlibs.datastructure.IntArray2
-import korlibs.memory.umod
+import korlibs.math.umod
 
 infix fun UByte.shr(other: Int): UInt = this.toUInt() shr other
 infix fun UByte.shl(other: Int): UInt = this.toUInt() shl other

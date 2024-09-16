@@ -1,26 +1,18 @@
 package gameplay
 
-
-import com.soywiz.klock.Frequency
-import com.soywiz.kmem.setBits
-import com.soywiz.kmem.unsetBits
-import com.soywiz.korau.sound.NativeSound
-import com.soywiz.korau.sound.NativeSoundChannel
-import com.soywiz.korge.component.StageComponent
-import com.soywiz.korge.component.registerStageComponent
-import com.soywiz.korge.input.onKeyDown
-import com.soywiz.korge.input.onKeyUp
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korio.async.*
-import com.soywiz.korma.geom.Angle
-import com.soywiz.korma.geom.cos
-import com.soywiz.korma.geom.sin
 import extensions.toBool
 import input.getButtonPressed
+import korlibs.image.bitmap.Bitmap32
+import korlibs.image.bitmap.BmpSlice
+import korlibs.io.async.Signal
+import korlibs.korge.scene.Scene
+import korlibs.korge.view.Container
+import korlibs.korge.view.Image
+import korlibs.korge.view.View
+import korlibs.math.geom.Angle
+import korlibs.math.geom.cos
+import korlibs.math.geom.sin
+import korlibs.time.Frequency
 import kotlinx.coroutines.*
 import resources.Resources
 import kotlin.random.Random

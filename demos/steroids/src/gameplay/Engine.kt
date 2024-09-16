@@ -1,25 +1,30 @@
 package gameplay
 
-
-import com.soywiz.kds.atomic.kdsIsFrozen
-import com.soywiz.klock.Frequency
-import com.soywiz.kmem.setBits
-import com.soywiz.kmem.unsetBits
-import com.soywiz.korge.component.StageComponent
-import com.soywiz.korge.component.registerStageComponent
-import com.soywiz.korge.input.onKeyDown
-import com.soywiz.korge.input.onKeyUp
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.bitmap.BmpSlice
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korio.async.*
-import com.soywiz.korma.geom.Angle
-import com.soywiz.korma.geom.cos
-import com.soywiz.korma.geom.sin
 import extensions.toBool
 import input.getButtonPressed
+import korlibs.image.bitmap.Bitmap32
+import korlibs.image.bitmap.BmpSlice
+import korlibs.image.bitmap.slice
+import korlibs.io.async.Signal
+import korlibs.io.async.asyncAsap
+import korlibs.io.async.asyncImmediately
+import korlibs.io.async.launchAsap
+import korlibs.io.async.launchImmediately
+import korlibs.korge.component.registerStageComponent
+import korlibs.korge.scene.Scene
+import korlibs.korge.view.Container
+import korlibs.korge.view.Image
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.View
+import korlibs.korge.view.Views
+import korlibs.korge.view.addFixedUpdater
+import korlibs.math.geom.Angle
+import korlibs.math.geom.cos
+import korlibs.math.geom.sin
+import korlibs.math.geom.slice.RectSlice
+import korlibs.memory.setBits
+import korlibs.memory.unsetBits
+import korlibs.time.Frequency
 import kotlinx.coroutines.*
 import resources.Resources
 import kotlin.coroutines.resume
@@ -65,7 +70,7 @@ abstract class SceneBase:Scene()
     private val frameReady = Signal<Unit>()
     private var frameListenerInitialized = false
 
-    suspend fun Container.frame() {
+    suspend fun SContainer.frame() {
         if(!frameListenerInitialized) {
             frameListenerInitialized = true
             addFixedUpdater(Frequency(24.0)) {
@@ -170,7 +175,6 @@ abstract class Process(parent: Container) : Image(emptyImage) {
         return (key and k).toBool()
     }
 
-    fun launch(callback: suspend () -> Unit) = currentScene.launch(callback)
     fun launchImmediately(callback: suspend () -> Unit) = currentScene.launchImmediately(callback)
     fun launchAsap(callback: suspend () -> Unit) = currentScene.launchAsap(callback)
 
@@ -183,8 +187,6 @@ abstract class Process(parent: Container) : Image(emptyImage) {
 fun Views.registerProcessSystem() {
     registerStageComponent()
 }
-
-
 
 fun Scene.loop(block:suspend ()->Unit){
     launchImmediately {

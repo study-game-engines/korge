@@ -1,15 +1,18 @@
 package scenes
 
-import com.soywiz.kmem.umod
-import com.soywiz.korau.sound.NativeSoundChannel
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.bitmap.extract
-import com.soywiz.korim.color.Colors
 import extensions.toBool
 import gameplay.*
 import input.*
+import korlibs.image.bitmap.Bitmap32
+import korlibs.korge.view.Container
+import korlibs.korge.view.SContainer
+import korlibs.korge.view.Text
+import korlibs.korge.view.align.alignLeftToLeftOf
+import korlibs.korge.view.align.centerXOnStage
+import korlibs.korge.view.anchor
+import korlibs.korge.view.position
+import korlibs.korge.view.scale
+import korlibs.korge.view.text
 import resources.Resources
 import resources.Resources.Companion.s_come_fantasma
 import resources.Resources.Companion.s_come_fruta
@@ -33,7 +36,7 @@ class GameScene() : SceneBase() {
     val inteligencia = arrayOf(0,10,30,50,65,75,85,90,95,100,100)
 
 
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         Resources(views).loadAll()
         program()
     }

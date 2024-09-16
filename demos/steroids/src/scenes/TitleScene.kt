@@ -1,18 +1,12 @@
 package scenes
 
-import com.soywiz.klock.seconds
-import com.soywiz.kmem.toIntFloor
-import com.soywiz.kmem.unsetBits
-import com.soywiz.korge.input.onKeyDown
-import com.soywiz.korge.input.onKeyUp
-import com.soywiz.korge.time.delay
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korim.color.Colors
 import extensions.toBool
 import gameplay.*
 import input.*
+import korlibs.korge.time.delay
+import korlibs.korge.view.SContainer
+import korlibs.memory.unsetBits
+import korlibs.time.seconds
 import resources.Resources
 
 
@@ -21,7 +15,7 @@ class TitleScene() : SceneBase() {
     lateinit var pafSounds:SteroidsSounds
 
 
-    override suspend fun Container.sceneInit() {
+    override suspend fun SContainer.sceneInit() {
         Resources(views).loadAll()
         inicio()
     }

@@ -1,13 +1,12 @@
 package gameplay
 
-import com.soywiz.korau.sound.NativeSound
-
+import korlibs.audio.sound.Sound
 
 class SteroidsSounds (
         private val tubo5Sound: NativeSound,
         private val tubo8Sound: NativeSound,
         private val fx33Sound: NativeSound,
-        private val naveSound: NativeSound
+        private val naveSound: NativeSound,
 ){
     var mute = false
 

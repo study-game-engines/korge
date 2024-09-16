@@ -1,18 +1,23 @@
 package views
 
-import com.soywiz.klock.milliseconds
-import com.soywiz.klock.seconds
-import com.soywiz.korau.sound.NativeSound
-import com.soywiz.korau.sound.readSound
-import com.soywiz.korge.time.delay
-import com.soywiz.korge.tween.get
-import com.soywiz.korge.tween.tween
-import com.soywiz.korge.view.*
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.geom.vector.circle
-import com.soywiz.korma.interpolation.Easing
+import korlibs.audio.sound.readSound
+import korlibs.image.color.Colors
+import korlibs.image.format.readBitmap
+import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.time.delay
+import korlibs.korge.tween.tween
+import korlibs.korge.view.BlendMode
+import korlibs.korge.view.Container
+import korlibs.korge.view.Image
+import korlibs.korge.view.Sprite
+import korlibs.korge.view.SpriteAnimation
+import korlibs.korge.view.hitShape
+import korlibs.korge.view.position
+import korlibs.math.interpolation.EASE_IN
+import korlibs.math.interpolation.EASE_IN_OUT
+import korlibs.math.interpolation.Easing
+import korlibs.time.milliseconds
+import korlibs.time.seconds
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

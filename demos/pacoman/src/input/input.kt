@@ -1,8 +1,7 @@
 package input
 
-import com.soywiz.korev.Key
-import com.soywiz.korev.KeyEvent
-
+import korlibs.event.Key
+import korlibs.event.KeyEvent
 
 val BUTTON_UP: Int = 1
 val BUTTON_DOWN: Int = 2
