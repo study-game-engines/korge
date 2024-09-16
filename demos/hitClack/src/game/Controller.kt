@@ -13,9 +13,7 @@ import korlibs.korge.view.Container
 import korlibs.korge.view.View
 import korlibs.korge.view.Views
 
-
-class Controller(point: Point, private val gameRadius: Double, override val view: View) : KeyComponent,
-    Point by point {
+class Controller(point: Point, private val gameRadius: Double, override val view: View) : KeyComponent, Point by point {
 
     suspend fun init(container: Container) = apply {
         val tiles = ButtonTiles().init(container)

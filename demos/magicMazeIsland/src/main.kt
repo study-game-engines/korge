@@ -1,9 +1,8 @@
-import com.soywiz.klogger.Logger
-import com.soywiz.korge.Korge
-import com.soywiz.korge.view.View
-import com.soywiz.korgw.GameWindow.Quality.QUALITY
-import com.soywiz.korim.color.Colors
-import com.soywiz.korinject.AsyncInjector
+import korlibs.image.color.Colors
+import korlibs.inject.Injector
+import korlibs.korge.Korge
+import korlibs.korge.view.View
+import korlibs.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import tfr.korge.jam.roguymaze.*
 import tfr.korge.jam.roguymaze.audio.JukeBox
@@ -49,9 +48,15 @@ val levelData = RoomFactory().createRoom(1)
 
 
 suspend fun main() = Korge(
-        title = "Isle Maze", virtualHeight = virtualResolution.height, virtualWidth = virtualResolution.width,
-        width = windowResolution.width, height = windowResolution.height, bgcolor = backgroundColor, debug = debug,
-        quality = QUALITY) {
+        title = "Isle Maze",
+        virtualHeight = virtualResolution.height,
+        virtualWidth = virtualResolution.width,
+        width = windowResolution.width,
+        height = windowResolution.height,
+        bgcolor = backgroundColor,
+        debug = debug,
+        quality = QUALITY
+) {
 
     Logger.defaultLevel = Logger.Level.DEBUG
 
@@ -64,7 +69,7 @@ suspend fun main() = Korge(
         world.shuffleUndiscoveredTiles()
     }
 
-    val injector = AsyncInjector().run {
+    val injector = Injector().run {
         mapInstance(this@Korge)
         mapInstance(this@Korge as View)
         mapInstance(this@Korge as CoroutineScope)
