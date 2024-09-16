@@ -573,9 +573,9 @@ internal inline fun <T : BView?> T?.doMouseEventSuspend(
 }
 
 @PublishedApi
-internal inline fun <T : BView?> T?.doMouseEvent(
+internal fun <T : BView?> T?.doMouseEvent(
     prop: KProperty1<MouseEvents, Signal<MouseEvents>>,
-    noinline handler: (MouseEvents) -> Unit,
+    handler: (MouseEvents) -> Unit,
 ): T? {
     this?.bviewAll?.fastForEach {
         it?.mouse?.let { mouse -> prop.get(mouse).add { handler(it) } }
@@ -627,7 +627,7 @@ suspend inline fun <T : BView?> T.onUpAnywhereSuspend(noinline handler: @EventsD
 suspend inline fun <T : BView?> T.onMoveSuspend(noinline handler: @EventsDslMarker suspend (MouseEvents) -> Unit) = doMouseEventSuspend(MouseEvents::move, handler, coroutineContext)
 suspend inline fun <T : BView?> T.onScrollSuspend(noinline handler: @EventsDslMarker suspend (MouseEvents) -> Unit) = doMouseEventSuspend(MouseEvents::scroll, handler, coroutineContext)
 
-inline fun <T : BView?> T.onClick(noinline handler: @EventsDslMarker (MouseEvents) -> Unit) = doMouseEvent(MouseEvents::click, handler)
+fun <T : BView?> T.onClick(handler: @EventsDslMarker (MouseEvents) -> Unit) = doMouseEvent(MouseEvents::click, handler)
 inline fun <T : BView?> T.onOver(noinline handler: @EventsDslMarker (MouseEvents) -> Unit) = doMouseEvent(MouseEvents::over, handler)
 inline fun <T : BView?> T.onOut(noinline handler: @EventsDslMarker (MouseEvents) -> Unit) = doMouseEvent(MouseEvents::out, handler)
 inline fun <T : BView?> T.onDown(noinline handler: @EventsDslMarker (MouseEvents) -> Unit) = doMouseEvent(MouseEvents::down, handler)

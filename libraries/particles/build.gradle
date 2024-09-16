@@ -1,0 +1,5 @@
+artifact "korge:particles"
+
+source {
+    include project(":korge:engine")
+}

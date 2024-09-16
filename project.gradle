@@ -1,4 +1,3 @@
-// demos
 //module("demos/candyCrush")
 //module("demos/chess")
 //module("demos/dungeon")
@@ -11,7 +10,6 @@
 module("demos/sandbox")
 //module("demos/steroids")
 
-// libraries
 module("libraries/annotations")
 module("libraries/asset-manager")
 module("libraries/audio")
@@ -42,6 +40,7 @@ module("libraries/io-stream")
 module("libraries/io-vfs")
 module("libraries/ipc")
 module("libraries/jseval")
+module("libraries/korge3d")
 module("libraries/ldtk")
 module("libraries/logger")
 //module("libraries/luak")
@@ -51,7 +50,7 @@ module("libraries/math-vector")
 module("libraries/memory")
 module("libraries/number")
 module("libraries/parallax")
-//module("libraries/particles")
+module("libraries/particles")
 module("libraries/utils")
 module("libraries/serialization")
 module("libraries/spine")
@@ -62,6 +61,5 @@ module("libraries/time")
 module("libraries/time-core")
 module("libraries/wasm")
 
-// tools
-module("libraries/editor")
-//module("libraries/korge-intellij-plugin")
+//module("tools/editor")
+//module("tools/korge-intellij-plugin")

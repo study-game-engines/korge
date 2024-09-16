@@ -1,0 +1,1 @@
+@echo off && gradlew korge:korge3d-examples:dist && java -jar libraries/korge3d/dist/korge3d-examples.jar

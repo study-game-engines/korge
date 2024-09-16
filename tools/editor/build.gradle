@@ -1,1 +1,6 @@
-artifafct "korge:editor-desktop"
+artifact "korge:editor-desktop"
+
+source {
+    include project(":korge:engine")
+    include project(":korge:particles")
+}

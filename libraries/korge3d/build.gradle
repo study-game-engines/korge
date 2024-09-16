@@ -1,0 +1,24 @@
+artifact "korge:korge3d"
+
+source {
+    include project(":korge:engine")
+    include "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+}
+
+apply plugin: "kotlinx-serialization"
+
+artifact "korge:korge3d-examples"
+
+source {
+    common {
+        include project(":korge:korge3d")
+        include "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+        include "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
+    }
+    js {
+        include "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    }
+    desktop {
+        include "org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version"
+    }
+}
