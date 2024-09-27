@@ -33,6 +33,7 @@ import com.dragonbones.util.*
 import korlibs.datastructure.*
 import korlibs.time.*
 import korlibs.logger.*
+import kotlin.time.Duration
 
 /**
  * - The animation player is used to play the animation data and manage the animation states.
@@ -592,8 +593,8 @@ class Animation(pool: SingleObjectPool<Animation>) : BaseObject(pool) {
 	}
 
     fun fadeIn(
-        animationName: String, fadeInTime: TimeSpan, playTimes: Int = -1,
-        layer: Int = 0, group: String? = null, fadeOutMode: AnimationFadeOutMode = AnimationFadeOutMode.SameLayerAndGroup
+		animationName: String, fadeInTime: Duration, playTimes: Int = -1,
+		layer: Int = 0, group: String? = null, fadeOutMode: AnimationFadeOutMode = AnimationFadeOutMode.SameLayerAndGroup
     ): AnimationState? {
         return fadeIn(animationName, fadeInTime.seconds, playTimes, layer, group, fadeOutMode)
     }

@@ -1,8 +1,9 @@
 package korlibs.korge.service.vibration
 
-import korlibs.time.*
-import kotlinx.browser.*
-import kotlin.coroutines.*
+import korlibs.time.milliseconds
+import kotlinx.browser.window
+import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration
 
 actual class NativeVibration actual constructor(val coroutineContext: CoroutineContext) {
 
@@ -11,7 +12,7 @@ actual class NativeVibration actual constructor(val coroutineContext: CoroutineC
      * @param amplitudes has no effect on JS backend
      */
     @ExperimentalUnsignedTypes
-    actual fun vibratePattern(timings: Array<TimeSpan>, amplitudes: Array<Double>) {
+    actual fun vibratePattern(timings: Array<Duration>, amplitudes: Array<Double>) {
         window.navigator.vibrate(timings.map { it.milliseconds }.toTypedArray())
     }
 
@@ -20,7 +21,7 @@ actual class NativeVibration actual constructor(val coroutineContext: CoroutineC
      * @param amplitude has no effect on JS backend
      */
     @ExperimentalUnsignedTypes
-    actual fun vibrate(time: TimeSpan, amplitude: Double) {
+    actual fun vibrate(time: Duration, amplitude: Double) {
         window.navigator.vibrate(time.milliseconds)
     }
 }

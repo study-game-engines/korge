@@ -1,6 +1,5 @@
 package korlibs.korge.time
 
-import korlibs.time.TimeSpan
 import korlibs.time.milliseconds
 import korlibs.math.interpolation.*
 import kotlin.time.*

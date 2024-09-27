@@ -2,7 +2,6 @@ package korlibs.korge.particle
 
 import korlibs.math.geom.*
 import korlibs.time.NIL
-import korlibs.time.TimeSpan
 import korlibs.time.seconds
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
@@ -10,15 +9,16 @@ import kotlin.random.Random
 import kotlin.time.Duration
 
 class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitterPos: Point = Point.ZERO, val random: Random = Random) {
+
     var totalElapsedTime: Duration = 0.seconds
     var timeUntilStop: Duration = Duration.NIL
     var emitting: Boolean = true
     val textureWidth: Int = emitter.texture?.width ?: 16
-    val particles: ParticleContainer = ParticleContainer(emitter.maxParticles).init()
+    val particles: ParticleContainer = ParticleContainer(emitter.maxParticles).apply { init() }
     val aliveCount: Int
         get() {
             var count = 0
-            particles.fastForEach { if (it.alive) count++ }
+            particles.forEach { if (it.alive()) count++ }
             return count
         }
     val anyAlive: Boolean get() = aliveCount > 0
@@ -27,7 +27,7 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
     private fun randomVariance(base: Double, variance: Double): Double = base + variance * (random.nextDouble() * 2.0 - 1.0)
     private fun randomVariance(base: Angle, variance: Angle): Angle = randomVariance(base.degrees, variance.degrees).degrees
 
-    fun ParticleContainer.init() = fastForEach {
+    fun ParticleContainer.init() = forEach {
         init(it, true)
     }
 
@@ -40,7 +40,7 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
         } else {
             particle.currentTime = 0f
         }
-        particle.initialized = false
+        particle.initializedFloat = 1f
         return particle
     }
 
@@ -84,7 +84,7 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
         val endRotation = randomVariance(emitter.rotationEnd, emitter.rotationEndVariance)
         particle.rotation = startRotation
         particle.rotationDelta = (endRotation - startRotation) / lifespan
-        particle.initialized = true
+        particle.initializedFloat = 1f
         return particle
     }
 
@@ -93,11 +93,11 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
         val elapsedTime = if (restTime > _elapsedTime) _elapsedTime else restTime
         particle.currentTime += elapsedTime
         if (particle.currentTime < 0.0) return
-        if ((!particle.initialized || !particle.alive) && emitting) {
+        if ((!particle.initialized() || !particle.alive()) && emitting) {
             init(particle, false)
             init2(particle)
         }
-        if (!particle.alive) return
+        if (!particle.alive()) return
         when (emitter.emitterType) {
             ParticleEmitter.Type.RADIAL -> {
                 particle.emitRotation += particle.emitRotationDelta * elapsedTime.toDouble()
@@ -123,8 +123,8 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
 
                 particle.velocityX += elapsedTime * (emitter.gravity.x + radialX + tangentialX).toFloat()
                 particle.velocityY += elapsedTime * (emitter.gravity.y + radialY + tangentialY).toFloat()
-                particle.x += particle.velocityX * elapsedTime.toFloat()
-                particle.y += particle.velocityY * elapsedTime.toFloat()
+                particle.x += particle.velocityX * elapsedTime
+                particle.y += particle.velocityY * elapsedTime
             }
         }
         particle.x += dx
@@ -137,13 +137,13 @@ class ParticleEmitterSimulator(private val emitter: ParticleEmitter, var emitter
         particle.colorA += (particle.colorAdelta * elapsedTime)
     }
 
-    fun simulate(time: TimeSpan, dx: Double = 0.0, dy: Double = 0.0) {
+    fun simulate(time: Duration, dx: Double = 0.0, dy: Double = 0.0) {
         if (emitting) {
             totalElapsedTime += time
-            if (timeUntilStop != TimeSpan.NIL && totalElapsedTime >= timeUntilStop) emitting = false
+            if (timeUntilStop != Duration.NIL && totalElapsedTime >= timeUntilStop) emitting = false
         }
         val timeSeconds = time.seconds.toFloat()
-        particles.fastForEach { p -> advance(p, timeSeconds, dx.toFloat(), dy.toFloat()) }
+        particles.forEach { p -> advance(p, timeSeconds, dx.toFloat(), dy.toFloat()) }
     }
 
     fun restart() {

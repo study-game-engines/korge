@@ -128,14 +128,14 @@ class ParticleEmitterView(private var emitter: ParticleEmitter, emitterPos: Poin
         val tex = emitter.texture ?: Bitmaps.white
         fviewInfo.texs[0] = tex.bmp
         sprites.size = 0
-        simulator.particles.fastForEach { p ->
-            if (p.alive) {
+        simulator.particles.forEach { p ->
+            if (p.alive()) {
                 //if (p.x == 0f && p.y == 0f) println("00: ${p.index}")
                 sprites.apply {
                     val fsprite = FSpriteFromIndex(sprites.size++)
                     //println("FSPRITE: ${fsprite.index}")
                     fsprite.setTex(tex)
-                    fsprite.colorMul = p.color * this@ParticleEmitterView.colorMul
+                    fsprite.colorMul = p.color() * this@ParticleEmitterView.colorMul
                     fsprite.setAnchor(.5f, .5f)
                     fsprite.xy(p.x, p.y)
                     fsprite.scale(p.scale)

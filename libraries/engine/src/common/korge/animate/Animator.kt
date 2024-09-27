@@ -295,13 +295,13 @@ open class Animator @PublishedApi internal constructor(
                     val node = currentNode!!
                     //println("${indent}UPDATE[dt=$dt]: $node")
                     val extraTime = node.update(dt)
-                    if (extraTime >= TimeSpan.ZERO) {
+                    if (extraTime >= Duration.ZERO) {
                         //println("${indent}|COMPLETENODE!! ${currentNode}")
                         currentNode = null
                         dt = extraTime
                     }
                     // Continue running other nodes
-                    if (extraTime > TimeSpan.ZERO) {
+                    if (extraTime > Duration.ZERO) {
                         continue
                     }
                 }

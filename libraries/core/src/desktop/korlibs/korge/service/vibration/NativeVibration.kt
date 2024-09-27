@@ -1,8 +1,7 @@
 package korlibs.korge.service.vibration
 
-import korlibs.time.*
-import kotlin.coroutines.*
-import kotlin.time.*
+import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration
 
 actual class NativeVibration actual constructor(val coroutineContext: CoroutineContext) {
     /**
@@ -10,7 +9,7 @@ actual class NativeVibration actual constructor(val coroutineContext: CoroutineC
      * @param amplitudes list of intensities of the vibration. A `0.2` results in 20% vibration power.
      */
     @ExperimentalUnsignedTypes
-    actual fun vibratePattern(timings: Array<TimeSpan>, amplitudes: Array<Double>) {
+    actual fun vibratePattern(timings: Array<Duration>, amplitudes: Array<Double>) {
     }
 
     /**

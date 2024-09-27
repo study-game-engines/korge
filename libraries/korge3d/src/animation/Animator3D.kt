@@ -11,6 +11,7 @@ import korlibs.korge3d.get
 import korlibs.math.geom.MMatrix3D
 import korlibs.math.geom.degrees
 import korlibs.math.interpolation.*
+import kotlin.time.Duration
 
 /**
  * @param playbackPattern: A function that takes normalized time (from 0 to 1) as argument and returns normalized
@@ -117,7 +118,7 @@ data class Animation3D(val id: String, val target: String, val property: String,
 		val totalTime = seconds.maxOrNull()?.let { it.toDouble().seconds } ?: 0.seconds
 
 		// @TODO: Binary Search
-		fun findIndex(time: TimeSpan): Int {
+		fun findIndex(time: Duration): Int {
 			val elapsedSeconds = time.seconds
 			for (n in 0 until totalFrames - 1) {
 				if (elapsedSeconds >= seconds[n] && elapsedSeconds < seconds[n + 1]) {

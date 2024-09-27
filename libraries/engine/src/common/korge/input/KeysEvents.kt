@@ -38,7 +38,7 @@ class KeysEvents(val view: View) : AutoCloseable {
     }
 
     /** Executes [callback] on each frame when [key] is being pressed. When [dt] is provided, the [callback] is executed at that [dt] steps. */
-    fun downFrame(keys: List<Key>, dt: Duration = TimeSpan.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable {
+    fun downFrame(keys: List<Key>, dt: Duration = Duration.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable {
         val ke = KeyEvent()
         return view.addOptFixedUpdater(dt) { dt ->
             if (::views.isInitialized) {
@@ -53,10 +53,10 @@ class KeysEvents(val view: View) : AutoCloseable {
         }
     }
 
-    fun downFrame(vararg keys: Key, dt: Duration = TimeSpan.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable =
+    fun downFrame(vararg keys: Key, dt: Duration = Duration.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable =
         downFrame(keys.toList(), dt, callback)
 
-    fun downFrame(key: Key, dt: Duration = TimeSpan.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable =
+    fun downFrame(key: Key, dt: Duration = Duration.NIL, callback: (ke: KeyEvent) -> Unit): Cancellable =
         downFrame(listOf(key), dt, callback)
 
     fun justDown(keys: List<Key>, callback: (ke: KeyEvent) -> Unit): Cancellable {

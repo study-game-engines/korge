@@ -1,6 +1,5 @@
 package korlibs.korge.scene
 
-import korlibs.time.TimeSpan
 import korlibs.time.milliseconds
 import korlibs.korge.view.Container
 import korlibs.korge.view.SContainer

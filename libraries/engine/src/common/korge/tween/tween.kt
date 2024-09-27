@@ -70,7 +70,7 @@ class TweenComponent(
         setTo(elapsed)
         callback(easing(ratio))
 
-        if (waitTime != TimeSpan.NIL && elapsed >= waitTime) {
+        if (waitTime != Duration.NIL && elapsed >= waitTime) {
             resumeOnce()
         }
 
@@ -142,7 +142,7 @@ fun BaseView?.tweenNoWait(
     vararg vs: V2<*>,
     time: Duration = DEFAULT_TIME,
     easing: Easing = DEFAULT_EASING,
-    waitTime: Duration = TimeSpan.NIL,
+    waitTime: Duration = Duration.NIL,
     callback: (Float) -> Unit = { }
 ): TweenComponent? {
     if (this == null) return null

@@ -9,7 +9,7 @@ import korlibs.math.geom.Vector2I
 import korlibs.number.niceStr
 import korlibs.platform.Platform
 import korlibs.time.DateTime
-import korlibs.time.TimeSpan
+import kotlin.time.Duration
 
 open class TypedEvent<T : BEvent>(open override var type: EventType<T>) : Event(), TEvent<T>
 
@@ -463,7 +463,7 @@ data class KeyEvent constructor(
         }
     }
 
-    var deltaTime = TimeSpan.ZERO
+    var deltaTime = Duration.ZERO
 
     val typeType get() = type == Type.TYPE
     val typeDown get() = type == Type.DOWN

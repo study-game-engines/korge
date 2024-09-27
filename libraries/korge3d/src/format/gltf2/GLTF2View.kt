@@ -9,6 +9,7 @@ import korlibs.math.*
 import korlibs.math.geom.*
 import korlibs.memory.*
 import korlibs.time.*
+import kotlin.time.Duration
 
 fun Container3D.gltf2View(gltf: GLTF2, autoAnimate: Boolean = true) = GLTF2View(gltf, autoAnimate).addTo(this)
 
@@ -112,12 +113,12 @@ class GLTF2View(override var gltf: GLTF2, autoAnimate: Boolean = true) : Contain
     }
 
     var currentTime = 0.seconds
-    fun updateAnimationDelta(dt: TimeSpan) {
+    fun updateAnimationDelta(dt: Duration) {
         currentTime += dt
         updateAnimation(currentTime)
     }
 
-    fun updateAnimation(time: TimeSpan) {
+    fun updateAnimation(time: Duration) {
         for (animation in gltf.animations) {
             for (channel in animation.channels) {
                 val target = channel.target ?: continue

@@ -8,6 +8,7 @@ import korlibs.korge.ui.*
 import korlibs.korge.view.*
 import korlibs.korge3d.*
 import korlibs.math.geom.*
+import kotlin.time.Duration
 
 class MainStage3d : Scene() {
 
@@ -37,7 +38,7 @@ class MainStage3d : Scene() {
 
 
     
-    private suspend fun Stage3D.orbit(v: View3D, distance: Float, time: TimeSpan) {
+    private suspend fun Stage3D.orbit(v: View3D, distance: Float, time: Duration) {
         viewParent.tween(time = time) { ratio ->
             val angle = 360.degrees * ratio
             camera.positionLookingAt(

@@ -3,6 +3,7 @@ package korlibs.datastructure.event
 import korlibs.datastructure.closeable.*
 import korlibs.platform.*
 import korlibs.time.*
+import kotlin.time.Duration
 
 actual fun createPlatformEventLoop(precise: Boolean): SyncEventLoop =
     LocalJsEventLoop(precise)
@@ -39,12 +40,12 @@ object JsEventLoop : BaseEventLoop() {
         jsGlobalThis.setTimeout({ task() }, 0)
     }
 
-    override fun setTimeout(time: TimeSpan, task: () -> Unit): AutoCloseable {
+    override fun setTimeout(time: Duration, task: () -> Unit): AutoCloseable {
         val id = jsGlobalThis.setTimeout({ task() }, time.millisecondsInt)
         return AutoCloseable { jsGlobalThis.clearTimeout(id) }
     }
 
-    override fun setInterval(time: TimeSpan, task: () -> Unit): AutoCloseable {
+    override fun setInterval(time: Duration, task: () -> Unit): AutoCloseable {
         val id = jsGlobalThis.setInterval({ task() }, time.millisecondsInt)
         return AutoCloseable { jsGlobalThis.clearInterval(id) }
     }

@@ -7,6 +7,7 @@ import korlibs.image.color.*
 import korlibs.korge.view.property.*
 import korlibs.math.geom.*
 import korlibs.time.*
+import kotlin.time.Duration
 
 class ParticleEmitter() {
 
@@ -90,9 +91,9 @@ class ParticleEmitter() {
     @ViewProperty(groupName = "rotation")
 	var rotationEndVariance = 0.0.degrees
 
-    fun create(pos: Point = Point.ZERO, time: TimeSpan = TimeSpan.NIL): ParticleEmitterView = ParticleEmitterView(this, pos).apply { this.timeUntilStop = time }
-    fun create(x: Float = 0f, y: Float = 0f, time: TimeSpan = TimeSpan.NIL): ParticleEmitterView = create(Point(x, y), time)
-    fun create(x: Double = 0.0, y: Double = 0.0, time: TimeSpan = TimeSpan.NIL): ParticleEmitterView = create(Point(x, y), time)
+    fun create(pos: Point = Point.ZERO, time: Duration = Duration.NIL): ParticleEmitterView = ParticleEmitterView(this, pos).apply { this.timeUntilStop = time }
+    fun create(x: Float = 0f, y: Float = 0f, time: Duration = Duration.NIL): ParticleEmitterView = create(Point(x, y), time)
+    fun create(x: Double = 0.0, y: Double = 0.0, time: Duration = Duration.NIL): ParticleEmitterView = create(Point(x, y), time)
 
     companion object {
         val blendFactorMap = mapOf(
