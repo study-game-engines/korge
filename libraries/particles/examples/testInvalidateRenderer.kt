@@ -29,7 +29,7 @@ fun testInvalidateRenderer() {
 
 val particleEmitter: ParticleEmitter = SingleFileMemoryVfs("""
 <particleEmitterConfig>
-    <texture name="texture.png"/>
+    <texture name="particle.png"/>
     <sourcePosition x="300.00" y="300.00"/>
     <sourcePositionVariance x="0.00" y="0.00"/>
     <speed value="100.00"/>
