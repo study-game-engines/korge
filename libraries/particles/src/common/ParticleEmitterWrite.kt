@@ -1,26 +1,17 @@
 package korlibs.korge.particle
 
-import korlibs.image.color.*
-import korlibs.io.file.*
-import korlibs.io.serialization.xml.*
-import korlibs.math.geom.*
+import korlibs.image.color.RGBAf
+import korlibs.io.file.VfsFile
+import korlibs.io.serialization.xml.buildXml
+import korlibs.math.geom.Angle
+import korlibs.math.geom.Point
 
 suspend fun VfsFile.writeParticleEmitter(particle: ParticleEmitter) {
-    val file = this
-    file.writeString(buildXml("particleEmitterConfig") {
-        fun nodeValue(name: String, value: Any?) {
-            node(name, "value" to value)
-        }
-        fun nodeAngle(name: String, value: Angle) {
-            node(name, "value" to value.degrees)
-        }
-        fun nodePoint(name: String, point: Point) {
-            node(name, "x" to point.x, "y" to point.y)
-        }
-        fun nodeColor(name: String, color: RGBAf) {
-            node(name, "red" to color.rd, "green" to color.gd, "blue" to color.bd, "alpha" to color.ad)
-        }
-
+    writeString(buildXml("particleEmitterConfig") {
+        fun nodeValue(name: String, value: Any?) = node(name, "value" to value)
+        fun nodeAngle(name: String, value: Angle) = node(name, "value" to value.degrees)
+        fun nodePoint(name: String, point: Point) = node(name, "x" to point.x, "y" to point.y)
+        fun nodeColor(name: String, color: RGBAf) = node(name, "red" to color.rd, "green" to color.gd, "blue" to color.bd, "alpha" to color.ad)
         node("texture", "name" to (particle.textureName ?: "texture.png"))
         nodePoint("sourcePosition", particle.sourcePosition)
         nodePoint("sourcePositionVariance", particle.sourcePositionVariance)

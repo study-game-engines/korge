@@ -8,11 +8,11 @@ import korlibs.korge.view.property.*
 import korlibs.math.geom.*
 import korlibs.time.*
 
-//e: java.lang.UnsupportedOperationException: Class literal annotation arguments are not yet supported: Factory
-//@AsyncFactoryClass(ParticleEmitter.Factory::class)
 class ParticleEmitter() {
+
 	enum class Type(val index: Int) {
-        GRAVITY(0), RADIAL(1)
+        GRAVITY(0),
+        RADIAL(1)
     }
 
     var textureName: String? = null

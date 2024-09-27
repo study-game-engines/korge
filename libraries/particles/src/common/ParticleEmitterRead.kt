@@ -14,19 +14,13 @@ suspend fun VfsFile.readParticleEmitter(): ParticleEmitter {
     val file = this
     val emitter = ParticleEmitter()
     val particleXml = file.readXml()
-
-    //var blendFuncSource = AGBlendFactor.ONE
-    //var blendFuncDestination = AGBlendFactor.ONE
-
     particleXml.allChildrenNoComments.fastForEach { item ->
         fun point() = Point(item.double("x"), item.double("y"))
         fun scalar() = item.double("value")
         fun blendFactor() = ParticleEmitter.blendFactorMap[scalar().toInt()] ?: AGBlendFactor.ONE
         fun type() = ParticleEmitter.typeMap[scalar().toInt()] ?: ParticleEmitter.Type.GRAVITY
-
         fun angle() = item.double("value").degrees
         fun color(): RGBAf = RGBAf(item.double("red"), item.double("green"), item.double("blue"), item.double("alpha"))
-
         when (item.name.lowercase()) {
             "texture" -> emitter.textureName = item.str("name")
             "sourceposition" -> emitter.sourcePosition = point()
@@ -67,7 +61,6 @@ suspend fun VfsFile.readParticleEmitter(): ParticleEmitter {
             "rotationendvariance" -> emitter.rotationEndVariance = angle()
         }
     }
-
     emitter.texture = try {
         file.parent[emitter.textureName?.takeIf { it.isNotBlank() } ?: "texture.png"].readBitmapSlice()
     } catch (e: FileNotFoundException) {
@@ -78,7 +71,6 @@ suspend fun VfsFile.readParticleEmitter(): ParticleEmitter {
                 .addColorStop(1.0, Colors.TRANSPARENT_WHITE)) { circle(Point(32, 32), 30.0) }
         }.slice()
     }
-    // After we load the texture, we set textureName to null, so it is not loaded again
     emitter.textureName = null
     return emitter
 }

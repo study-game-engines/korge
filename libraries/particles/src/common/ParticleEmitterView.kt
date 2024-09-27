@@ -1,37 +1,40 @@
 package korlibs.korge.particle
 
-import korlibs.graphics.*
-import korlibs.image.bitmap.*
-import korlibs.image.format.*
-import korlibs.io.async.*
-import korlibs.io.file.*
-import korlibs.korge.render.*
-import korlibs.korge.time.*
+import korlibs.graphics.AGBlending
+import korlibs.image.bitmap.Bitmaps
+import korlibs.image.bitmap.bmp
+import korlibs.image.format.readBitmapSlice
+import korlibs.io.async.launchImmediately
+import korlibs.io.file.VfsFile
+import korlibs.korge.render.RenderContext
+import korlibs.korge.render.views
+import korlibs.korge.time.delayFrame
 import korlibs.korge.view.*
-import korlibs.korge.view.fast.*
-import korlibs.korge.view.property.*
-import korlibs.math.geom.*
-import korlibs.time.*
-import kotlinx.coroutines.*
-import kotlin.random.*
+import korlibs.korge.view.fast.FSpriteFromIndex
+import korlibs.korge.view.fast.FSprites
+import korlibs.korge.view.property.ViewProperty
+import korlibs.korge.view.property.ViewPropertyFileRef
+import korlibs.math.geom.Point
+import korlibs.math.geom.Rectangle
+import korlibs.math.geom.mutable
+import korlibs.math.geom.toPoint
+import korlibs.time.NIL
+import korlibs.time.milliseconds
+import kotlinx.coroutines.CancellationException
+import kotlin.random.Random
+import kotlin.time.Duration
 
 inline fun Container.particleEmitter(
     emitter: ParticleEmitter,
     emitterPos: Point = Point.ZERO,
-    time: TimeSpan = TimeSpan.NIL,
+    time: Duration = Duration.NIL,
     localCoords: Boolean = false,
     random: Random = Random,
     callback: ParticleEmitterView.() -> Unit = {}
 ) = ParticleEmitterView(emitter, emitterPos, localCoords, random).apply { this.timeUntilStop = time }
     .addTo(this, callback)
 
-suspend fun Container.attachParticleAndWait(
-    particle: ParticleEmitter,
-    x: Double,
-    y: Double,
-    time: TimeSpan = TimeSpan.NIL,
-    speed: Double = 1.0
-) {
+suspend fun Container.attachParticleAndWait(particle: ParticleEmitter, x: Double, y: Double, time: Duration = Duration.NIL, speed: Double = 1.0) {
     val p = particle.create(x, y, time)
     p.speed = speed
     this += p
@@ -39,25 +42,15 @@ suspend fun Container.attachParticleAndWait(
     this -= p
 }
 
-class ParticleEmitterView(
-    @ViewProperty
-    @ViewPropertySubTree
-    private var emitter: ParticleEmitter,
-    emitterPos: Point = Point.ZERO,
-    localCoords: Boolean = false,
-    random: Random = Random,
-) : View(), ViewFileRef by ViewFileRef.Mixin() {
-    var simulator = ParticleEmitterSimulator(emitter, emitterPos, random)
-
+class ParticleEmitterView(private var emitter: ParticleEmitter, emitterPos: Point = Point.ZERO, localCoords: Boolean = false, random: Random = Random) : View(),
+    ViewFileRef by ViewFileRef.Mixin() {
+    var simulator: ParticleEmitterSimulator = ParticleEmitterSimulator(emitter, emitterPos, random)
     var timeUntilStop by simulator::timeUntilStop
     var emitting by simulator::emitting
     val aliveCount by simulator::aliveCount
     val anyAlive by simulator::anyAlive
 
-    @ViewProperty(
-        min = -1000.0,
-        max = +1000.0,
-    )
+    @ViewProperty(min = -1000.0, max = +1000.0)
     var emitterPos: Point
         get() = simulator.emitterPos
         set(value) {
@@ -84,38 +77,20 @@ class ParticleEmitterView(
 
     private val lastPosition = globalPos.mutable
 
-    //override fun setXY(x: Double, y: Double) {
-    //    if (localCoords) {
-    //        super.setXY(x, y)
-    //    } else {
-    //        super.setXY(0.0, 0.0)
-    //        emitterX = x
-    //        emitterY = y
-    //    }
-    //}
-
     var autoInvalidateRenderer: Boolean = true
 
     init {
         addUpdater { step(it) }
     }
 
-    fun step(dt: TimeSpan) {
-//            if (!this.localCoords) {
-//                simulator.emitterPos.setTo(x, y)
-//            }
+    fun step(dt: Duration) {
         if (dt > 0.milliseconds) {
             val g = globalPos / stage!!.scaleXY.toPoint()
             val gx = g.x
             val gy = g.y
-
             val dx = if (this.localCoords) 0.0 else lastPosition.x - gx
             val dy = if (this.localCoords) 0.0 else lastPosition.y - gy
-//                val dx = 0.0
-//                val dy = 0.0
-
             simulator.simulate(dt, dx, dy)
-
             lastPosition.setTo(gx, gy)
             if (autoInvalidateRenderer) invalidateRender()
         }
@@ -131,7 +106,6 @@ class ParticleEmitterView(
 
     private var cachedBlending = BlendMode.NORMAL
 
-    // @TODO: Make ultra-fast rendering flushing ctx and using a custom shader + vertices + indices
     override fun renderInternal(ctx: RenderContext) {
         if (!visible) return
         run {
@@ -143,7 +117,6 @@ class ParticleEmitterView(
             }
             lazyLoadRenderInternal(ctx, this)
         }
-
         if (cachedBlending.factors.srcRGB != emitter.blendFuncSource || cachedBlending.factors.dstRGB != emitter.blendFuncDestination) {
             cachedBlending = BlendMode(AGBlending(emitter.blendFuncSource, emitter.blendFuncDestination))
         }
@@ -155,8 +128,6 @@ class ParticleEmitterView(
         val tex = emitter.texture ?: Bitmaps.white
         fviewInfo.texs[0] = tex.bmp
         sprites.size = 0
-        val particles = simulator.particles
-        //println("particles.max=${particles.max}")
         simulator.particles.fastForEach { p ->
             if (p.alive) {
                 //if (p.x == 0f && p.y == 0f) println("00: ${p.index}")
@@ -172,7 +143,6 @@ class ParticleEmitterView(
                 }
             }
         }
-
         FSprites.render(
             ctx = ctx,
             sprites = sprites,
@@ -190,6 +160,7 @@ class ParticleEmitterView(
     override fun getLocalBoundsInternal() = Rectangle(-30, -30, +30, +30)
 
     private var textureLoaded: Boolean = false
+
     @ViewProperty
     @ViewPropertyFileRef(["png", "jpg"])
     var texture: String?
@@ -200,7 +171,6 @@ class ParticleEmitterView(
         }
 
     suspend fun forceLoadTexture(views: Views, currentVfs: VfsFile = views.currentVfs, sourceFile: String? = null) {
-        //println("### Trying to load sourceImage=$sourceImage")
         this.texture = sourceFile
         textureLoaded = true
         try {
@@ -212,7 +182,6 @@ class ParticleEmitterView(
     }
 
     override suspend fun forceLoadSourceFile(views: Views, currentVfs: VfsFile, sourceFile: String?) {
-        //println("### Trying to load sourceImage=$sourceImage")
         baseForceLoadSourceFile(views, currentVfs, sourceFile)
         emitter = currentVfs["$sourceFile"].readParticleEmitter()
         simulator = ParticleEmitterSimulator(emitter, emitterPos)
@@ -223,4 +192,5 @@ class ParticleEmitterView(
     @ViewProperty
     @ViewPropertyFileRef(["pex"])
     private var pexSourceFile: String? by this::sourceFile
+
 }

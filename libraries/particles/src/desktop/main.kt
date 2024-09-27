@@ -2,9 +2,7 @@ import korlibs.io.file.std.*
 import korlibs.korge.particle.*
 import korlibs.korge.scene.*
 import korlibs.korge.view.*
-import korlibs.math.geom.*
 import korlibs.korge.*
-import korlibs.korge.scene.*
 
 suspend fun main() = Korge().start {
     sceneContainer().changeTo({ MainParticles() })
