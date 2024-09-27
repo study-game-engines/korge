@@ -1,0 +1,5 @@
+artifact "korge:particles-examples-desktop"
+
+source {
+    include project(":korge:particles-examples")
+}

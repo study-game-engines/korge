@@ -3,3 +3,18 @@ artifact "korge:particles"
 source {
     include project(":korge:engine")
 }
+
+artifact "korge:particles-examples"
+
+source {
+    common {
+        include project(":korge:particles")
+        include "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+        include "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
+    }
+    desktop {
+        include "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    }
+}
+
+example("testInvalidateRenderer")
