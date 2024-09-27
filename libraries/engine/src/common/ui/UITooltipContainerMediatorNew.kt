@@ -15,12 +15,10 @@ import korlibs.time.*
 
 private val uiTooltipContainerMediatorNewKey: String = "uiTooltipContainerMediatorNew"
 
-@KorgeExperimental
 val Container.uiTooltipContainerMediatorNew: UITooltipContainerMediatorNew by Extra.PropertyThis(uiTooltipContainerMediatorNewKey) {
     UITooltipContainerMediatorNew(this)
 }
 
-@KorgeExperimental
 val Container.closestUITooltipContainerMediatorNew: UITooltipContainerMediatorNew get() {
     if (this.extra?.contains(uiTooltipContainerMediatorNewKey) == true) {
         return this.uiTooltipContainerMediatorNew
@@ -29,7 +27,6 @@ val Container.closestUITooltipContainerMediatorNew: UITooltipContainerMediatorNe
     }
 }
 
-@KorgeExperimental
 class UITooltipContainerMediatorNew(val container: Container) : AutoCloseable {
     class Tooltip(val mediator: UITooltipContainerMediatorNew, track: View, textData: RichTextData) : UIView(size = computeSize(textData)) {
         companion object {

@@ -24,7 +24,6 @@ import korlibs.time.*
 import kotlin.math.*
 import kotlin.text.isLetterOrDigit
 
-@KorgeExperimental
 class TextEditController(
     val textView: Text,
     val caretContainer: Container = textView,

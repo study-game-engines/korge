@@ -28,6 +28,7 @@ typealias ExtraType = ExtraObject?
 fun ExtraTypeCreate() = ExtraObject()
 
 interface Extra {
+
     var extra: ExtraType
 
     open class Mixin(override var extra: ExtraType = null) : Extra

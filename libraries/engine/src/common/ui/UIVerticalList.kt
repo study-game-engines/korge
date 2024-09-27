@@ -6,7 +6,6 @@ import korlibs.korge.view.*
 import korlibs.math.*
 import korlibs.math.geom.*
 
-@KorgeExperimental
 inline fun Container.uiVerticalList(
     provider: UIVerticalList.Provider,
     width: Number = 256.0,
@@ -14,7 +13,6 @@ inline fun Container.uiVerticalList(
 ): UIVerticalList = UIVerticalList(provider, width.toDouble())
     .addTo(this).also { block(it) }
 
-@KorgeExperimental
 open class UIVerticalList(provider: Provider, width: Double = 200.0) : UIView(DEFAULT_SIZE.copy(width = width)) {
     companion object {
         inline operator fun invoke(provider: Provider, width: Number = 200.0): UIVerticalList =

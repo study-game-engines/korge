@@ -15,7 +15,6 @@ import korlibs.math.interpolation.*
 import korlibs.render.*
 import korlibs.time.*
 
-@KorgeExperimental
 inline fun Container.uiWindow(
     title: String,
     size: Size = Size(256, 256),
@@ -23,7 +22,6 @@ inline fun Container.uiWindow(
     block: @ViewDslMarker Container.(UIWindow) -> Unit = {},
 ): UIWindow = UIWindow(title, size).addTo(this).apply(configure).also { block(it.container.container, it) }
 
-@KorgeExperimental
 class UIWindow(title: String, size: Size = Size(256, 256)) : UIContainer(size) {
     private val titleHeight = 32.0
     private val buttonSeparation = 6.0

@@ -10,7 +10,6 @@ import kotlin.time.*
 /**
  * Creates a new [Camera] and attaches to [this] [Container]. The [callback] argument is called with the [Camera] injected as this to be able to configure the camera.
  */
-@KorgeExperimental
 inline fun Container.camera(callback: @ViewDslMarker Camera.() -> Unit = {}): Camera = Camera().addTo(this, callback)
 
 /**
@@ -26,7 +25,6 @@ inline fun Container.camera(callback: @ViewDslMarker Camera.() -> Unit = {}): Ca
  * The [ClipContainer] or the nearest [View.Reference] ancestor will determine the size of the [Camera]
  */
 // @TODO: Do not require a [ClipContainer] by handling the [renderInternal] to use a transformed Camera. To support legacy we should do this in a separate class NewCamera? CameraContainer?.
-@KorgeExperimental
 open class Camera : Container(), View.Reference {
     //private val globalTransform = parent?.globalMatrix?.toTransform() ?: MatrixTransform()
 

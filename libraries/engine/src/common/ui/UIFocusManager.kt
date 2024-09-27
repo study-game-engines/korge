@@ -9,7 +9,6 @@ import korlibs.korge.component.*
 import korlibs.korge.view.*
 import kotlin.native.concurrent.*
 
-@KorgeExperimental
 interface UIFocusable {
     val UIFocusManager.Scope.focusView: View
     var tabIndex: Int
@@ -44,7 +43,6 @@ var View.focusable: UIFocusable?
 fun UIFocusable.focus() { focused = true }
 fun UIFocusable.blur() { focused = false }
 
-@KorgeExperimental
 class UIFocusManager(val view: Stage) {
     object Scope
 
@@ -119,9 +117,7 @@ class UIFocusManager(val view: Stage) {
     }
 }
 
-@KorgeExperimental
 val Stage.uiFocusManager: UIFocusManager by Extra.PropertyThis { UIFocusManager(this) }
-@KorgeExperimental
 var Stage.uiFocusedView: UIFocusable?
     get() = uiFocusManager.uiFocusedView
     set(value) { uiFocusManager.uiFocusedView = value }

@@ -19,8 +19,7 @@ import korlibs.math.interpolation.*
 import korlibs.time.measureTime
 import kotlin.math.absoluteValue
 
-//@KorgeExperimental
-inline fun Container.gpuGraphics(
+//inline fun Container.gpuGraphics(
     build: ShapeBuilder.() -> Unit,
     antialiased: Boolean = true,
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
@@ -32,14 +31,12 @@ inline fun Container.gpuGraphics(
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
 ): GpuShapeView = gpuShapeView(shape, antialiased, callback)
 
-//@KorgeExperimental
-inline fun Container.gpuGraphics(
+//inline fun Container.gpuGraphics(
     antialiased: Boolean = true,
     callback: @ViewDslMarker ShapeBuilder.(GpuShapeView) -> Unit = {}
 ): GpuShapeView = gpuShapeView(antialiased, callback)
 
-//@KorgeExperimental
-inline fun Container.gpuShapeView(
+//inline fun Container.gpuShapeView(
     build: ShapeBuilder.() -> Unit,
     antialiased: Boolean = true,
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
@@ -51,16 +48,14 @@ inline fun Container.gpuShapeView(
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
 ): GpuShapeView = GpuShapeView(shape, antialiased).addTo(this, callback)
 
-//@KorgeExperimental
-inline fun Container.gpuShapeView(
+//inline fun Container.gpuShapeView(
     antialiased: Boolean = true,
     callback: @ViewDslMarker ShapeBuilder.(GpuShapeView) -> Unit = {}
 ): GpuShapeView = GpuShapeView(EmptyShape, antialiased)
     .also { it.updateShape { callback(this, it) } }
     .addTo(this)
 
-//@KorgeExperimental
-@OptIn(KorgeInternal::class)
+//@OptIn(KorgeInternal::class)
 //open class GpuGraphics(
 open class GpuShapeView(
     shape: Shape = EmptyShape,

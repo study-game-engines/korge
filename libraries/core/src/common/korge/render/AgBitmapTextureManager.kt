@@ -219,8 +219,7 @@ class AgBitmapTextureManager(
         referencedBitmapsSinceGC.clear()
 	}
 
-    @KorgeExperimental
-    fun removeBitmap(bmp: Bitmap, reason: String) {
+        fun removeBitmap(bmp: Bitmap, reason: String) {
         val info = bitmapsToTextureBase.getAndRemove(bmp) ?: return
         managedTextureMemory -= info.usedMemory
         referencedBitmapsSinceGC.remove(bmp)

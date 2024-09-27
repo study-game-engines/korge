@@ -17,14 +17,12 @@ inline fun Container.cpuGraphics(autoScaling: Boolean = false, callback: ShapeBu
     graphics.redrawIfRequired()
 }
 
-@KorgeExperimental
 inline fun Container.cpuGraphics(
     build: ShapeBuilder.() -> Unit,
     antialiased: Boolean = true,
     callback: @ViewDslMarker CpuGraphics.() -> Unit = {}
 ) = CpuGraphics(buildShape { build() }, antialiased).addTo(this, callback)
 
-@KorgeExperimental
 inline fun Container.cpuGraphics(
     shape: Shape,
     antialiased: Boolean = true,

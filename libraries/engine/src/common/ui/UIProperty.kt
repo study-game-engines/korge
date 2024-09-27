@@ -5,7 +5,6 @@ import korlibs.korge.annotations.KorgeExperimental
 import korlibs.io.async.Signal2
 import kotlin.reflect.KMutableProperty0
 
-@KorgeExperimental
 class UIObservablePropertyList {
     val props = FastArrayList<UIObservableProperty<Any>>()
 
@@ -22,7 +21,6 @@ class UIObservablePropertyList {
     }
 }
 
-@KorgeExperimental
 open class UIObservableProperty<T>(
     val prop: UIProperty<T>,
 ) {
@@ -45,25 +43,21 @@ open class UIObservableProperty<T>(
     var getDisplayValue: () -> T = { value }
 }
 
-@KorgeExperimental
 class UIPropertyPlain<T>(var value: T) : UIProperty<T> {
     override fun set(value: T) { this.value = value }
     override fun get(): T = this.value
 }
 
-@KorgeExperimental
 interface UIProperty<T> {
     fun set(value: T)
     fun get(): T
 }
 
-@KorgeExperimental
 fun <T> UIProperty(set: (T) -> Unit, get: () -> T): UIProperty<T> = object : UIProperty<T> {
     override fun set(value: T) = set(value)
     override fun get(): T = get()
 }
 
-@KorgeExperimental
 fun <T> KMutableProperty0<T>.toUI(): UIProperty<T> = UIProperty(set = { this@toUI.set(it) }, get = { this@toUI.get() })
 
 fun UIProperty<Float>.toDouble(): UIProperty<Double> = UIProperty(set = { this@toDouble.set(it.toFloat()) }, get = { this@toDouble.get().toDouble() })

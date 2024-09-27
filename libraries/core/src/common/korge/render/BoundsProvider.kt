@@ -28,10 +28,8 @@ interface BoundsProvider {
     val virtualRight: Double get() = actualVirtualBounds.right.toDouble()
     val virtualBottom: Double get() = actualVirtualBounds.bottom.toDouble()
 
-    @KorgeExperimental
-    val actualVirtualRight: Double get() = actualVirtualBounds.right.toDouble()
-    @KorgeExperimental
-    val actualVirtualBottom: Double get() = actualVirtualBounds.bottom.toDouble()
+        val actualVirtualRight: Double get() = actualVirtualBounds.right.toDouble()
+        val actualVirtualBottom: Double get() = actualVirtualBounds.bottom.toDouble()
 
     fun globalToWindowBounds(bounds: Rectangle): Rectangle =
         bounds.transformed(globalToWindowMatrix)

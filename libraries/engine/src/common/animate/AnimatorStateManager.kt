@@ -3,7 +3,6 @@ package korlibs.korge.animate
 import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*
 import korlibs.time.*
-import korlibs.korge.annotations.*
 import korlibs.korge.tween.*
 import korlibs.korge.view.*
 import korlibs.io.lang.*
@@ -12,34 +11,24 @@ import korlibs.math.interpolation.*
 import kotlin.reflect.*
 import kotlin.time.*
 
-@KorgeExperimental
 val View.animStateManager by Extra.PropertyThis { AnimatorStateManager(this) }
 
-@KorgeExperimental
 data class AnimState(val transitions: List<V2<*>>, val fastTime: FastDuration = 0.5.fastSeconds, val easing: Easing = Easing.LINEAR) {
     constructor(vararg transitions: V2<*>, fastTime: FastDuration = 0.5.fastSeconds, easing: Easing = Easing.LINEAR) : this(transitions.toList(), fastTime = fastTime, easing = easing)
-
     constructor(transitions: List<V2<*>>, time: Duration, easing: Easing) : this(transitions, time.fast, easing)
     constructor(vararg transitions: V2<*>, time: Duration, easing: Easing = Easing.LINEAR) : this(transitions.toList(), time = time, easing = easing)
-
     val time: Duration get() = fastTime.slow
-
-    operator fun plus(other: AnimState): AnimState = AnimState(
-        (other.transitions.associateBy { it.key } + transitions.associateBy { it.key }).values.toList(),
-        fastTime = fastTime,
-        easing = easing
-    )
+    operator fun plus(other: AnimState): AnimState = AnimState((other.transitions.associateBy { it.key } + transitions.associateBy { it.key }).values.toList(), fastTime = fastTime, easing = easing)
 }
 
 class AnimatorStateManager(val view: View) {
-    data class Entry<T>(val v2: V2<T>, val value: T)
 
-    val defaults = LinkedHashMap<KMutableProperty0<*>, Entry<*>>()
+    data class Entry<T>(val v2: V2<T>, val value: T)
+    val defaults: LinkedHashMap<KMutableProperty0<*>, Entry<*>> = LinkedHashMap()
 
     private fun backup(state: AnimState) {
-        // Backup all the values we don't have yet
-        state.transitions?.fastForEach { trans ->
-            defaults.getOrPut(trans.key) { Entry<Any?>(trans as V2<Any?>, trans.get()) }
+        state.transitions.fastForEach { trans ->
+            defaults.getOrPut(trans.key) { Entry(trans as V2<Any?>, trans.get()) }
         }
     }
 
@@ -82,7 +71,7 @@ class AnimatorStateManager(val view: View) {
     }
 
     fun update(dt: FastDuration) {
-        val isStart = currentTime == FastDuration.ZERO
+        val isStart: Boolean = currentTime == FastDuration.ZERO
         currentTime += dt
         var completedCount = 0
         currentState.transitions.fastForEach {
@@ -100,4 +89,5 @@ class AnimatorStateManager(val view: View) {
             updater = null
         }
     }
+
 }

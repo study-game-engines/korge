@@ -14,7 +14,6 @@ import korlibs.io.lang.*
 import korlibs.math.geom.*
 import kotlin.time.*
 
-@KorgeExperimental
 inline fun Container.uiTooltipContainer(
     block: @ViewDslMarker Container.(UITooltipContainer) -> Unit = {}
 ): UITooltipContainer = UITooltipContainer()

@@ -35,7 +35,6 @@ suspend fun View.renderToBitmap(views: Views? = this.stage?.views, region: Recta
     return done.await()
 }
 
-@KorgeExperimental
 fun View.unsafeRenderToBitmapSync(
     ctx: RenderContext,
     region: Rectangle? = null,

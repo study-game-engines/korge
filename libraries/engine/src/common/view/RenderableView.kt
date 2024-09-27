@@ -4,10 +4,8 @@ import korlibs.korge.annotations.*
 import korlibs.korge.render.*
 import korlibs.math.geom.*
 
-@KorgeExperimental
 inline fun Container.renderableView(size: Size = Size(128, 24), noinline viewRenderer: RenderableView.() -> Unit, ): RenderableView = RenderableView(size, viewRenderer).addTo(this)
 
-@KorgeExperimental
 inline fun Container.renderableView(size: Size = Size(128, 24), viewRenderer: ViewRenderer, ): RenderableView = RenderableView(size, viewRenderer).addTo(this)
 
 class RenderableView(size: Size, var viewRenderer: ViewRenderer) : CustomContextRenderizableView(size) {

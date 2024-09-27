@@ -10,7 +10,6 @@ import korlibs.korge.text.*
 import korlibs.korge.view.*
 import korlibs.math.geom.*
 
-@KorgeExperimental
 inline fun Container.uiTextInput(
     initialText: String = "",
     size: Size = Size(128, 24),
@@ -21,7 +20,6 @@ inline fun Container.uiTextInput(
 /**
  * Simple Single Line Text Input
  */
-@KorgeExperimental
 class UITextInput(initialText: String = "", size: Size = Size(128, 24)) :
     UIView(size),
     //UIFocusable,

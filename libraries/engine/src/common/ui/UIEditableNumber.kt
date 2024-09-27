@@ -10,7 +10,6 @@ import korlibs.math.geom.*
 import korlibs.render.*
 import kotlin.math.*
 
-@KorgeExperimental
 class UIEditableNumberProps(
     prop: UIProperty<Double>,
     val min: Double = 0.0,
@@ -23,7 +22,6 @@ class UIEditableBooleanProps(
     prop: UIProperty<Boolean>,
 ) : UIObservableProperty<Boolean>(prop)
 
-@KorgeExperimental
 inline fun Container.uiEditableNumber(
     value: Double = 0.0, min: Double = 0.0, max: Double = 1.0, decimals: Int = 2, clamped: Boolean = true,
     size: Size = Size(64, 18),
@@ -31,7 +29,6 @@ inline fun Container.uiEditableNumber(
 ): UIEditableNumber = append(UIEditableNumber(value, min, max, decimals, clamped, size)).apply(block)
 
 // @TODO: lock cursor while dragging
-@KorgeExperimental
 class UIEditableNumber(value: Double = 0.0, min: Double = 0.0, max: Double = 1.0, var decimals: Int = 2, var clamped: Boolean = true, size: Size = Size(64, 18)) : UIView(size) {
     private val textView = uiText("", size)
     private val textInputView = uiTextInput("", size)

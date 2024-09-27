@@ -12,12 +12,10 @@ import korlibs.korge.view.*
 import korlibs.math.geom.*
 import kotlin.time.Duration.Companion.seconds
 
-@KorgeExperimental
 class UITreeViewNode<T>(val element: T, val items: List<UITreeViewNode<T>> = emptyList()) {
     constructor(element: T, vararg items: UITreeViewNode<T>) : this(element, items.toList())
 }
 
-@KorgeExperimental
 class UITreeViewList<T>(
     val nodes: List<UITreeViewNode<T>> = listOf(),
     override val height: Double = 20.0,
@@ -46,10 +44,8 @@ class UITreeViewList<T>(
     }
 }
 
-@KorgeExperimental
 fun <T> UITreeViewProvider<T>.getChildrenList(node: T?): List<T> = List(getNumChildren(node)) { getChildAt(node, it) }
 
-@KorgeExperimental
 interface UITreeViewProvider<T> {
     val height: Double
     fun getNumChildren(node: T?): Int
@@ -67,7 +63,6 @@ interface UITreeViewProvider<T> {
     }
 }
 
-@KorgeExperimental
 private class UITreeViewVerticalListProviderAdapter<T>(val provider: UITreeViewProvider<T>) : UIVerticalList.Provider {
     class Node<T>(val value: T, val localIndex: Int, val indentation: Int, val parent: Node<T>?) {
         val path: List<Node<T>> = (parent?.path ?: emptyList()) + listOf(this)
@@ -204,7 +199,6 @@ private class UITreeViewVerticalListProviderAdapter<T>(val provider: UITreeViewP
     }
 }
 
-@KorgeExperimental
 inline fun <T> Container.uiTreeView(
     provider: UITreeViewProvider<T>,
     size: Size = Size(256, 256),
@@ -212,14 +206,12 @@ inline fun <T> Container.uiTreeView(
 ): UITreeView<T> = UITreeView(provider, size)
     .addTo(this).also { block(it) }
 
-@KorgeExperimental
 class UITreeView<T>(
     provider: UITreeViewProvider<T>,
     size: Size = Size(128, 128),
 ) : UIGridFill(size, cols = 1, rows = 1) {
     val scrollable = uiScrollable {  }
-    @KorgeExperimental
-    internal val list = scrollable.container.uiVerticalList(UIVerticalList.Provider.Dummy)
+        internal val list = scrollable.container.uiVerticalList(UIVerticalList.Provider.Dummy)
 
     var provider: UITreeViewProvider<T> = UITreeViewProvider.Dummy()
         set(value) {

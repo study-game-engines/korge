@@ -118,7 +118,6 @@ object MaterialRender {
     }
 }
 
-@KorgeExperimental
 fun RenderContext2D.materialRoundRect(
     x: Double,
     y: Double,
@@ -165,7 +164,6 @@ fun RenderContext2D.materialRoundRect(
     quadPaddedCustomProgram(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat(), MaterialRender.PROGRAM, Margin((shadowRadius + shadowOffset.length)))
 }
 
-@KorgeExperimental
 fun RenderContext2D.drawText(
     text: RichTextData,
     pos: Point = Point.ZERO,
@@ -182,7 +180,6 @@ fun RenderContext2D.drawText(
     drawText(text.place(Rectangle(pos, size), wordWrap, includePartialLines, ellipsis, fill, stroke, align, includeFirstLineAlways = includeFirstLineAlways), filtering = filtering)
 }
 
-@KorgeExperimental
 fun RenderContext2D.drawText(
     placements: RichTextDataPlacements,
     textRangeStart: Int = 0,
@@ -201,7 +198,6 @@ fun RenderContext2D.drawText(
     }
 }
 
-@KorgeExperimental
 fun RenderContext2D.drawText(
     text: String,
     font: BitmapFont,
