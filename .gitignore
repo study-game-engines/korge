@@ -23,7 +23,6 @@ application.conf
 classes/
 gen-external-apklibs
 local.properties
-log/
 out/
 target/
 Thumbs.db
