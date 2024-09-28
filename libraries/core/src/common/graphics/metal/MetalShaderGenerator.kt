@@ -3,18 +3,13 @@ package korlibs.graphics.metal.shader
 import korlibs.graphics.shader.*
 import korlibs.graphics.shader.gl.GlobalsProgramVisitor
 import korlibs.io.util.Indenter
-import korlibs.korge.internal.*
 
 internal const val vertexMainFunctionName = "vertexMain"
 internal const val fragmentMainFunctionName = "fragmentMain"
 private const val vertexInputStructureName = "VertexInput"
 internal const val vertexInputStructureDeclarationName = "vertexInput"
 
-class MetalShaderGenerator(
-    private val vertexShader: VertexShader,
-    private val fragmentShader: FragmentShader,
-    private val bufferLayouts: MetalShaderBufferInputLayouts
-) : BaseMetalShaderGenerator {
+class MetalShaderGenerator(private val vertexShader: VertexShader, private val fragmentShader: FragmentShader, private val bufferLayouts: MetalShaderBufferInputLayouts) : BaseMetalShaderGenerator {
 
     private var attributeIndex = -1
     private val vertexInstructions = vertexShader.stm
@@ -22,73 +17,41 @@ class MetalShaderGenerator(
     private val vertexBodyGenerator = MetalShaderBodyGenerator(ShaderType.VERTEX)
     private val fragmentBodyGenerator = MetalShaderBodyGenerator(ShaderType.FRAGMENT)
     private val inputStructure by lazy {
-        bufferLayouts.vertexInputStructure
-            .map { (index, attributes) -> index to attributes.attributes.toMetalShaderStructureGeneratorAttributes(shouldAddAttributeNumber = true)}
+        bufferLayouts.vertexInputStructure.map { (index, attributes) -> index to attributes.attributes.toMetalShaderStructureGeneratorAttributes(shouldAddAttributeNumber = true) }
     }
     private val vertexVisitor by lazy {
-        GlobalsProgramVisitor()
-            .also { it.visit(vertexInstructions) }
+        GlobalsProgramVisitor().also { it.visit(vertexInstructions) }
     }
     private val fragmentVisitor by lazy {
-        GlobalsProgramVisitor()
-            .also { it.visit(fragmentInstructions) }
+        GlobalsProgramVisitor().also { it.visit(fragmentInstructions) }
     }
     private val varyings = computeVaryings()
     private val attributes = bufferLayouts.attributes
-    private val vertexParameters by bufferLayouts.computeFunctionParameter(
-        vertexVisitor.uniforms.toList(),
-        vertexBodyGenerator
-    )
-    private val fragmentParameters by bufferLayouts.computeFunctionParameter(
-        fragmentVisitor.uniforms.toList(),
-        fragmentBodyGenerator
-    )
+    private val vertexParameters by bufferLayouts.computeFunctionParameter(vertexVisitor.uniforms.toList(), vertexBodyGenerator)
+    private val fragmentParameters by bufferLayouts.computeFunctionParameter(fragmentVisitor.uniforms.toList(), fragmentBodyGenerator)
 
-        data class Result(
-        val result: String,
-        val inputBuffers: MetalShaderBufferInputLayouts
-    )
+    data class Result(val result: String, val inputBuffers: MetalShaderBufferInputLayouts)
 
-    fun generateResult(): Result  {
-
+    fun generateResult(): Result {
         val result = Indenter {
-
             addHeaders()
             declareVertexInputStructure()
             declareVertexOutputStructure()
-
-            listFunctions()
-                .also { generationFunctions(it) }
-
+            listFunctions().also { generationFunctions(it) }
             generateVertexMainFunction()
             generateFragmentMainFunction()
-
         }.toString()
-
-        return Result(
-            result,
-            bufferLayouts
-        )
+        return Result(result, bufferLayouts)
     }
 
     private fun listFunctions() = (vertexShader.functions + fragmentShader.functions)
 
-    private fun Indenter.declareVertexInputStructure() = MetalShaderStructureGenerator.generate(
-        indenter = this,
-        name = vertexInputStructureName,
-        attributes = attributes.toMetalShaderStructureGeneratorAttributes(true)
-    )
+    private fun Indenter.declareVertexInputStructure() = MetalShaderStructureGenerator.generate(indenter = this, name = vertexInputStructureName, attributes = attributes.toMetalShaderStructureGeneratorAttributes(true))
 
-    private fun Indenter.declareVertexOutputStructure() = MetalShaderStructureGenerator.generate(
-        indenter = this,
-        name = "v2f",
-        attributes = varyings.toMetalShaderStructureGeneratorAttributes()
-    )
+    private fun Indenter.declareVertexOutputStructure() = MetalShaderStructureGenerator.generate(indenter = this, name = "v2f", attributes = varyings.toMetalShaderStructureGeneratorAttributes())
 
     private fun Indenter.generateVertexMainFunction() {
-
         val parameters = listOf(("$vertexInputStructureName $vertexInputStructureDeclarationName [[stage_in]]")) + vertexParameters
-
         line("vertex v2f $vertexMainFunctionName(")
         indent {
             for ((index, parameter) in parameters.withIndex()) {
@@ -110,7 +73,7 @@ class MetalShaderGenerator(
 
     private fun Indenter.generateFragmentMainFunction() {
 
-        val parameters = listOf(("v2f in [[stage_in]]"))  + fragmentParameters
+        val parameters = listOf(("v2f in [[stage_in]]")) + fragmentParameters
 
         line("fragment float4 $fragmentMainFunctionName(")
         indent {

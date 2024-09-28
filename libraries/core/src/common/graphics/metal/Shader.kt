@@ -1,7 +1,11 @@
 package korlibs.graphics.metal.shader
 
-import korlibs.graphics.shader.*
-import korlibs.korge.internal.*
+import korlibs.graphics.shader.FragmentShader
+import korlibs.graphics.shader.VertexShader
 
-fun Pair<VertexShader, FragmentShader>.toNewMetalShaderStringResult(bufferInputsLayout: MetalShaderBufferInputLayouts): MetalShaderGenerator.Result = let { (vertexShader, fragmentShader) -> MetalShaderGenerator(vertexShader, fragmentShader, bufferInputsLayout) }
-        .generateResult()
+fun Pair<VertexShader, FragmentShader>.toNewMetalShaderStringResult(bufferInputsLayout: MetalShaderBufferInputLayouts): MetalShaderGenerator.Result {
+    return let {
+            (vertexShader, fragmentShader) -> MetalShaderGenerator(vertexShader, fragmentShader, bufferInputsLayout)
+    }.generateResult()
+}
+

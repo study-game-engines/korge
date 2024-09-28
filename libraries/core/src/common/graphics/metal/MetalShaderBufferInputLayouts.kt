@@ -4,24 +4,13 @@ import korlibs.graphics.shader.Attribute
 import korlibs.graphics.shader.Uniform
 import korlibs.graphics.shader.VariableWithOffset
 import korlibs.graphics.shader.VertexLayout
-import korlibs.korge.internal.*
 import korlibs.logger.Logger
 
-fun lazyMetalShaderBufferInputLayouts(
-    vertexLayouts: List<VertexLayout>,
-    uniforms: List<Uniform>
-) = lazy {
-    MetalShaderBufferInputLayouts(
-        vertexLayouts,
-        (vertexLayouts.map { it.items } + uniforms.map { listOf(it) })
-            .toList()
-    )
+fun lazyMetalShaderBufferInputLayouts(vertexLayouts: List<VertexLayout>, uniforms: List<Uniform>) = lazy {
+    MetalShaderBufferInputLayouts(vertexLayouts, (vertexLayouts.map { it.items } + uniforms.map { listOf(it) }).toList())
 }
 
-class MetalShaderBufferInputLayouts(
-    vertexLayouts: List<VertexLayout>,
-    private val inputBuffers: List<List<VariableWithOffset>>
-) : List<List<VariableWithOffset>> by inputBuffers {
+class MetalShaderBufferInputLayouts(vertexLayouts: List<VertexLayout>, private val inputBuffers: List<List<VariableWithOffset>>) : List<List<VariableWithOffset>> by inputBuffers {
 
     val attributes: List<Attribute> = vertexLayouts.flatMap { it.items }
 
@@ -29,7 +18,6 @@ class MetalShaderBufferInputLayouts(
 
     fun attributeIndexOf(attribute: Attribute): Int? {
         return bufferIndexOf(attribute)
-            // take is not zero indexed, so we add 1
             ?.let { inputBuffers.take(it + 1) }
             ?.fold(0) { acc, list ->
                 when (attribute) {
@@ -40,31 +28,20 @@ class MetalShaderBufferInputLayouts(
     }
 
     private fun bufferIndexOf(attribute: Attribute): Int? {
-        return inputBuffers.indexOfFirst { attribute in it }
-            .let { if (it == -1) null else it }
+        return inputBuffers.indexOfFirst { attribute in it }.let { if (it == -1) null else it }
     }
 
     internal val vertexInputStructure by lazy {
-        vertexLayouts
-            .mapIndexed { index, attributes -> index to attributes }
-            .filter { (_, attributes) -> attributes.items.size >= 2 }
+        vertexLayouts.mapIndexed { index, attributes -> index to attributes }.filter { (_, attributes) -> attributes.items.size >= 2 }
     }
 
-    internal fun computeFunctionParameter(
-        parameters: List<VariableWithOffset>,
-        bodyGenerator: MetalShaderBodyGenerator
-    ): Lazy<List<String>> = lazy {
-        inputBuffers.filterNotIn(parameters)
-            .map { it.findDeclarationFromInputBuffer(bodyGenerator) }
+    internal fun computeFunctionParameter(parameters: List<VariableWithOffset>, bodyGenerator: MetalShaderBodyGenerator): Lazy<List<String>> = lazy {
+        inputBuffers.filterNotIn(parameters).map { it.findDeclarationFromInputBuffer(bodyGenerator) }
 
     }
 
-    internal fun convertInputBufferToLocalDeclarations(
-        parameters: List<VariableWithOffset>
-    ): List<String> {
-        return inputBuffers.filterNotIn(parameters)
-            .filter { buffer -> buffer.any { it is Attribute } }
-            .flatMap { it.toLocalDeclarations() }
+    internal fun convertInputBufferToLocalDeclarations(parameters: List<VariableWithOffset>): List<String> {
+        return inputBuffers.filterNotIn(parameters).filter { buffer -> buffer.any { it is Attribute } }.flatMap { it.toLocalDeclarations() }
 
     }
 
@@ -79,7 +56,6 @@ class MetalShaderBufferInputLayouts(
                 logger.error { "buffer without layout" }
                 ""
             }
-
             size > 1 -> "device const Buffer$bufferIndex* buffer$bufferIndex [[buffer($bufferIndex)]]"
             else -> {
                 val variableWithOffset = first()
@@ -98,6 +74,7 @@ class MetalShaderBufferInputLayouts(
             "auto ${it.name} = $vertexInputStructureDeclarationName.${it.name};"
         }
     }
+
 }
 
 

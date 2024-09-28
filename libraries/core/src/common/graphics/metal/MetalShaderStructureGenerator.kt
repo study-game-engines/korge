@@ -20,11 +20,10 @@ object MetalShaderStructureGenerator {
     // TODO: when context receiver leave preview, move indenter as extension
     fun generate(indenter: Indenter, name: String, attributes: List<Attribute>) = with(indenter) {
         "struct $name"(expressionSuffix = ";") {
-            attributes.map { it.generate()}
-                .forEach { +it }
-
+            attributes.map { it.generate()}.forEach { +it }
         }
     }
+
 }
 
 private fun String?.generateAttribute(): String = when (this) {

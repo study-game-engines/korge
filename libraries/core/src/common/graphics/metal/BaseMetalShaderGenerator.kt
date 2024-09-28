@@ -1,22 +1,23 @@
 package korlibs.graphics.metal.shader
 
-import korlibs.graphics.shader.*
-import korlibs.io.lang.*
-
+import korlibs.graphics.shader.Precision
+import korlibs.graphics.shader.VarKind
+import korlibs.graphics.shader.VarType
+import korlibs.io.lang.invalidOp
 
 internal interface BaseMetalShaderGenerator {
 
     private fun errorType(type: VarType): Nothing = invalidOp("Don't know how to serialize type $type")
 
     fun precisionToString(precision: Precision) = when (precision) {
-            Precision.DEFAULT -> ""
-            Precision.LOW -> "half "
-            Precision.MEDIUM, Precision.HIGH -> "float "
+        Precision.DEFAULT -> ""
+        Precision.LOW -> "half "
+        Precision.MEDIUM, Precision.HIGH -> "float "
     }
 
     fun typeToString(type: VarType) = when (type) {
         VarType.TVOID -> "void"
-        VarType.Byte4 -> "uchar4"
+        VarType.UByte4 -> "uchar4"
         VarType.Mat2 -> "float2x2"
         VarType.Mat3 -> "float3x3"
         VarType.Mat4 -> "float4x4"
@@ -35,7 +36,11 @@ internal interface BaseMetalShaderGenerator {
                         else -> errorType(type)
                     }
                 }
-                VarKind.TBYTE, VarKind.TUNSIGNED_BYTE, VarKind.TSHORT, VarKind.TUNSIGNED_SHORT, VarKind.TFLOAT -> {
+                VarKind.TBYTE,
+                VarKind.TUNSIGNED_BYTE,
+                VarKind.TSHORT,
+                VarKind.TUNSIGNED_SHORT,
+                VarKind.TFLOAT -> {
                     when (type.elementCount) {
                         1 -> "float"
                         2 -> "float2"

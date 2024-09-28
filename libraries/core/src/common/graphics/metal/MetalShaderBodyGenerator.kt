@@ -1,12 +1,10 @@
 package korlibs.graphics.metal.shader
 
-import korlibs.graphics.*
 import korlibs.graphics.shader.*
-import korlibs.io.util.*
+import korlibs.io.util.Indenter
 
-internal class MetalShaderBodyGenerator(
-    val kind: ShaderType? = null
-) : Program.Visitor<String>(""), BaseMetalShaderGenerator {
+internal class MetalShaderBodyGenerator(val kind: ShaderType? = null) : Program.Visitor<String>(""), BaseMetalShaderGenerator {
+
     val temps = LinkedHashSet<Temp>()
     val programIndenter = Indenter()
 
@@ -41,18 +39,11 @@ internal class MetalShaderBodyGenerator(
         }
     }
 
-    override fun visit(operand: Program.Vector): String =
-        typeToString(operand.type) + "(" + operand.ops.joinToString(", ") { visit(it) } + ")"
-
+    override fun visit(operand: Program.Vector): String = typeToString(operand.type) + "(" + operand.ops.joinToString(", ") { visit(it) } + ")"
     override fun visit(operand: Program.Unop): String = "(" + operand.op + "(" + visit(operand.right) + ")" + ")"
-    override fun visit(operand: Program.Binop): String =
-        "(" + visit(operand.left) + " " + operand.op + " " + visit(operand.right) + ")"
-
-    override fun visit(func: Program.BaseFunc): String =
-        func.name + "(" + func.ops.joinToString(", ") { visit(it) } + ")"
-
-    override fun visit(ternary: Program.Ternary): String =
-        "((${visit(ternary.cond)}) ? (${visit(ternary.otrue)}) : (${visit(ternary.ofalse)}))"
+    override fun visit(operand: Program.Binop): String = "(" + visit(operand.left) + " " + operand.op + " " + visit(operand.right) + ")"
+    override fun visit(func: Program.BaseFunc): String = func.name + "(" + func.ops.joinToString(", ") { visit(it) } + ")"
+    override fun visit(ternary: Program.Ternary): String = "((${visit(ternary.cond)}) ? (${visit(ternary.otrue)}) : (${visit(ternary.ofalse)}))"
 
     override fun visit(stm: Program.Stm.If) {
         programIndenter.apply {
@@ -89,13 +80,11 @@ internal class MetalShaderBodyGenerator(
                 ShaderType.FRAGMENT -> "out"
                 else -> error("unreachable statement")
             }
-
             else -> when (operand) {
                 is Varying -> when (kind) {
                     ShaderType.VERTEX -> "out.${operand.name}"
                     else -> "in.${operand.name}"
                 }
-
                 else -> operand.name
             }
         }
@@ -116,4 +105,5 @@ internal class MetalShaderBodyGenerator(
     override fun visit(operand: Program.BoolLiteral): String = "${operand.value}"
     override fun visit(operand: Program.Swizzle): String = visit(operand.left) + "." + operand.swizzle
     override fun visit(operand: Program.ArrayAccess): String = visit(operand.left) + "[" + visit(operand.index) + "]"
+
 }
