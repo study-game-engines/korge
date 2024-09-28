@@ -1465,7 +1465,6 @@ class Bezier (val points: PointList, dummy: Unit) : Curve, IsAlmostEquals<Bezier
 }
 
 fun Line.toBezier(): Bezier = Bezier(Point(x0, y0), Point(x1, y1))
-fun Line.toBezier(): Bezier = Bezier(Point(x0, y0), Point(x1, y1))
 
 interface Curve {
     val order: Int

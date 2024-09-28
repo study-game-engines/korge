@@ -281,7 +281,7 @@ class PolygonScanline : RastScale() {
     fun getLineIntersection(x0: Int, y0: Int, x1: Int, y1: Int, out: LineIntersection = LineIntersection()): LineIntersection? {
         // @TODO: Optimize not iterating over all the edges, but only the ones between y0 and y1
         allEdges.fastForEachWithIndex { index, edge ->
-            val res = MEdge.getIntersectXY(
+            val res: Point? = MEdge.getIntersectXY(
                 edge.ax.toDouble(), edge.ay.toDouble(), edge.bx.toDouble(), edge.by.toDouble(),
                 x0.toDouble(), y0.toDouble(), x1.toDouble(), y1.toDouble(),
             )

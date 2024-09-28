@@ -75,7 +75,7 @@ class ParticleEmitterView(private var emitter: ParticleEmitter, emitterPos: Poin
     @ViewProperty
     var localCoords: Boolean = localCoords
 
-    private val lastPosition = globalPos.mutable
+    private var lastPosition: Point = globalPos
 
     var autoInvalidateRenderer: Boolean = true
 
@@ -91,7 +91,7 @@ class ParticleEmitterView(private var emitter: ParticleEmitter, emitterPos: Poin
             val dx = if (this.localCoords) 0.0 else lastPosition.x - gx
             val dy = if (this.localCoords) 0.0 else lastPosition.y - gy
             simulator.simulate(dt, dx, dy)
-            lastPosition.setTo(gx, gy)
+            lastPosition = lastPosition.copy(gx, gy)
             if (autoInvalidateRenderer) invalidateRender()
         }
     }

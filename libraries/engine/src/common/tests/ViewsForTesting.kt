@@ -94,7 +94,7 @@ open class ViewsForTesting(val frameTime: Duration = 10.milliseconds, val window
     val views get() = viewsLog.views
     val stage get() = views.stage
     val stats get() = views.stats
-    val mouse: MPoint get() = input.mousePos.mutable
+    val mouse: Point get() = input.mousePos
 
     fun resizeGameWindow(width: Int, height: Int, scaleMode: ScaleMode = views.scaleMode, scaleAnchor: Anchor = views.scaleAnchor) {
         ag.mainFrameBuffer.setSize(0, 0, width, height)

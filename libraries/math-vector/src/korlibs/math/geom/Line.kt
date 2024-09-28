@@ -123,9 +123,7 @@ data class Line2D(val a: Vector2D, val b: Vector2D) : SimpleShape2D {
     val length: Double get() = Point.distance(a, b)
     val lengthSquared: Double get() = Point.distanceSquared(a, b)
 
-    fun getLineIntersectionPoint(line: Line): Point? =
-        getIntersectXY(x0, y0, x1, y1, line.x0, line.y0, line.x1, line.y1)
-
+    fun getLineIntersectionPoint(line: Line): Point? = getIntersectXY(x0, y0, x1, y1, line.x0, line.y0, line.x1, line.y1)
     fun getIntersectionPoint(line: Line): Point? = getSegmentIntersectionPoint(line)
     fun getSegmentIntersectionPoint(line: Line): Point? {
         val out = getIntersectXY(x0, y0, x1, y1, line.x0, line.y0, line.x1, line.y1)

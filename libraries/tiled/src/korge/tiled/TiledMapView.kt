@@ -29,7 +29,7 @@ class TiledMapView(val tiledMap: TiledMap, showShapes: Boolean = true, smoothing
     fun hitTestShapeInternal(shape: Shape2D, matrix: MMatrix, direction: HitTestDirection): View? {
         // @TODO: Use shape
         val p = matrix.transform(shape.center)
-        return globalPixelHitTest(p, direction)
+        return globalPixelHitTest(p.immutable, direction)
         //println("TiledMapView.hitTestShapeInternal: $shape, $matrix")
         //return super.hitTestShapeInternal(shape, matrix, direction)
     }
