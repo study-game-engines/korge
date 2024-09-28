@@ -1,7 +1,7 @@
 package korlibs.render.awt
 
+import korlibs.concurrent.thread.nativeThread
 import korlibs.datastructure.event.*
-import korlibs.datastructure.thread.*
 import korlibs.graphics.*
 import korlibs.image.awt.*
 import korlibs.image.bitmap.*

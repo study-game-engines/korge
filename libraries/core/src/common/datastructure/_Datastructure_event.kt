@@ -2,13 +2,17 @@
 
 package korlibs.datastructure.event
 
-import korlibs.concurrent.lock.*
-import korlibs.concurrent.thread.*
-import korlibs.datastructure.*
-import korlibs.datastructure.pauseable.*
-import korlibs.logger.*
+import korlibs.concurrent.lock.Lock
+import korlibs.concurrent.thread.NativeThread
+import korlibs.concurrent.thread.nativeThread
+import korlibs.concurrent.thread.sleep
+import korlibs.datastructure.TGenPriorityQueue
+import korlibs.datastructure.pauseable.Pauseable
+import korlibs.datastructure.pauseable.SyncPauseable
+import korlibs.logger.Console
 import korlibs.time.*
-import kotlin.time.*
+import kotlin.time.Duration
+import kotlin.time.TimeSource
 
 expect fun createPlatformEventLoop(precise: Boolean = true): SyncEventLoop
 
@@ -24,32 +28,33 @@ interface EventLoop : Pauseable, AutoCloseable {
 fun EventLoop.setInterval(time: Frequency, task: () -> Unit): AutoCloseable = setInterval(time.duration, task)
 
 abstract class BaseEventLoop : EventLoop, Pauseable {
-    val runLock = Lock()
+    val runLock: Lock = Lock()
 }
 
-open class SyncEventLoop(
-    /** Execute timers immediately instead of waiting. Useful for testing. */
-    var immediateRun: Boolean = false,
-) : BaseEventLoop(), Pauseable {
-    private val pauseable = SyncPauseable()
-    override var paused: Boolean by pauseable::paused
-    private val lock = Lock()
-    private var running = true
+open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), Pauseable {
 
-    class TimedTask(val eventLoop: SyncEventLoop, var now: Duration, val time: Duration, var interval: Boolean, val callback: () -> Unit) :
-        Comparable<TimedTask>, AutoCloseable {
+    private val pauseable: SyncPauseable = SyncPauseable()
+    override var paused: Boolean by pauseable::paused
+    private val lock: Lock = Lock()
+    private var running: Boolean = true
+
+    class TimedTask(val eventLoop: SyncEventLoop, var now: Duration, val time: Duration, var interval: Boolean, val callback: () -> Unit) : Comparable<TimedTask>, AutoCloseable {
+
         var timeMark: Duration
             get() = now + time
             set(value) {
                 now = value - time
             }
 
-        override fun compareTo(other: TimedTask): Int = this.timeMark.compareTo(other.timeMark)
+        override fun compareTo(other: TimedTask): Int {
+            return this.timeMark.compareTo(other.timeMark)
+        }
+
         override fun close() {
-            //println("CLOSE")
             interval = false
             eventLoop.timedTasks.remove(this)
         }
+
     }
 
     private val startTime = TimeSource.Monotonic.markNow()
@@ -68,7 +73,6 @@ open class SyncEventLoop(
     }
 
     override fun setImmediate(task: () -> Unit) {
-        //println("setImmediate: task=$task")
         lock {
             tasks.addLast(task)
             lock.notify()
@@ -84,7 +88,6 @@ open class SyncEventLoop(
     }
 
     private fun _queueAfter(time: Duration, interval: Boolean, task: () -> Unit): AutoCloseable {
-        //println("_queueAfter: time=$time, interval=$interval, task=$task")
         return lock {
             val task = TimedTask(this, now, time, interval, task)
             if (running) {
@@ -92,7 +95,6 @@ open class SyncEventLoop(
             } else {
                 Console.warn("WARNING: QUEUED TASK time=$time interval=$interval without running")
             }
-            //println("NOTIFIED!")
             lock.notify()
             task
         }
@@ -132,7 +134,6 @@ open class SyncEventLoop(
 
     private inline fun runCatchingExceptions(block: () -> Unit) {
         try {
-            //runLock {
             run {
                 block()
             }
@@ -156,7 +157,6 @@ open class SyncEventLoop(
             runCatchingExceptions { timedTask.callback() }
             if (timedTask.interval && !immediateRun) {
                 timedTask.timeMark = maxOf(timedTask.timeMark + timedTask.time, now)
-                //println("READDED: timedTask.now=${timedTask.now}")
                 timedTasks.add(timedTask)
             }
         }
@@ -164,7 +164,6 @@ open class SyncEventLoop(
             if (tasks.isNotEmpty()) tasks.removeFirst() else null
         }
         runCatchingExceptions {
-            //println("RUN TASK $task")
             task?.invoke()
         }
 
@@ -172,14 +171,9 @@ open class SyncEventLoop(
     }
 
     fun waitAndRunNextTask(): Boolean {
-        //println("tasks=$tasks, timedTasks=$timedTasks")
         lock {
             if (tasks.isEmpty() && timedTasks.isNotEmpty()) {
                 val head = timedTasks.head
-                //if ((head.timeMark - now) >= 16.milliseconds) {
-                //    //println("GC")
-                //    //NativeThread.gc(full = false)
-                //}
                 val waitTime = head.timeMark - now
                 if (waitTime >= 0.seconds) {
                     wait(waitTime)
@@ -191,8 +185,6 @@ open class SyncEventLoop(
     }
 
     fun runTasksUntilEmpty() {
-        //Thread.currentThread().priority = Thread.MAX_PRIORITY
-        // Timed tasks
         val stopwatch = Stopwatch().start()
         while (running) {
             pauseable.checkPaused()
@@ -217,9 +209,8 @@ open class SyncEventLoop(
         }
     }
 
-    // START
-
     private var thread: NativeThread? = null
+
     open fun start(): Unit {
         if (thread != null) return
         thread = nativeThread {
@@ -231,4 +222,5 @@ open class SyncEventLoop(
         running = false
         thread = null
     }
+
 }

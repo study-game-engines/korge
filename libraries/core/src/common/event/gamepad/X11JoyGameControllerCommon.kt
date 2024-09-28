@@ -1,8 +1,8 @@
 package korlibs.event.gamepad
 
+import korlibs.concurrent.thread.NativeThread
 import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*
-import korlibs.datastructure.thread.*
 import korlibs.event.*
 import korlibs.io.concurrent.*
 import korlibs.io.concurrent.atomic.*

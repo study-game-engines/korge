@@ -1,8 +1,8 @@
 package korlibs.graphics.gl
 
+import korlibs.concurrent.thread.NativeThread
 import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*
-import korlibs.datastructure.thread.*
 import korlibs.encoding.*
 import korlibs.graphics.*
 import korlibs.graphics.shader.*
@@ -332,15 +332,15 @@ class AGOpengl(val gl: KmlGl, var context: KmlGlContext? = null) : AG() {
 
     fun listStart() {
         if (renderThreadId == -1L) {
-            renderThreadId = NativeThread.currentThreadId
-            renderThreadName = NativeThread.currentThreadName
-            if (NativeThread.currentThreadName?.contains("DefaultDispatcher-worker") == true) {
+            renderThreadId = NativeThread.current.id
+            renderThreadName = NativeThread.current.name
+            if (NativeThread.current.name?.contains("DefaultDispatcher-worker") == true) {
                 println("DefaultDispatcher-worker!")
                 printStackTrace()
             }
         }
-        if (renderThreadId != NativeThread.currentThreadId) {
-            println("AGQueueProcessorOpenGL.listStart: CALLED FROM DIFFERENT THREAD! ${renderThreadName}:${renderThreadId} != ${NativeThread.currentThreadName}:${NativeThread.currentThreadId}")
+        if (renderThreadId != NativeThread.current.id) {
+            println("AGQueueProcessorOpenGL.listStart: CALLED FROM DIFFERENT THREAD! ${renderThreadName}:${renderThreadId} != ${NativeThread.current.name}:${NativeThread.current.id}")
             printStackTrace()
         }
     }

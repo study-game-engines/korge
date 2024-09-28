@@ -1,7 +1,7 @@
 package korlibs.korge.service.storage
 
+import korlibs.concurrent.lock.Lock
 import korlibs.datastructure.*
-import korlibs.datastructure.lock.*
 import korlibs.io.serialization.json.*
 import korlibs.korge.view.*
 import kotlin.collections.*

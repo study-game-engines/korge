@@ -1,17 +1,13 @@
 package korlibs.datastructure.event
 
-import korlibs.datastructure.closeable.*
-import korlibs.platform.*
-import korlibs.time.*
+import korlibs.platform.jsGlobalThis
+import korlibs.time.millisecondsInt
 import kotlin.time.Duration
 
-actual fun createPlatformEventLoop(precise: Boolean): SyncEventLoop =
-    LocalJsEventLoop(precise)
+actual fun createPlatformEventLoop(precise: Boolean): SyncEventLoop = LocalJsEventLoop(precise)
 
-open class LocalJsEventLoop(
-    precise: Boolean = false,
-    immediateRun: Boolean = false,
-) : SyncEventLoop(precise) {
+open class LocalJsEventLoop(precise: Boolean = false, immediateRun: Boolean = false) : SyncEventLoop(precise) {
+
     private var closeable: AutoCloseable? = null
 
     override fun start() {
@@ -64,4 +60,5 @@ object JsEventLoop : BaseEventLoop() {
         gen()
         return AutoCloseable { running = false }
     }
+
 }

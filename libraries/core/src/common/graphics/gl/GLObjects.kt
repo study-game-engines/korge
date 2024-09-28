@@ -1,7 +1,7 @@
 package korlibs.graphics.gl
 
+import korlibs.concurrent.lock.Lock
 import korlibs.datastructure.*
-import korlibs.datastructure.lock.*
 import korlibs.graphics.*
 import korlibs.kgl.*
 import korlibs.memory.unit.*
