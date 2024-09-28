@@ -8,9 +8,9 @@ artifact "korge:particles-examples"
 
 source {
     common {
-        include project(":korge:particles")
         include "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
         include "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
+        include project(":korge:particles")
     }
     desktop {
         include "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"

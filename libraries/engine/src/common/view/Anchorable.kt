@@ -42,4 +42,3 @@ fun <T : PixelAnchorable> T.anchorPixel(point: Point): T {
     this.anchorPixel = point
     return this
 }
-

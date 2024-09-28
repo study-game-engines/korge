@@ -174,11 +174,6 @@ fun BaseView?.tweenAsync(
     callback: (Float) -> Unit = {}
 ): Deferred<Unit> = tweenAsync(*vs, coroutineContext = coroutineContext, time = time.fast, easing = easing, waitTime = waitTime.fast, callback = callback)
 
-
-
-
-
-
 /**
  * Creates a tween that will take a specified [time] to execute,
  * with an optional [easing].

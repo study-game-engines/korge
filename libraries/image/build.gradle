@@ -1,6 +1,7 @@
 artifact "korge:image"
 
 source {
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
     include project(":korge:io")
     include project(":korge:image-core")
     include project(":korge:io-vfs")
@@ -17,5 +18,4 @@ source {
     include project(":korge:string")
     include project(":korge:io")
     include project(":korge:checksum")
-    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

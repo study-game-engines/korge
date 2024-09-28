@@ -7,6 +7,7 @@ import korlibs.image.tiles.tiled.*
 import korlibs.io.async.launchImmediately
 import korlibs.io.file.*
 import korlibs.io.file.std.resourcesVfs
+import korlibs.korge.input.GamePadEvents
 import korlibs.korge.ldtk.view.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*

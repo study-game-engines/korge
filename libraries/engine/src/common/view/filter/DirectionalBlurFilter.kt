@@ -25,6 +25,7 @@ class DirectionalBlurFilter(
     }
 
     companion object : BaseProgramProvider() {
+
         inline operator fun invoke(
             angle: Angle = 0.degrees,
             radius: Number = 4.0,

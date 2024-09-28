@@ -17,7 +17,6 @@ class PageFilter(
     hamplitude0: Double = 0.0,
     hamplitude1: Double = 10.0,
     hamplitude2: Double = 0.0,
-
     vratio: Ratio = Ratio.HALF,
     vamplitude0: Double = 0.0,
     vamplitude1: Double = 0.0,

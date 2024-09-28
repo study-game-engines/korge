@@ -8,7 +8,7 @@ val Double.fps get() = this.timesPerSecond
 val Int.fps get() = this.timesPerSecond
 
 fun <T : View> T.addUpdater(referenceFps: Frequency, first: Boolean = true, updatable: T.(scale: Float) -> Unit): Cancellable {
-    val time = referenceFps.timeSpan
+    val time = referenceFps.duration
     return addUpdater(first) {
         updatable((it / time).toFloat())
     }
@@ -19,5 +19,6 @@ fun View.Companion.convertViewSpace(src: View, srcPoint: Point, dst: View?): Poi
     return dst?.globalToLocal(global) ?: global
 }
 
-@Deprecated("") fun View.convertToSpace(srcPoint: Point, dst: View): Point =
+@Deprecated("")
+fun View.convertToSpace(srcPoint: Point, dst: View): Point =
     View.convertViewSpace(this, srcPoint, dst)

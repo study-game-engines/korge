@@ -4,12 +4,12 @@ import korlibs.korge.input.*
 import korlibs.korge.view.*
 
 fun <T : View> T.decorateOutOver(onEvent: (view: T, over: Boolean) -> Unit = { view, over -> }): T {
-    val view = this
+    val view: T = this
     onEvent(view, false)
     mouse {
-        this.over { onEvent(view, true) }
-        this.out { if (it.input.numActiveTouches == 0) onEvent(view, false) }
-        this.upOutside { onEvent(view, false) }
+        over { onEvent(view, true) }
+        out { if (it.input.numActiveTouches == 0) onEvent(view, false) }
+        upOutside { onEvent(view, false) }
     }
     return this
 }

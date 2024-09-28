@@ -43,9 +43,6 @@ value class Frequency(val hertz: Double) : Comparable<Frequency>, Serializable {
     operator fun rem(other: Frequency): Frequency = Frequency(this.hertz % other.hertz)
     infix fun umod(other: Frequency): Frequency = Frequency(this.hertz umod other.hertz)
 
-    @Deprecated("", ReplaceWith("duration"))
-    val timeSpan: Duration get() = duration
-
     val duration: Duration get() = (1.0 / this.hertz).seconds
     val fastDuration: FastDuration get() = (1.0 / this.hertz).fastSeconds
 }

@@ -7,45 +7,17 @@ import korlibs.math.*
 import korlibs.time.*
 import kotlin.time.*
 
-class SpriteAnimation constructor(
-    val sprites: List<BmpSlice>,
-    val fastDefaultTimePerFrame: FastDuration = FastDuration.NaN
-) : Collection<BmpSlice> by sprites {
+class SpriteAnimation constructor(val sprites: List<BmpSlice>, val fastDefaultTimePerFrame: FastDuration = FastDuration.NaN) : Collection<BmpSlice> by sprites {
+
     val defaultTimePerFrame get() = fastDefaultTimePerFrame.toDuration()
 
-    constructor(
-        sprites: List<BmpSlice>,
-        defaultTimePerFrame: Duration
-    ) : this(sprites, defaultTimePerFrame.fast)
+    constructor(sprites: List<BmpSlice>, defaultTimePerFrame: Duration) : this(sprites, defaultTimePerFrame.fast)
 
     companion object {
-        operator fun invoke(
-            spriteMap: Bitmap,
-            spriteWidth: Int = 16,
-            spriteHeight: Int = 16,
-            marginTop: Int = 0,
-            marginLeft: Int = 0,
-            columns: Int = 1,
-            rows: Int = 1,
-            offsetBetweenColumns: Int = 0,
-            offsetBetweenRows: Int = 0,
-            numberOfFrames: Int = rows * columns,
-            byRows: Boolean = true,
-        ): SpriteAnimation = invoke(spriteMap.slice(), spriteWidth, spriteHeight, marginTop, marginLeft, columns, rows, offsetBetweenColumns, offsetBetweenRows, numberOfFrames, byRows)
 
-        operator fun invoke(
-            spriteMap: BmpSlice,
-            spriteWidth: Int = 16,
-            spriteHeight: Int = 16,
-            marginTop: Int = 0,
-            marginLeft: Int = 0,
-            columns: Int = 1,
-            rows: Int = 1,
-            offsetBetweenColumns: Int = 0,
-            offsetBetweenRows: Int = 0,
-            numberOfFrames: Int = rows * columns,
-            byRows: Boolean = true,
-        ): SpriteAnimation {
+        operator fun invoke(spriteMap: Bitmap, spriteWidth: Int = 16, spriteHeight: Int = 16, marginTop: Int = 0, marginLeft: Int = 0, columns: Int = 1, rows: Int = 1, offsetBetweenColumns: Int = 0, offsetBetweenRows: Int = 0, numberOfFrames: Int = rows * columns, byRows: Boolean = true): SpriteAnimation = invoke(spriteMap.slice(), spriteWidth, spriteHeight, marginTop, marginLeft, columns, rows, offsetBetweenColumns, offsetBetweenRows, numberOfFrames, byRows)
+
+        operator fun invoke(spriteMap: BmpSlice, spriteWidth: Int = 16, spriteHeight: Int = 16, marginTop: Int = 0, marginLeft: Int = 0, columns: Int = 1, rows: Int = 1, offsetBetweenColumns: Int = 0, offsetBetweenRows: Int = 0, numberOfFrames: Int = rows * columns, byRows: Boolean = true): SpriteAnimation {
             return SpriteAnimation(
                 FastArrayList<BmpSlice>().apply {
                     for (n in 0 until numberOfFrames) {
@@ -64,12 +36,14 @@ class SpriteAnimation constructor(
                 }
             )
         }
+
     }
 
     val spriteStackSize: Int get() = sprites.size
     val firstSprite: BmpSlice get() = sprites[0]
     fun getSprite(index: Int): BmpSlice = sprites[index umod sprites.size]
     operator fun get(index: Int) = getSprite(index)
+
 }
 
 fun Atlas.getSpriteAnimation(prefix: String = "", defaultTimePerFrame: Duration = Duration.NIL): SpriteAnimation =

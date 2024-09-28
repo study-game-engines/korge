@@ -1,11 +1,11 @@
 artifact "korge:io-network-core"
 
 source {
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
     include project(":korge:io-stream")
     include project(":korge:datastructure")
     include project(":korge:logger")
     include project(":korge:utils")
     include project(":korge:io-stream")
     include project(":korge:annotations")
-    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
 }

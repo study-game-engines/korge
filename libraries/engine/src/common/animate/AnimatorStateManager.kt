@@ -41,11 +41,6 @@ class AnimatorStateManager(val view: View) {
     private var currentTime: FastDuration = FastDuration.ZERO
     private var currentState: AnimState = AnimState()
 
-    fun add(vararg states: AnimState) {
-        // Keeps other states running
-        TODO()
-    }
-
     fun set(vararg states: AnimState) {
         states.fastForEach { backup(it) }
         val default = defaultState()

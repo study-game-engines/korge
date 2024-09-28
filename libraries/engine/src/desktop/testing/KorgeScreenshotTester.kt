@@ -85,7 +85,6 @@ class KorgeScreenshotTester(
 
     // name: The name of the golden. (e.g: "cool_view").
     // Note: You do not need to add a file extension to the end.
-    @OptIn(KorgeExperimental::class)
     suspend fun recordGolden(
         view: View,
         goldenName: String,

@@ -8,14 +8,13 @@ import korlibs.korge.render.*
 import korlibs.korge.view.property.*
 import korlibs.math.geom.*
 
-inline fun Container.vectorImage(shape: SizedDrawable, autoScaling: Boolean = true, callback: @ViewDslMarker VectorImage.() -> Unit = {}): VectorImage = VectorImage(shape, autoScaling).addTo(this, callback).apply { redrawIfRequired() }
+inline fun Container.vectorImage(shape: SizedDrawable, autoScaling: Boolean = true, callback: @ViewDslMarker VectorImage.() -> Unit = {}): VectorImage =
+    VectorImage(shape, autoScaling).addTo(this, callback).apply { redrawIfRequired() }
 
-class VectorImage(
-    shape: SizedDrawable,
-    autoScaling: Boolean = true,
-) : BaseGraphics(autoScaling), ViewFileRef by ViewFileRef.Mixin() {
+class VectorImage(shape: SizedDrawable, autoScaling: Boolean = true) : BaseGraphics(autoScaling), ViewFileRef by ViewFileRef.Mixin() {
+
     companion object {
-        fun createDefault() = VectorImage(buildShape { fill(Colors.WHITE) { rect(0, 0, 100, 100) } })
+        fun createDefault(): VectorImage = VectorImage(buildShape { fill(Colors.WHITE) { rect(0, 0, 100, 100) } })
     }
 
     var shape: SizedDrawable = shape
@@ -43,8 +42,7 @@ class VectorImage(
 
     override suspend fun forceLoadSourceFile(views: Views, currentVfs: VfsFile, sourceFile: String?) {
         baseForceLoadSourceFile(views, currentVfs, sourceFile)
-        val vector = currentVfs["$sourceFile"].readVectorImage()
-        println("VECTOR: $vector")
+        val vector: SizedDrawable = currentVfs["$sourceFile"].readVectorImage()
         shape = vector
     }
 
@@ -52,4 +50,5 @@ class VectorImage(
     @ViewProperty
     @ViewPropertyFileRef(["svg"])
     private var imageSourceFile: String? by this::sourceFile
+
 }

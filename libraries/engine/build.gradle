@@ -2,8 +2,8 @@ artifact "korge:engine"
 
 source {
     common {
-        include project(":korge:core")
         include "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$kotlinx_coroutines_version"
+        include project(":korge:core")
     }
     desktop {
         include project(":korge:ipc-desktop")

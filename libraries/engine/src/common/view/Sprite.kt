@@ -133,7 +133,6 @@ open class Sprite(
 
     init {
         addFastUpdater { frameTime ->
-            //println("UPDATER: animationRequested=$animationRequested")
             if (animationRequested) {
                 nextSprite(frameTime)
             }
@@ -145,137 +144,29 @@ open class Sprite(
         else -> fastSpriteDisplayTime
     }
 
+    fun playAnimation(times: Int = 1, spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation), startFrame: Int = -1, endFrame: Int = 0, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime, animationCyclesRequested = times, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, endFrame = endFrame, reversed = reversed, type = AnimationType.STANDARD)
 
+    fun playAnimation(spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation), startFrame: Int = -1, endFrame: Int = 0, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime, animationCyclesRequested = 1, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, endFrame = endFrame, reversed = reversed, type = AnimationType.STANDARD)
 
-    fun playAnimation(
-        times: Int = 1,
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation),
-        startFrame: Int = -1,
-        endFrame: Int = 0,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime,
-        animationCyclesRequested = times,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        endFrame = endFrame,
-        reversed = reversed,
-        type = AnimationType.STANDARD
-    )
+    fun playAnimationForDuration(duration: Duration, spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation), startFrame: Int = -1, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime, duration = duration.fast, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, reversed = reversed, type = AnimationType.DURATION)
 
-    fun playAnimation(
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation),
-        startFrame: Int = -1,
-        endFrame: Int = 0,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime,
-        animationCyclesRequested = 1,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        endFrame = endFrame,
-        reversed = reversed,
-        type = AnimationType.STANDARD
-    )
+    fun playAnimationLooped(spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation), startFrame: Int = -1, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, looped = true, reversed = reversed, type = AnimationType.LOOPED)
 
-    fun playAnimationForDuration(
-        duration: Duration,
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation),
-        startFrame: Int = -1,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime,
-        duration = duration.fast,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        reversed = reversed,
-        type = AnimationType.DURATION
-    )
+    fun playAnimation(times: Int = 1, spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: Duration, startFrame: Int = -1, endFrame: Int = 0, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime.fast, animationCyclesRequested = times, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, endFrame = endFrame, reversed = reversed, type = AnimationType.STANDARD)
 
-    fun playAnimationLooped(
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation),
-        startFrame: Int = -1,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        looped = true,
-        reversed = reversed,
-        type = AnimationType.LOOPED
-    )
+    fun playAnimation(spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: Duration, startFrame: Int = -1, endFrame: Int = 0, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime.fast, animationCyclesRequested = 1, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, endFrame = endFrame, reversed = reversed, type = AnimationType.STANDARD)
 
+    fun playAnimationForDuration(duration: Duration, spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: Duration, startFrame: Int = -1, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime.fast, duration = duration.fast, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, reversed = reversed, type = AnimationType.DURATION)
 
-
-
-
-
-
-    fun playAnimation(
-        times: Int = 1,
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: Duration,
-        startFrame: Int = -1,
-        endFrame: Int = 0,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime.fast,
-        animationCyclesRequested = times,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        endFrame = endFrame,
-        reversed = reversed,
-        type = AnimationType.STANDARD
-    )
-
-    fun playAnimation(
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: Duration,
-        startFrame: Int = -1,
-        endFrame: Int = 0,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime.fast,
-        animationCyclesRequested = 1,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        endFrame = endFrame,
-        reversed = reversed,
-        type = AnimationType.STANDARD
-    )
-
-    fun playAnimationForDuration(
-        duration: Duration,
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: Duration,
-        startFrame: Int = -1,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime.fast,
-        duration = duration.fast,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        reversed = reversed,
-        type = AnimationType.DURATION
-    )
-
-    fun playAnimationLooped(
-        spriteAnimation: SpriteAnimation? = currentAnimation,
-        spriteDisplayTime: Duration,
-        startFrame: Int = -1,
-        reversed: Boolean = false
-    ) = updateCurrentAnimation(
-        spriteAnimation = spriteAnimation,
-        spriteDisplayTime = spriteDisplayTime.fast,
-        startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex,
-        looped = true,
-        reversed = reversed,
-        type = AnimationType.LOOPED
-    )
+    fun playAnimationLooped(spriteAnimation: SpriteAnimation? = currentAnimation, spriteDisplayTime: Duration, startFrame: Int = -1, reversed: Boolean = false) =
+        updateCurrentAnimation(spriteAnimation = spriteAnimation, spriteDisplayTime = spriteDisplayTime.fast, startFrame = if (startFrame >= 0) startFrame else currentSpriteIndex, looped = true, reversed = reversed, type = AnimationType.LOOPED)
 
     fun stopAnimation() {
         animationRequested = false
@@ -291,11 +182,9 @@ open class Sprite(
                         animationNumberOfFramesRequested--
                     }
                 }
-
                 AnimationType.DURATION -> {
                     animationRemainingDuration -= lastAnimationFrameTime
                 }
-
                 AnimationType.LOOPED -> {
                 }
             }
@@ -312,17 +201,7 @@ open class Sprite(
             return ca.size
         }
 
-    private fun updateCurrentAnimation(
-        spriteAnimation: SpriteAnimation?,
-        spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation),
-        animationCyclesRequested: Int = 1,
-        duration: FastDuration = 0.fastSeconds,
-        startFrame: Int = 0,
-        endFrame: Int = 0,
-        looped: Boolean = false,
-        reversed: Boolean = false,
-        type: AnimationType = AnimationType.STANDARD
-    ) {
+    private fun updateCurrentAnimation(spriteAnimation: SpriteAnimation?, spriteDisplayTime: FastDuration = getDefaultTime(spriteAnimation), animationCyclesRequested: Int = 1, duration: FastDuration = 0.fastSeconds, startFrame: Int = 0, endFrame: Int = 0, looped: Boolean = false, reversed: Boolean = false, type: AnimationType = AnimationType.STANDARD) {
         triggerEvent(_onAnimationStarted)
         this.fastSpriteDisplayTime = spriteDisplayTime
         currentAnimation = spriteAnimation
@@ -352,10 +231,6 @@ open class Sprite(
         if (signal != null) currentAnimation?.let { signal.invoke(it) }
     }
 }
-
-//enum class AnimationType {
-//    STANDARD, LOOPED, DURATION
-//}
 
 inline class AnimationType(val id: Int) {
     companion object {

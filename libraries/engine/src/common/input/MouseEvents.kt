@@ -29,11 +29,13 @@ private var Views.mouseDebugLastFrameClicked by Extra.Property { false }
 
 @OptIn(KorgeInternal::class)
 class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
+
     init {
         view.mouseEnabled = true
     }
 
     companion object {
+
         private fun mouseHitTest(views: Views): View? {
             if (!views.input.mouseHitSearch) {
                 views.input.mouseHitSearch = true
@@ -65,12 +67,8 @@ class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
             views.mouseDebugHandlerOnce {
                 views.debugHandlers += { ctx ->
                     val scale = ctx.debugOverlayScale
-                    //val scale = 2.0
-
                     val space = max(1 * scale, 2.0)
                     val matrix = views.windowToGlobalMatrix
-                    //println(scale)
-
                     var yy = 60.toDouble() * scale
                     val lineHeight = 8.toDouble() * scale
                     val mouseHit = mouseHitTest(views)
@@ -393,10 +391,7 @@ class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
                 upPosGlobal = views.input.mousePos
                 upPosTime = PerformanceCounter.reference
                 val elapsedTime = upPosTime - downPosTime
-                if (
-                    upPosGlobal.distanceTo(downPosGlobal) < views.input.clickDistance &&
-                    elapsedTime < views.input.clickTime
-                ) {
+                if (upPosGlobal.distanceTo(downPosGlobal) < views.input.clickDistance && elapsedTime < views.input.clickTime) {
                     clickedCount++
                     //if (isOver) {
                     //	onClick(this)
@@ -565,7 +560,7 @@ internal inline fun <T : BView?> T?.doMouseEventSuspend(
     coroutineContext: CoroutineContext? = null,
 ): T? {
     this?.bviewAll?.fastForEach {
-        it?.mouse?.let { mouse ->
+        it.mouse.let { mouse ->
             prop.get(mouse).add { launchImmediately(coroutineContext ?: mouse.coroutineContext) { handler(it) } }
         }
     }

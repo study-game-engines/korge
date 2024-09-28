@@ -1,9 +1,9 @@
 artifact "korge:concurrent"
 
 source {
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
     include project(":korge:time-core")
     include project(":korge:utils")
     include project(":korge:datastructure-core")
-    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
-    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
 }

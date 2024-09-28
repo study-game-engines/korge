@@ -26,6 +26,7 @@ val Any?.dyn: Dyn get() = Dyn(this)
 
 @Suppress("DEPRECATION")
 inline class Dyn(val value: Any?) : Comparable<Dyn> {
+
     val dyn get() = this
     val isNull get() = value == null
     val isNotNull get() = value != null
@@ -64,9 +65,7 @@ inline class Dyn(val value: Any?) : Comparable<Dyn> {
     infix fun bitAnd(r: Dyn): Dyn = (this.toInt() and r.toInt()).dyn
     infix fun bitOr(r: Dyn): Dyn = (this.toInt() or r.toInt()).dyn
     infix fun bitXor(r: Dyn): Dyn = (this.toInt() xor r.toInt()).dyn
-    /** Logical AND */
     infix fun and(r: Dyn): Boolean = (this.toBool() && r.toBool())
-    /** Logical OR */
     infix fun or(r: Dyn): Boolean = (this.toBool() || r.toBool())
 
     /** Equal */
@@ -130,7 +129,8 @@ inline class Dyn(val value: Any?) : Comparable<Dyn> {
     }
 
     companion object {
-        val global get() = dynApi.global.dyn
+
+        val global: Dyn get() = dynApi.global.dyn
 
         fun compare(l: Dyn, r: Dyn): Int = l.compareTo(r)
         fun contains(collection: Dyn, element: Dyn): Boolean = element in collection

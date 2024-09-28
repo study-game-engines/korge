@@ -79,7 +79,6 @@ abstract class BaseGraphics(
 
     private var _ctx: RenderContext? = null
 
-    @OptIn(KorgeExperimental::class)
     override fun renderInternal(ctx: RenderContext) {
         _ctx = ctx
         clearBitmaps(onParentChanged = false)

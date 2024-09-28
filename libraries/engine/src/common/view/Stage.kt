@@ -1,29 +1,24 @@
 package korlibs.korge.view
 
-import korlibs.graphics.*
-import korlibs.inject.*
-import korlibs.io.resources.*
-import korlibs.korge.input.*
-import korlibs.korge.view.property.*
-import korlibs.math.annotations.*
-import korlibs.math.geom.*
-import korlibs.render.*
-import kotlinx.coroutines.*
+import korlibs.graphics.AG
+import korlibs.inject.Injector
+import korlibs.io.resources.ResourcesContainer
+import korlibs.korge.input.Input
+import korlibs.korge.input.InputKeys
+import korlibs.korge.view.property.ViewProperty
+import korlibs.math.annotations.RootViewDslMarker
+import korlibs.math.geom.Point
+import korlibs.math.geom.Size
+import korlibs.render.GameWindow
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Singleton root [View] and [Container] that contains a reference to the [Views] singleton and doesn't have any parent.
  */
 @RootViewDslMarker
-open class Stage internal constructor(override val views: Views) : FixedSizeContainer()
-    , View.Reference
-    , CoroutineScope by views
-    , ViewsContainer
-    , ResourcesContainer
-    , BoundsProvider by views.bp
-    , InvalidateNotifier
-{
-    override var clip: Boolean by views::clipBorders
+open class Stage internal constructor(override val views: Views) : FixedSizeContainer(), View.Reference, CoroutineScope by views, ViewsContainer, ResourcesContainer, BoundsProvider by views.bp, InvalidateNotifier {
 
+    override var clip: Boolean by views::clipBorders
     override var unscaledSize: Size by views::virtualSizeDouble
 
     val keys: InputKeys get() = views.input.keys
@@ -78,4 +73,5 @@ open class Stage internal constructor(override val views: Views) : FixedSizeCont
     }
 
     override fun toString(): String = "Stage"
+
 }

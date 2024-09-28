@@ -8,7 +8,6 @@ import korlibs.korge.render.*
 import korlibs.math.*
 import korlibs.platform.*
 import korlibs.time.*
-import kotlin.time.*
 
 @OptIn(KorgeInternal::class)
 internal fun ViewsContainer.installFpsDebugOverlay() {

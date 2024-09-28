@@ -24,7 +24,7 @@ import kotlin.time.*
 suspend fun VfsFile.readSVG() = SVG(this.readString())
 
 class SVG(val root: Xml, val warningProcessor: ((message: String) -> Unit)? = null) : SizedDrawable {
-	//constructor(@Language("xml") str: String) : this(Xml(str))
+
 	constructor(str: String) : this(Xml(str))
 
     override fun toString(): String = "SVG($width, $height)"

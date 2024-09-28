@@ -19,21 +19,25 @@ import kotlin.time.*
  * LOG_LEVEL=debug
  * ```
  */
-class Logger (val name: String, val normalizedName: String, val dummy: Boolean) {
-    var nativeLogger: Any? = null
+class Logger(val name: String, val normalizedName: String, val dummy: Boolean) {
 
+    var nativeLogger: Any? = null
     var optLevel: Level? = null
     var optOutput: Output? = null
 
     /** [Level] of this [Logger]. If not set, it will use the [Logger.defaultLevel] */
     var level: Level
         get() = optLevel ?: defaultLevel ?: Level.WARN
-        set(value) { optLevel = value }
+        set(value) {
+            optLevel = value
+        }
 
     /** [Output] of this [Logger]. If not set, it will use the [Logger.defaultOutput] */
     var output: Output
         get() = optOutput ?: defaultOutput
-        set(value) { optOutput = value }
+        set(value) {
+            optOutput = value
+        }
 
     ///** Check if the [level] is set for this [Logger] */
     val isLocalLevelSet: Boolean get() = optLevel != null
@@ -41,6 +45,7 @@ class Logger (val name: String, val normalizedName: String, val dummy: Boolean) 
     val isLocalOutputSet: Boolean get() = optOutput != null
 
     companion object {
+
         private val Logger_lock = SynchronizedObject()
         private val Logger_loggers = HashMap<String, Logger>()
 
@@ -76,13 +81,20 @@ class Logger (val name: String, val normalizedName: String, val dummy: Boolean) 
 
     /** Logging [Level] */
     enum class Level(val index: Int) {
-        NONE(0), FATAL(1), ERROR(2),
-        WARN(3), INFO(4), DEBUG(5), TRACE(6);
+
+        NONE(0),
+        FATAL(1),
+        ERROR(2),
+        WARN(3),
+        INFO(4),
+        DEBUG(5),
+        TRACE(6);
 
         companion object {
-            val BY_NAME = values().associateBy { it.name }
+            val BY_NAME = entries.associateBy { it.name }
             operator fun get(name: String): Level = BY_NAME[name.uppercase()] ?: NONE
         }
+
     }
 
     /** Logging [Output] to handle logs */
@@ -123,7 +135,9 @@ class Logger (val name: String, val normalizedName: String, val dummy: Boolean) 
     inline val isTraceEnabled: Boolean get() = isEnabled(Level.TRACE)
 
     /** Traces the lazily executed [msg] if the [Logger.level] is at least [level] */
-    inline fun log(level: Level, msg: () -> Any?) { if (isEnabled(level)) actualLog(level, msg()) }
+    inline fun log(level: Level, msg: () -> Any?) {
+        if (isEnabled(level)) actualLog(level, msg())
+    }
 
     /** Traces the lazily executed [msg] if the [Logger.level] is at least [Level.FATAL] */
     inline fun fatal(msg: () -> Any?) = log(Level.FATAL, msg)
@@ -149,8 +163,8 @@ class Logger (val name: String, val normalizedName: String, val dummy: Boolean) 
         return value
     }
 
-    @PublishedApi
-    internal fun actualLog(level: Level, msg: Any?) { output.output(this, level, msg) }
+    @PublishedApi internal fun actualLog(level: Level, msg: Any?) = output.output(this, level, msg)
+
 }
 
 /** Sets the [Logger.level] */
@@ -162,12 +176,13 @@ fun Logger.setOutput(output: Logger.Output): Logger = this.apply { this.output =
 internal val miniEnvironmentVariables: Map<String, String> get() = Platform.envs
 private var _miniEnvironmentVariablesUC: Map<String, String>? = null
 
-internal val miniEnvironmentVariablesUC: Map<String, String> get() {
-    if (_miniEnvironmentVariablesUC == null) {
-        _miniEnvironmentVariablesUC = miniEnvironmentVariables.mapKeys { it.key.uppercase() }
+internal val miniEnvironmentVariablesUC: Map<String, String>
+    get() {
+        if (_miniEnvironmentVariablesUC == null) {
+            _miniEnvironmentVariablesUC = miniEnvironmentVariables.mapKeys { it.key.uppercase() }
+        }
+        return _miniEnvironmentVariablesUC!!
     }
-    return _miniEnvironmentVariablesUC!!
-}
 
 expect object DefaultLogOutput : Logger.Output {
     override fun output(logger: Logger, level: Logger.Level, msg: Any?)

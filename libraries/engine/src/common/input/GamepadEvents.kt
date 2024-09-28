@@ -1,81 +1,101 @@
 package korlibs.korge.input
 
-import korlibs.datastructure.*
-import korlibs.datastructure.iterators.*
+import korlibs.datastructure.Extra
+import korlibs.datastructure.iterators.fastForEach
 import korlibs.event.*
-import korlibs.io.async.*
-import korlibs.korge.view.*
-import korlibs.math.geom.*
-import kotlin.jvm.*
+import korlibs.io.async.Signal
+import korlibs.io.async.launchImmediately
+import korlibs.korge.view.View
+import korlibs.korge.view.Views
+import korlibs.math.geom.Point
+import kotlin.jvm.JvmOverloads
 
 class GamePadEvents(val view: View) {
+
     @PublishedApi
     internal lateinit var views: Views
+
     @PublishedApi
     internal val coroutineContext get() = views.coroutineContext
 
-    val gamepads = GamePadUpdateEvent()
-	val updated = Signal<GamePadUpdateEvent>()
-    val updatedGamepad = Signal<GamepadInfo>()
-	val stick = Signal<GamePadStickEvent>()
-	val button = Signal<GamePadButtonEvent>()
-	val connection = Signal<GamePadConnectionEvent>()
+    val gamepads: GamePadUpdateEvent = GamePadUpdateEvent()
+    val updated: Signal<GamePadUpdateEvent> = Signal()
+    val updatedGamepad: Signal<GamepadInfo> = Signal()
+    val stick: Signal<GamePadStickEvent> = Signal()
+    val button: Signal<GamePadButtonEvent> = Signal()
+    val connection: Signal<GamePadConnectionEvent> = Signal()
 
-	fun stick(callback: suspend (playerId: Int, stick: GameStick, x: Double, y: Double) -> Unit) {
-		stick { e -> launchImmediately(coroutineContext) { callback(e.gamepad, e.stick, e.x, e.y) } }
-	}
+    fun stick(callback: suspend (playerId: Int, stick: GameStick, x: Double, y: Double) -> Unit) {
+        stick { event ->
+            launchImmediately(coroutineContext) {
+                callback(event.gamepad, event.stick, event.x, event.y)
+            }
+        }
+    }
 
-	fun button(callback: suspend (playerId: Int, pressed: Boolean, button: GameButton, value: Float) -> Unit) {
-		button { e ->
-            launchImmediately(coroutineContext) { callback(e.gamepad, e.type == GamePadButtonEvent.Type.DOWN, e.button, e.value) }
-		}
-	}
+    fun button(callback: suspend (playerId: Int, pressed: Boolean, button: GameButton, value: Float) -> Unit) {
+        button { event ->
+            launchImmediately(coroutineContext) {
+                callback(event.gamepad, event.type == GamePadButtonEvent.Type.DOWN, event.button, event.value)
+            }
+        }
+    }
 
-	fun button(playerId: Int, callback: suspend (pressed: Boolean, button: GameButton, value: Float) -> Unit) {
-		button { e ->
-			if (e.gamepad == playerId) launchImmediately(coroutineContext) { callback(e.type == GamePadButtonEvent.Type.DOWN, e.button, e.value) }
-		}
-	}
+    fun button(playerId: Int, callback: suspend (pressed: Boolean, button: GameButton, value: Float) -> Unit) {
+        button { event ->
+            if (event.gamepad == playerId) {
+                launchImmediately(coroutineContext) {
+                    callback(event.type == GamePadButtonEvent.Type.DOWN, event.button, event.value)
+                }
+            }
+        }
+    }
 
-	fun down(playerId: Int, button: GameButton, callback: suspend () -> Unit) {
-		button { e ->
-			if (e.gamepad == playerId && e.button == button && e.type == GamePadButtonEvent.Type.DOWN) launchImmediately(coroutineContext) { callback() }
-		}
-	}
+    fun down(playerId: Int, button: GameButton, callback: suspend () -> Unit) {
+        button { event ->
+            if (event.gamepad == playerId && event.button == button && event.type == GamePadButtonEvent.Type.DOWN) {
+                launchImmediately(coroutineContext) { callback() }
+            }
+        }
+    }
 
-	fun up(playerId: Int, button: GameButton, callback: suspend () -> Unit) {
-		button { e ->
-			if (e.gamepad == playerId && e.button == button && e.type == GamePadButtonEvent.Type.UP) launchImmediately(coroutineContext) { callback() }
-		}
-	}
+    fun up(playerId: Int, button: GameButton, callback: suspend () -> Unit) {
+        button { event ->
+            if (event.gamepad == playerId && event.button == button && event.type == GamePadButtonEvent.Type.UP) {
+                launchImmediately(coroutineContext) { callback() }
+            }
+        }
+    }
 
     fun updatedGamepad(callback: (GamepadInfo) -> Unit) {
         this.updatedGamepad.add(callback)
     }
 
-	fun connected(callback: suspend (playerId: Int) -> Unit) {
-		connection { e ->
-			if (e.type == GamePadConnectionEvent.Type.CONNECTED) launchImmediately(coroutineContext) { callback(e.gamepad) }
-		}
-	}
+    fun connected(callback: suspend (playerId: Int) -> Unit) {
+        connection { e ->
+            if (e.type == GamePadConnectionEvent.Type.CONNECTED) {
+                launchImmediately(coroutineContext) { callback(e.gamepad) }
+            }
+        }
+    }
 
-	fun disconnected(callback: suspend (playerId: Int) -> Unit) {
-		connection { e ->
-			if (e.type == GamePadConnectionEvent.Type.DISCONNECTED) launchImmediately(coroutineContext) { callback(e.gamepad) }
-		}
-	}
+    fun disconnected(callback: suspend (playerId: Int) -> Unit) {
+        connection { e ->
+            if (e.type == GamePadConnectionEvent.Type.DISCONNECTED) {
+                launchImmediately(coroutineContext) { callback(e.gamepad) }
+            }
+        }
+    }
 
-	private val oldGamepads = GamePadUpdateEvent()
-
-	private val stickEvent = GamePadStickEvent()
-	private val buttonEvent = GamePadButtonEvent()
+    private val oldGamepads = GamePadUpdateEvent()
+    private val stickEvent = GamePadStickEvent()
+    private val buttonEvent = GamePadButtonEvent()
 
     init {
         view.onEvent(GamePadUpdateEvent) { event ->
-            this.views = event.target as Views
+            views = event.target as Views
             gamepads.copyFrom(event)
             var gamepadsUpdated = false
-            // Compute diff
             for (gamepadIndex in 0 until event.gamepadsLength) {
                 val gamepad = event.gamepads[gamepadIndex]
                 val oldGamepad = this.oldGamepads.gamepads[gamepadIndex]
@@ -83,7 +103,6 @@ class GamePadEvents(val view: View) {
                 GameButton.BUTTONS.fastForEach { button ->
                     if (gamepad[button] != oldGamepad[button]) {
                         updateCount++
-                        //println("CHANGED: button=$button: ${gamepad[button]}")
                         button(buttonEvent.apply {
                             this.gamepad = gamepad.index
                             this.type = if (gamepad[button] != 0f) GamePadButtonEvent.Type.DOWN else GamePadButtonEvent.Type.UP
@@ -118,20 +137,16 @@ class GamePadEvents(val view: View) {
     }
 }
 
-data class GamePadStickEvent(
-    var gamepad: Int = 0,
-    var stick: GameStick = GameStick.LEFT,
-    var pos: Point = Point.ZERO,
-) : TypedEvent<GamePadStickEvent>(GamePadStickEvent) {
+data class GamePadStickEvent(var gamepad: Int = 0, var stick: GameStick = GameStick.LEFT, var pos: Point = Point.ZERO) : TypedEvent<GamePadStickEvent>(GamePadStickEvent) {
     val x: Double get() = pos.x
     val y: Double get() = pos.y
 
     companion object : EventType<GamePadStickEvent>
 
-    fun copyFrom(other: GamePadStickEvent) {
-        this.gamepad = other.gamepad
-        this.stick = other.stick
-        this.pos = other.pos
+    fun copyFrom(original: GamePadStickEvent) {
+        this.gamepad = original.gamepad
+        this.stick = original.stick
+        this.pos = original.pos
     }
 }
 
@@ -141,8 +156,6 @@ data class GamePadButtonEvent @JvmOverloads constructor(
     var button: GameButton = GameButton.BUTTON_SOUTH,
     var value: Float = 0f
 ) : Event(), TEvent<GamePadButtonEvent> {
-    //companion object : EventType<GamePadButtonEvent>
-
     enum class Type : EventType<GamePadButtonEvent> { UP, DOWN }
 
     fun copyFrom(other: GamePadButtonEvent) {

@@ -5,23 +5,23 @@ import korlibs.io.async.*
 import korlibs.io.file.*
 
 interface ViewFileRef {
+
     var sourceTreeLoaded: Boolean
     var sourceFile: String?
     suspend fun ViewFileRef.baseForceLoadSourceFile(views: Views, currentVfs: VfsFile, sourceFile: String?)
     suspend fun forceLoadSourceFile(views: Views, currentVfs: VfsFile = views.currentVfs, sourceFile: String? = null)
     fun lazyLoadRenderInternal(ctx: RenderContext, view: ViewFileRef)
 
-    class Mixin() : ViewFileRef {
+    class Mixin : ViewFileRef {
+
         override var sourceTreeLoaded: Boolean = true
         override var sourceFile: String? = null
             set(value) {
-                //println("SET sourceFile=$value")
                 sourceTreeLoaded = false
                 field = value
             }
 
         override suspend fun ViewFileRef.baseForceLoadSourceFile(views: Views, currentVfs: VfsFile, sourceFile: String?) {
-            //println("### Trying to load sourceImage=$sourceImage")
             this.sourceFile = sourceFile
             sourceTreeLoaded = true
         }
@@ -43,5 +43,6 @@ interface ViewFileRef {
                 }
             }
         }
+
     }
 }

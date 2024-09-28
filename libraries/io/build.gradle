@@ -1,6 +1,7 @@
 artifact "korge:io"
 
 source {
+    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
     include project(":korge:compression")
     include project(":korge:jseval")
     include project(":korge:io-vfs")
@@ -21,5 +22,4 @@ source {
     include project(":korge:serialization")
     include project(":korge:io-fs")
     include project(":korge:checksum")
-    include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
 }

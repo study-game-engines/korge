@@ -1,6 +1,6 @@
 artifact "korge:memory"
 
 source {
-    include project(":korge:math-core")
     include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
+    include project(":korge:math-core")
 }

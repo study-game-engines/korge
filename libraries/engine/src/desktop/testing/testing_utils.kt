@@ -15,7 +15,6 @@ import korlibs.math.geom.Size
 import kotlinx.coroutines.sync.Mutex
 import java.awt.HeadlessException
 
-@OptIn(KorgeExperimental::class)
 inline fun korgeScreenshotTestV2(
     korgeConfig: Korge,
     settings: KorgeScreenshotValidationSettings = KorgeScreenshotValidationSettings(),

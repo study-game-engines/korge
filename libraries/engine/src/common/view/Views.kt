@@ -543,7 +543,6 @@ data class KorgeFileLoader<T>(val name: String, val loader: suspend VfsFile.(Fas
 /////////////////////////
 /////////////////////////
 
-@OptIn(KorgeInternal::class)
 fun getAllDescendantViews(view: View, out: FastArrayList<View> = FastArrayList(), reversed: Boolean = true): FastArrayList<View> {
     out.clear()
     val pos = getAllDescendantViewsBase(view, out, reversed, 0)
@@ -567,7 +566,6 @@ private fun getAllDescendantViewsBase(view: View, out: FastArrayList<View>, reve
     return pos
 }
 
-@OptIn(KorgeInternal::class)
 fun View.updateSingleView(delta: Duration, tempUpdate: UpdateEvent = UpdateEvent()) {
     dispatch(tempUpdate.also { it.deltaTime = delta })
 }
@@ -581,7 +579,6 @@ fun View.updateSingleView(delta: Duration, tempUpdate: UpdateEvent = UpdateEvent
 //    }
 //}
 
-@OptIn(KorgeInternal::class)
 fun View.updateSingleViewWithViewsAll(views: Views, delta: Duration) = updateSingleViewWithViewsAll(views, delta.fast)
 
 fun View.updateSingleViewWithViewsAll(

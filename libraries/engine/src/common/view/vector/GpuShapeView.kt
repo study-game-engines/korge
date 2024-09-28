@@ -19,7 +19,7 @@ import korlibs.math.interpolation.*
 import korlibs.time.measureTime
 import kotlin.math.absoluteValue
 
-//inline fun Container.gpuGraphics(
+inline fun Container.gpuGraphics(
     build: ShapeBuilder.() -> Unit,
     antialiased: Boolean = true,
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
@@ -31,12 +31,12 @@ inline fun Container.gpuGraphics(
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
 ): GpuShapeView = gpuShapeView(shape, antialiased, callback)
 
-//inline fun Container.gpuGraphics(
+inline fun Container.gpuGraphics(
     antialiased: Boolean = true,
     callback: @ViewDslMarker ShapeBuilder.(GpuShapeView) -> Unit = {}
 ): GpuShapeView = gpuShapeView(antialiased, callback)
 
-//inline fun Container.gpuShapeView(
+inline fun Container.gpuShapeView(
     build: ShapeBuilder.() -> Unit,
     antialiased: Boolean = true,
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
@@ -48,7 +48,7 @@ inline fun Container.gpuShapeView(
     callback: @ViewDslMarker GpuShapeView.() -> Unit = {}
 ): GpuShapeView = GpuShapeView(shape, antialiased).addTo(this, callback)
 
-//inline fun Container.gpuShapeView(
+inline fun Container.gpuShapeView(
     antialiased: Boolean = true,
     callback: @ViewDslMarker ShapeBuilder.(GpuShapeView) -> Unit = {}
 ): GpuShapeView = GpuShapeView(EmptyShape, antialiased)

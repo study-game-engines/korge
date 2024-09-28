@@ -147,17 +147,15 @@ class TexturedVertexArray(vcount: Int, val indices: ShortArray, icount: Int = in
      * Sets a textured quad at vertice [index] with the region defined by [x],[y] [width]x[height] and the [matrix],
      * using the texture coords defined by [BmpSlice] and color transforms [colMul]
      */
-    @OptIn(KorgeInternal::class)
     @Deprecated("Use Float version instead")
     fun quad(index: Int, x: Double, y: Double, width: Double, height: Double, matrix: Matrix, bmp: BmpCoords, colMul: RGBA) {
         quad(index, x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat(), matrix, bmp, colMul)
     }
 
-    @OptIn(KorgeInternal::class)
     fun quad(index: Int, x: Float, y: Float, width: Float, height: Float, matrix: Matrix, bmp: BmpCoords, colMul: RGBA) {
         quad(index, x, y, width, height, matrix, bmp.tlX, bmp.tlY, bmp.trX, bmp.trY, bmp.blX, bmp.blY, bmp.brX, bmp.brY, colMul)
     }
-    @OptIn(KorgeInternal::class)
+
     fun quad(
         index: Int, x: Float, y: Float, width: Float, height: Float, matrix: Matrix,
         tl_x: Float, tl_y: Float,

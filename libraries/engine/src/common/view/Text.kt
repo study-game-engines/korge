@@ -17,9 +17,7 @@ import korlibs.math.geom.*
 import korlibs.math.geom.vector.*
 
 /*
-// Example:
 val font = BitmapFont(DefaultTtfFont, 64.0)
-
 var offset = 0.degrees
 addUpdater { offset += 10.degrees }
 text2("Hello World!", color = Colors.RED, font = font, renderer = CreateStringTextRenderer { text, n, c, c1, g, advance ->
@@ -32,15 +30,7 @@ text2("Hello World!", color = Colors.RED, font = font, renderer = CreateStringTe
     advance(advance)
 }).position(100, 100)
 */
-inline fun Container.text(
-    text: String, textSize: Number = Text.DEFAULT_TEXT_SIZE,
-    color: RGBA = Colors.WHITE, font: Resourceable<out Font> = DefaultTtfFontAsBitmap,
-    alignment: TextAlignment = TextAlignment.TOP_LEFT,
-    renderer: TextRenderer<String> = DefaultStringTextRenderer,
-    autoScaling: Boolean = Text.DEFAULT_AUTO_SCALING,
-    fill: Paint? = null, stroke: Stroke? = null,
-    block: @ViewDslMarker Text.() -> Unit = {}
-): Text
+inline fun Container.text(text: String, textSize: Number = Text.DEFAULT_TEXT_SIZE, color: RGBA = Colors.WHITE, font: Resourceable<out Font> = DefaultTtfFontAsBitmap, alignment: TextAlignment = TextAlignment.TOP_LEFT, renderer: TextRenderer<String> = DefaultStringTextRenderer, autoScaling: Boolean = Text.DEFAULT_AUTO_SCALING, fill: Paint? = null, stroke: Stroke? = null, block: @ViewDslMarker Text.() -> Unit = {}): Text
     = Text(text, textSize.toDouble(), color, font, alignment, renderer, autoScaling, fill, stroke).addTo(this, block)
 
 open class Text(
@@ -65,12 +55,15 @@ open class Text(
     var lineCount: Int = 0; private set
 
     @ViewProperty
-    override var text: String = text; set(value) { if (field != value) {
-        field = value;
-        updateLineCount()
-        invalidate()
-        invalidateRender()
-    } }
+    override var text: String = text
+        set(value) {
+            if (field != value) {
+                field = value;
+                updateLineCount()
+                invalidate()
+                invalidateRender()
+            }
+        }
     private fun updateLineCount() {
         lineCount = text.count { it == '\n' } + 1
     }
@@ -255,21 +248,11 @@ open class Text(
                 }
             }
         }
-        //container.colorMul = color
         val font: Font? = this.font.getOrNull()
-
-        //println("font=$font")
-
         if (autoSize && font is Font && boundsVersion != version) {
             boundsVersion = version
             val metrics = font.getTextBounds(textSize, text, out = textMetrics, renderer = renderer, align = alignment)
-            _textBounds = Rectangle(
-                metrics.left,
-                alignment.vertical.getOffsetY(metrics.height, -metrics.ascent),
-                metrics.width,
-                font.getFontMetrics(textSize, metrics = fontMetrics).lineHeight * lineCount
-            )
-            //println("autoSize: _textBounds=$_textBounds, ${alignment.horizontal}, ${alignment.horizontal.getOffsetX(metrics.width)} + ${metrics.left}")
+            _textBounds = Rectangle(metrics.left, alignment.vertical.getOffsetY(metrics.height, -metrics.ascent), metrics.width, font.getFontMetrics(textSize, metrics = fontMetrics).lineHeight * lineCount)
         }
 
         when (font) {
@@ -432,6 +415,7 @@ open class Text(
     @ViewProperty
     @ViewPropertyFileRef(["ttf", "fnt", "otf"])
     private var fontSourceFile: String? by this::fontSource
+
 }
 
 fun <T : Text> T.autoSize(value: Boolean): T {

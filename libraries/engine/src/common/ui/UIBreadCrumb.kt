@@ -6,22 +6,12 @@ import korlibs.korge.component.*
 import korlibs.korge.input.*
 import korlibs.korge.view.*
 
-inline fun <T> Container.uiBreadCrumb(
-    path: UIBreadCrumb.Path<T>,
-    block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}
-) = UIBreadCrumb<T>(path).addTo(this).apply(block)
-
-inline fun <T> Container.uiBreadCrumb(
-    path: Iterable<T>,
-    block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}
-) = UIBreadCrumb<T>(UIBreadCrumb.Path(path.toList())).addTo(this).apply(block)
-
-inline fun <T> Container.uiBreadCrumbArray(
-    vararg path: T,
-    block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}
-) = UIBreadCrumb<T>(UIBreadCrumb.Path(path.toList())).addTo(this).apply(block)
+inline fun <T> Container.uiBreadCrumb(path: UIBreadCrumb.Path<T>, block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}) = UIBreadCrumb<T>(path).addTo(this).apply(block)
+inline fun <T> Container.uiBreadCrumb(path: Iterable<T>, block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}) = UIBreadCrumb<T>(UIBreadCrumb.Path(path.toList())).addTo(this).apply(block)
+inline fun <T> Container.uiBreadCrumbArray(vararg path: T, block: @ViewDslMarker UIBreadCrumb<T>.() -> Unit = {}) = UIBreadCrumb<T>(UIBreadCrumb.Path(path.toList())).addTo(this).apply(block)
 
 class UIBreadCrumb<T>(path: Path<T>) : UIView() {
+
     constructor(path: Iterable<T>) : this(Path(path.toList()))
     constructor(vararg path: T) : this(Path(path.toList()))
 
@@ -59,4 +49,5 @@ class UIBreadCrumb<T>(path: Path<T>) : UIView() {
     init {
         this.path = path
     }
+
 }

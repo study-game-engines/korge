@@ -1,11 +1,11 @@
 artifact "korge:io-vfs"
 
 source {
- include project(":korge:io-fs")
- include project(":korge:concurrent")
- include project(":korge:utils")
- include project(":korge:io-stream")
- include project(":korge:time-core")
- include project(":korge:string")
- include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+    include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+    include project(":korge:io-fs")
+    include project(":korge:concurrent")
+    include project(":korge:utils")
+    include project(":korge:io-stream")
+    include project(":korge:time-core")
+    include project(":korge:string")
 }

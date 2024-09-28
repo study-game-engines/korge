@@ -33,7 +33,6 @@ class ObjectRenderSystem(
     private val assetStore: AssetStore = world.inject(name = "AssetStore")
 
 
-    @OptIn(KorgeExperimental::class)
     override fun renderInternal(ctx: RenderContext) {
         // Sort sprite and text entities by their layerIndex
         family.sort(comparator)

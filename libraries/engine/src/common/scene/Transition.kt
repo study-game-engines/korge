@@ -43,7 +43,6 @@ class TransitionView() : Container() {
 
     fun endTransition() {
         this.ratio = Ratio.ONE
-
         this.transitionProcess.end(this.prev, this.next)
         setViews(dummyView(), next)
     }

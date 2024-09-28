@@ -29,7 +29,6 @@ open class FixedSizeCachedContainer(
 
     private var renderingInternalRef = Ref(false)
 
-    @OptIn(KorgeInternal::class)
     override fun renderInternal(ctx: RenderContext) {
         FixedSizeContainer.renderClipped(this, ctx, clip, renderingInternalRef) { super.renderInternal(ctx) }
     }
@@ -131,10 +130,7 @@ open class CachedContainer(
         ctx.useBatcher { batch ->
             batch.drawQuad(
                 cache.tex,
-                m = globalMatrix
-                    .pretranslated(lbounds.x, lbounds.y)
-                    .prescaled(1.0 / (renderScale * windowLocalRatio.scaleX), 1.0 / (renderScale * windowLocalRatio.scaleY))
-                ,
+                m = globalMatrix.pretranslated(lbounds.x, lbounds.y).prescaled(1.0 / (renderScale * windowLocalRatio.scaleX), 1.0 / (renderScale * windowLocalRatio.scaleY)),
                 colorMul = renderColorMul,
                 blendMode = blendMode,
             )
@@ -147,4 +143,5 @@ open class CachedContainer(
         dirty = true
         parent?._invalidateNotifier?.invalidatedView(view)
     }
+
 }

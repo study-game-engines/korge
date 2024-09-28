@@ -1,9 +1,13 @@
+@file:JvmName("LoggerDesktop")
+
 package korlibs.logger
 
 import korlibs.logger.Console.color
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.logging.*
+import java.util.*
+import java.util.logging.Handler
+import java.util.logging.Level
+import java.util.logging.LogRecord
 
 actual object Console : BaseConsole() {
     override fun logInternal(kind: Kind, vararg msg: Any?) {
@@ -23,6 +27,7 @@ actual object Console : BaseConsole() {
 }
 
 actual object DefaultLogOutput : Logger.Output {
+
     private val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
     actual override fun output(logger: Logger, level: Logger.Level, msg: Any?) {
@@ -41,6 +46,7 @@ actual object DefaultLogOutput : Logger.Output {
                             val time = DATE_FORMAT.format(Date(System.currentTimeMillis()))
                             out.println("$time[${Thread.currentThread()}]: ${record.level}: ${record.loggerName} - ${record.message}".color(color))
                         }
+
                         override fun flush() = Unit
                         override fun close() = Unit
                     })
@@ -53,6 +59,7 @@ actual object DefaultLogOutput : Logger.Output {
         //println("logger=$logger, level=$level, msg=$msg")
         nativeLogger.log(level.toJava(), msg.toString())
     }
+
 }
 
 fun Logger.Level.toJava(): Level = when (this) {

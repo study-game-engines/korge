@@ -10,19 +10,11 @@ import korlibs.korge.view.property.*
 import korlibs.math.*
 import korlibs.math.geom.*
 
-inline fun Container.textBlock(
-    text: RichTextData = RichTextData("", textSize = 16.0, font = DefaultTtfFontAsBitmap),
-    align: TextAlignment = TextAlignment.TOP_LEFT,
-    size: Size = Size(100, 100),
-    block: @ViewDslMarker TextBlock.() -> Unit = {}
-): TextBlock
-    = TextBlock(text, align, size).addTo(this, block)
+inline fun Container.textBlock(text: RichTextData = RichTextData("", textSize = 16.0, font = DefaultTtfFontAsBitmap), align: TextAlignment = TextAlignment.TOP_LEFT, size: Size = Size(100, 100), block: @ViewDslMarker TextBlock.() -> Unit = {}): TextBlock =
+    TextBlock(text, align, size).addTo(this, block)
 
-class TextBlock(
-    text: RichTextData = RichTextData("", textSize = 16.0, font = DefaultTtfFontAsBitmap),
-    align: TextAlignment = TextAlignment.TOP_LEFT,
-    size: Size = Size(100, 100),
-) : UIView(size), ViewLeaf {
+class TextBlock(text: RichTextData = RichTextData("", textSize = 16.0, font = DefaultTtfFontAsBitmap), align: TextAlignment = TextAlignment.TOP_LEFT, size: Size = Size(100, 100)) : UIView(size), ViewLeaf {
+
     private var dirty = true
 
     @ViewProperty
@@ -31,7 +23,6 @@ class TextBlock(
     @ViewProperty
     @ViewPropertyProvider(TextAlignmentProvider::class)
     var align: TextAlignment = align; set(value) { if (field != value) { field = value; invalidProps() } }
-
     @ViewProperty
     var includePartialLines: Boolean = false; set(value) { if (field != value) { field = value; invalidProps() } }
     @ViewProperty
@@ -48,8 +39,6 @@ class TextBlock(
     var padding: Margin = Margin.ZERO; set(value) { if (field != value) { field = value; invalidProps() } }
     @ViewProperty
     var autoSize: Boolean = false; set(value) { if (field != value) { field = value; invalidateText() } }
-    //@ViewProperty(min = 0.0, max = 10.0, clampMin = true)
-    //var textRange: IntRange = ALL_TEXT_RANGE; set(value) { field = value; invalidateText() }
     @ViewProperty(min = 0.0, max = 10.0, clampMin = true)
     var textRangeStart: Int = 0; set(value) { if (field != value) { field = value; invalidateText() } }
     @ViewProperty(min = 0.0, max = 10.0, clampMin = true)
@@ -96,7 +85,6 @@ class TextBlock(
         if (!dirty) return
         dirty = false
         val bmp = NativeImage(width.toIntCeil(), height.toIntCeil())
-        //println("ensureTexture: bmp=$bmp")
         if (image == null) {
             image = image(Bitmaps.transparent)
         }
@@ -124,7 +112,6 @@ class TextBlock(
             }
             image?.removeFromParent()
             image = null
-            //if (textRange != ALL_TEXT_RANGE) println("textRange=$textRange")
             renderCtx2d(ctx) {
                 it.drawText(placements!!, textRangeStart = textRangeStart, textRangeEnd = textRangeEnd, filtering = smoothing)
             }
@@ -137,4 +124,5 @@ class TextBlock(
     companion object {
         val ALL_TEXT_RANGE = 0 until Int.MAX_VALUE
     }
+
 }

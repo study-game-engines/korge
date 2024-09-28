@@ -40,13 +40,7 @@ open class ShapeBuilder(width: Int?, height: Int?) : Context2d(DummyRenderer), D
         val clip = state.clip?.clone()?.also { it.winding = winding ?: it.winding }
         val transform = state.transform
         if (fill) {
-            shapes += FillShape(
-                path = path,
-                clip = clip,
-                paint = state.fillStyle.clone(),
-                transform = transform,
-                globalAlpha = state.globalAlpha,
-            )
+            shapes += FillShape(path = path, clip = clip, paint = state.fillStyle.clone(), transform = transform, globalAlpha = state.globalAlpha)
         } else {
             shapes += PolylineShape(
                 path = path,
@@ -79,23 +73,15 @@ open class ShapeBuilder(width: Int?, height: Int?) : Context2d(DummyRenderer), D
             fill = if (fill) state.fillStyle else null,
             stroke = if (fill) null else state.strokeStyle,
             align = state.alignment,
-            //transform = Matrix()
             transform = state.transform
         )
     }
 
     override fun rendererDrawImage(image: Bitmap, pos: Point, size: Size, transform: Matrix) {
         rendererRender(
-            State(
-                transform = transform,
-                path = VectorPath().apply { rect(pos, size) },
-                fillStyle = BitmapPaint(
-                    image,
-                    transform = Matrix.IDENTITY
-                        .scaled(size / image.size.toFloat())
-                        .translated(pos)
-                )
-            ), fill = true)
+            State(transform, path = VectorPath().apply { rect(pos, size) }, fillStyle = BitmapPaint(image, transform = Matrix.IDENTITY.scaled(size / image.size.toFloat()).translated(pos))),
+            fill = true
+        )
     }
 
     override fun rendererDispose() {

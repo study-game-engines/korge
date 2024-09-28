@@ -1472,7 +1472,6 @@ fun View?.commonAncestor(ancestor: View?): View? = View.commonAncestor(this, anc
  * Returns true if the replacement was successful.
  * If this view doesn't have a parent or [view] is the same as [this], returns false.
  */
-@OptIn(KorgeInternal::class)
 fun View.replaceWith(view: View): Boolean = this.parent?.replaceChild(this, view) ?: false
 
 /** Adds a block that will be executed per frame to this view. As parameter the block will receive a [TimeSpan] with the time elapsed since the previous frame. */
@@ -1488,7 +1487,6 @@ fun <T : View> T.addFastUpdater(first: Boolean = true, firstTime: FastDuration =
 
 fun <T : View> T.addUpdater(updatable: T.(dt: Duration) -> Unit): CloseableCancellable = addUpdater(true, updatable = updatable)
 fun <T : View> T.addFastUpdater(updatable: T.(dt: FastDuration) -> Unit): CloseableCancellable = addFastUpdater(true, updatable = updatable)
-
 fun <T : View> T.addUpdaterWithViews(updatable: T.(views: Views, dt: Duration) -> Unit): CloseableCancellable = onEvent(ViewsUpdateEvent) { updatable(this@addUpdaterWithViews, it.views, it.delta * this.globalSpeed) }
 fun <T : View> T.addFastUpdaterWithViews(updatable: T.(views: Views, dt: FastDuration) -> Unit): CloseableCancellable = onEvent(ViewsUpdateEvent) { updatable(this@addFastUpdaterWithViews, it.views, it.fastDelta * this.globalSpeed) }
 
@@ -1516,28 +1514,18 @@ fun <T : View> T.addOptFixedUpdater(time: FastDuration = FastDuration.NaN, updat
     else -> addFixedUpdater(time) { updatable(time) }
 }
 
-fun <T : View> T.addFixedUpdater(
-    timesPerSecond: Frequency,
-    initial: Boolean = true,
-    limitCallsPerFrame: Int = 16,
-    updatable: T.() -> Unit
-): Cancellable = addFixedUpdater(timesPerSecond.fastDuration, initial, limitCallsPerFrame, updatable)
+fun <T : View> T.addFixedUpdater(timesPerSecond: Frequency, initial: Boolean = true, limitCallsPerFrame: Int = 16, updatable: T.() -> Unit): Cancellable =
+    addFixedUpdater(timesPerSecond.fastDuration, initial, limitCallsPerFrame, updatable)
 
-fun <T : View> T.addFixedUpdater(
-    time: Duration, first: Boolean = true, limitCallsPerFrame: Int = 16, updatable: T.() -> Unit
-): CloseableCancellable = addFixedUpdater(time.fast, first, limitCallsPerFrame, updatable)
+fun <T : View> T.addFixedUpdater(time: Duration, first: Boolean = true, limitCallsPerFrame: Int = 16, updatable: T.() -> Unit): CloseableCancellable =
+    addFixedUpdater(time.fast, first, limitCallsPerFrame, updatable)
 
 /**
  * Adds an [updatable] block that will be executed every [time] time, the calls will be discretized on each frame and will handle accumulations.
  * The [first] properly allows to adjust if the [updatable] will be called immediately after calling this function.
  * To avoid executing too many blocks, when there is a long pause, [limitCallsPerFrame] limits the number of times the block can be executed in a single frame.
  */
-fun <T : View> T.addFixedUpdater(
-    time: FastDuration,
-    first: Boolean = true,
-    limitCallsPerFrame: Int = 16,
-    updatable: T.() -> Unit
-): CloseableCancellable {
+fun <T : View> T.addFixedUpdater(time: FastDuration, first: Boolean = true, limitCallsPerFrame: Int = 16, updatable: T.() -> Unit): CloseableCancellable {
     var accum = FastDuration.ZERO
     return addFastUpdater(first = first, firstTime = time) { dt ->
         accum += dt
@@ -1899,7 +1887,6 @@ fun View?.findLastAscendant(cond: (view: View) -> Boolean): View? {
 
 ///////////////////
 
-
 val View.prevSibling get() = parent?.children?.getOrNull(index - 1)
 val View.nextSibling get() = parent?.children?.getOrNull(index + 1)
 
@@ -1914,7 +1901,7 @@ val Stage.lastTreeView: View
                 return view
             }
         }
-        return view ?: stage!!
+        return view ?: stage
     }
 
 fun View.nextView(): View? {

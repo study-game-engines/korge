@@ -1,5 +1,6 @@
 package korlibs.concurrent.lock
 
+import korlibs.concurrent.lock.BaseLockWithNotifyAndWait
 import korlibs.time.*
 
 /*

@@ -1,13 +1,10 @@
 package korlibs.datastructure
 
 import kotlin.math.*
-import korlibs.datastructure.internal.*
 
-/**
- * ArrayList that prevents isObject + jsInstanceOf on getter on Kotlin/JS
- * This class should be temporal until Kotlin/JS fixes this issue.
- */
+// ArrayList that prevents isObject + jsInstanceOf on getter on Kotlin/JS. This class should be temporal until Kotlin/JS fixes this issue.
 expect class FastArrayList<E> : MutableListEx<E>, RandomAccess {
+
     constructor()
     constructor(initialCapacity: Int)
     constructor(elements: Collection<E>)
@@ -15,10 +12,11 @@ expect class FastArrayList<E> : MutableListEx<E>, RandomAccess {
     fun trimToSize()
     fun ensureCapacity(minCapacity: Int)
 
-    // From MutableListEx
+    /*MutableListEx*/
+
     override fun removeRange(fromIndex: Int, toIndex: Int)
 
-    // From List
+    /*List*/
 
     override val size: Int
     override fun isEmpty(): Boolean
@@ -28,11 +26,11 @@ expect class FastArrayList<E> : MutableListEx<E>, RandomAccess {
     override fun indexOf(element: @UnsafeVariance E): Int
     override fun lastIndexOf(element: @UnsafeVariance E): Int
 
-    // From MutableCollection
+    /*MutableCollection*/
 
     override fun iterator(): MutableIterator<E>
 
-    // From MutableList
+    /*MutableList*/
 
     override fun add(element: E): Boolean
     override fun remove(element: E): Boolean
@@ -47,11 +45,11 @@ expect class FastArrayList<E> : MutableListEx<E>, RandomAccess {
     override fun listIterator(): MutableListIterator<E>
     override fun listIterator(index: Int): MutableListIterator<E>
     override fun subList(fromIndex: Int, toIndex: Int): MutableList<E>
-
     inline fun fastForEach(callback: (E) -> Unit)
     inline fun fastForEachWithIndex(callback: (index: Int, value: E) -> Unit)
     inline fun fastForEachReverse(callback: (E) -> Unit)
     inline fun fastForEachReverseWithIndex(callback: (index: Int, value: E) -> Unit)
+
 }
 
 fun <T> fastArrayListOf(vararg values: T): FastArrayList<T> = FastArrayList<T>(values.size).also { it.addAll(values) }
@@ -63,22 +61,19 @@ fun <T> Array<T>.toFastList(): List<T> = FastArrayList<T>(this.size).also { out 
 
 inline fun <T> buildFastList(block: FastArrayList<T>.() -> Unit): FastArrayList<T> = FastArrayList<T>().apply(block)
 
-fun <T> List<T>.toFastList(out: FastArrayList<T> = FastArrayList()): FastArrayList<T> {
-    // Copy the elements we can
-    val minSize = min(this.size, out.size)
-    for (n in 0 until minSize) out[n] = this[n]
-    // Add new elements
-    for (n in minSize  until this.size) out.add(this[n])
-    // Remove extra elements
-    while (out.size > this.size) out.removeLast()
-    return out
+fun <T> List<T>.toFastList(target: FastArrayList<T> = FastArrayList()): FastArrayList<T> {
+    val minSize: Int = min(this.size, target.size)
+    for (n in 0 until minSize) target[n] = this[n]
+    for (n in minSize  until this.size) target.add(this[n])
+    while (target.size > this.size) target.removeLast()
+    return target
 }
 
-fun <T> FastArrayList<T>.toFastList(out: FastArrayList<T> = FastArrayList()): FastArrayList<T> {
-    // Copy the elements we can
-    out.setAddAll(0, this)
-    out.removeToSize(this.size)
-    return out
+fun <T> FastArrayList<T>.toFastList(target: FastArrayList<T> = FastArrayList()): FastArrayList<T> {
+    val source: FastArrayList<T> = this
+    target.setAddAll(0, source)
+    target.removeToSize(source.size)
+    return target
 }
 
 interface MutableListEx<E> : MutableList<E> {

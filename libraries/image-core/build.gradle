@@ -2,9 +2,9 @@ artifact "korge:image-core"
 
 source {
     common {
-        include project(":korge:annotations")
         include "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
         include "org.jetbrains.kotlinx:atomicfu:$kotlinx_atomicfu_version"
+        include project(":korge:annotations")
     }
     desktop {
         include "net.java.dev.jna:jna:5.14.0"

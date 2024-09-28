@@ -40,7 +40,6 @@ class ViewNode(val view: View?) : TreeNode {
     override fun getParent(): TreeNode? = view?.parent?.treeNode
     override fun getIndex(node: TreeNode?): Int = childrenList().indexOf((node as? ViewNode?)?.view)
     override fun getAllowsChildren(): Boolean = container != null
-    @OptIn(KorgeInternal::class)
     override fun children() = Vector<Any>(childrenList()).elements() as Enumeration<out TreeNode>
 }
 

@@ -15,6 +15,7 @@ import kotlin.native.concurrent.*
 import kotlin.time.*
 
 class KeysEvents(val view: View) : AutoCloseable {
+
     @PublishedApi
     internal lateinit var views: Views
 
@@ -49,7 +50,6 @@ class KeysEvents(val view: View) : AutoCloseable {
                     }
                 }
             }
-            //if (view.input)
         }
     }
 
@@ -68,7 +68,6 @@ class KeysEvents(val view: View) : AutoCloseable {
                     callback(ke.setFromKeys(key, vkeys, dt))
                 }
             }
-            //if (view.input)
         }
     }
 
@@ -78,13 +77,7 @@ class KeysEvents(val view: View) : AutoCloseable {
     fun justDown(key: Key, callback: (ke: KeyEvent) -> Unit): Cancellable =
         justDown(listOf(key), callback)
 
-    fun downRepeating(
-        keys: Set<Key>,
-        maxDelay: Duration = 500.milliseconds,
-        minDelay: Duration = 100.milliseconds,
-        delaySteps: Int = 6,
-        callback: suspend (ke: KeyEvent) -> Unit
-    ): Cancellable {
+    fun downRepeating(keys: Set<Key>, maxDelay: Duration = 500.milliseconds, minDelay: Duration = 100.milliseconds, delaySteps: Int = 6, callback: suspend (ke: KeyEvent) -> Unit): Cancellable {
         val keys = keys.toList()
         val ke = KeyEvent()
         val currentStep = IntArray(keys.size)
@@ -110,22 +103,10 @@ class KeysEvents(val view: View) : AutoCloseable {
         }
     }
 
-    fun downRepeating(
-        vararg keys: Key,
-        maxDelay: Duration = 500.milliseconds,
-        minDelay: Duration = 100.milliseconds,
-        delaySteps: Int = 6,
-        callback: suspend (ke: KeyEvent) -> Unit
-    ): Cancellable =
+    fun downRepeating(vararg keys: Key, maxDelay: Duration = 500.milliseconds, minDelay: Duration = 100.milliseconds, delaySteps: Int = 6, callback: suspend (ke: KeyEvent) -> Unit): Cancellable =
         downRepeating(keys.toSet(), maxDelay, minDelay, delaySteps, callback)
 
-    fun downRepeating(
-        key: Key,
-        maxDelay: Duration = 500.milliseconds,
-        minDelay: Duration = 100.milliseconds,
-        delaySteps: Int = 6,
-        callback: suspend (ke: KeyEvent) -> Unit
-    ): Cancellable =
+    fun downRepeating(key: Key, maxDelay: Duration = 500.milliseconds, minDelay: Duration = 100.milliseconds, delaySteps: Int = 6, callback: suspend (ke: KeyEvent) -> Unit): Cancellable =
         downRepeating(setOf(key), maxDelay, minDelay, delaySteps, callback)
 
     fun down(keys: Set<Key>, callback: suspend (key: KeyEvent) -> Unit): AutoCloseable =
@@ -189,6 +170,7 @@ class KeysEvents(val view: View) : AutoCloseable {
     override fun close() {
         closeable.close()
     }
+
 }
 
 val View.keys: KeysEvents by Extra.PropertyThis<View, KeysEvents> { KeysEvents(this) }
@@ -202,5 +184,4 @@ inline fun <T> View.keys(callback: KeysEvents.() -> T): T {
 }
 
 suspend fun KeysEvents.waitUp(key: Key): KeyEvent = waitUp { it.key == key }
-suspend fun KeysEvents.waitUp(filter: (key: KeyEvent) -> Boolean = { true }): KeyEvent =
-    waitSubscriberCloseable { callback -> up { if (filter(it)) callback(it) } }
+suspend fun KeysEvents.waitUp(filter: (key: KeyEvent) -> Boolean = { true }): KeyEvent = waitSubscriberCloseable { callback -> up { if (filter(it)) callback(it) } }

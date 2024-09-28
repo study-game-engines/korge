@@ -7,25 +7,30 @@ import korlibs.korge.view.*
 import korlibs.math.interpolation.*
 import korlibs.time.*
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.*
 import kotlin.time.*
 
 fun audioChannel(isLocal: Boolean = false): AudioChannel.Provider = if (isLocal) AudioChannel.ProviderLocal else AudioChannel.ProviderGlobal
 
 class AudioChannel(val name: String, val viewsContainer: ViewsContainer, val isLocal: Boolean = false) {
+
     interface Provider {
         operator fun getValue(viewsContainer: ViewsContainer, property: KProperty<*>): AudioChannel
     }
+
     object ProviderLocal : Provider {
         override operator fun getValue(viewsContainer: ViewsContainer, property: KProperty<*>): AudioChannel = viewsContainer.views.extraCache("audio-channel-ref-local-${property.name}") {
             AudioChannel(property.name, viewsContainer, isLocal = true)
         }
     }
+
     object ProviderGlobal : Provider {
         override operator fun getValue(viewsContainer: ViewsContainer, property: KProperty<*>): AudioChannel = viewsContainer.views.extraCache("audio-channel-ref-global-${property.name}") {
             AudioChannel(property.name, viewsContainer, isLocal = false)
         }
     }
+
     val views get() = viewsContainer.views
     private val channelName = "sound-channel-$name"
     internal var channel: SoundChannel?
@@ -36,11 +41,11 @@ class AudioChannel(val name: String, val viewsContainer: ViewsContainer, val isL
 
     fun play(sound: Sound, params: PlaybackParameters = PlaybackParameters.DEFAULT) {
         channel?.stop()
-        channel = sound.play(
-            when {
-                isLocal -> (viewsContainer as CoroutineScope?)?.coroutineContext ?: views.views.coroutineContext
-                else -> views.views.coroutineContext
-            }, params)
+        val coroutineContext: CoroutineContext = when {
+            isLocal -> (viewsContainer as CoroutineScope?)?.coroutineContext ?: views.views.coroutineContext
+            else -> views.views.coroutineContext
+        }
+        channel = sound.play(coroutineContext, params)
     }
 
     fun stop() {
@@ -55,4 +60,5 @@ class AudioChannel(val name: String, val viewsContainer: ViewsContainer, val isL
     suspend fun fadeOut(time: Duration = DEFAULT_FADE_TIME, easing: Easing = DEFAULT_FADE_EASING) {
         channel?.fadeOut(time, easing)
     }
+
 }

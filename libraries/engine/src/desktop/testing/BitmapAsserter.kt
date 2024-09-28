@@ -115,7 +115,6 @@ fun OffscreenStage.simulateRenderFrame(
     useTexture: Boolean = true,
 ): Bitmap32 = views.simulateRenderFrame(view, posterize, includeBackground, useTexture)
 
-@OptIn(KorgeExperimental::class)
 fun Views.simulateRenderFrame(
     view: View,
     posterize: Int = 0,
