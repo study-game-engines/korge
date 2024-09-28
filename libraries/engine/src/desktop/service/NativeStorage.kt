@@ -5,6 +5,7 @@ import java.io.*
 import java.util.*
 
 actual class NativeStorage actual constructor(val views: Views) : IStorageWithKeys {
+
 	val props = Properties()
     val folder = File(views.realSettingsFolder).also { kotlin.runCatching { it.mkdirs() } }
     val file = File(folder, "game.jvm.storage")
@@ -53,4 +54,5 @@ actual class NativeStorage actual constructor(val views: Views) : IStorageWithKe
 		props.clear()
 		save()
 	}
+
 }

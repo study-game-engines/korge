@@ -10,6 +10,7 @@ import korlibs.render.osx.*
 import korlibs.render.platform.*
 import korlibs.render.win32.*
 import korlibs.render.x11.*
+import kotlinx.coroutines.DisposableHandle
 import java.util.concurrent.atomic.*
 
 val GLOBAL_HEADLESS_KML_CONTEXT by lazy { KmlGlContextDefault() }
@@ -42,7 +43,7 @@ class Win32KmlGlContextManaged(window: Any? = null, parent: KmlGlContext? = null
     }
 }
 
-class Win32DummyWindow : Disposable {
+class Win32DummyWindow : DisposableHandle {
     val hWND = Win32.CreateWindowEx(
         0, dummyName, "Dummy OpenGL Window",
         0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,

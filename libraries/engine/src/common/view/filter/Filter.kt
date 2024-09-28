@@ -9,6 +9,7 @@ import korlibs.korge.render.*
 import korlibs.korge.view.*
 import korlibs.math.*
 import korlibs.math.geom.*
+import kotlinx.coroutines.DisposableHandle
 import kotlin.math.*
 
 /**
@@ -103,7 +104,7 @@ fun Filter.renderToTextureWithBorder(
     }
 }
 
-class RenderToTextureResult() : Disposable {
+class RenderToTextureResult() : DisposableHandle {
     var filter: Filter? = null
     var newTexWidth: Int = 0
     var newTexHeight: Int = 0

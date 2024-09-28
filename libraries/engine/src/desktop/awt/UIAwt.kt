@@ -1,42 +1,42 @@
 package korlibs.korge.awt
 
-import korlibs.datastructure.*
+import korlibs.datastructure.Extra
+import korlibs.datastructure.WeakMap
 import korlibs.event.*
 import korlibs.event.FocusEvent
 import korlibs.event.KeyEvent
-import korlibs.image.awt.*
-import korlibs.image.bitmap.*
-import korlibs.image.color.*
-import korlibs.io.file.*
-import korlibs.io.file.std.*
-import korlibs.io.lang.*
-import korlibs.math.geom.*
+import korlibs.image.awt.toAwt
+import korlibs.image.bitmap.Bitmap
+import korlibs.image.color.RGBA
+import korlibs.image.color.toAwt
+import korlibs.image.color.toRgba
+import korlibs.io.file.VfsFile
+import korlibs.io.file.std.localVfs
+import korlibs.math.geom.BoundsBuilder
+import korlibs.math.geom.RectangleInt
+import kotlinx.coroutines.DisposableHandle
 import java.awt.*
-import java.awt.Rectangle
 import java.awt.event.*
 import java.awt.event.MouseEvent
-import java.awt.image.*
+import java.awt.image.BufferedImage
 import javax.swing.*
-import javax.swing.event.*
+import javax.swing.event.ChangeListener
 
 internal val DEFAULT_UI_FACTORY: NativeUiFactory get() = DEFAULT_AWT_UI_FACTORY
 
 internal var DEFAULT_AWT_UI_FACTORY: NativeUiFactory = NativeUiFactory()
 
 internal open class NativeUiFactory {
-    fun wrapNativeContainer(native: Any?): NativeContainer {
-        val container = native as Container
-        return AwtContainer(this, container)
-    }
 
-    fun createContainer() = AwtContainer(this)
-    fun createScrollPanel() = AwtScrollPanel(this)
-    fun createButton() = AwtButton(this)
-    fun createLabel() = AwtLabel(this)
-    fun createCanvas() = AwtCanvas(this)
-    fun createCheckBox() = AwtCheckBox(this)
-    fun createTextField() = AwtTextField(this)
-    fun <T> createComboBox() = AwtComboBox<T>(this)
+    fun wrapNativeContainer(native: Any?): NativeContainer = AwtContainer(this, native as Container)
+    fun createContainer(): AwtContainer = AwtContainer(this)
+    fun createScrollPanel(): AwtScrollPanel = AwtScrollPanel(this)
+    fun createButton(): AwtButton = AwtButton(this)
+    fun createLabel(): AwtLabel = AwtLabel(this)
+    fun createCanvas(): AwtCanvas = AwtCanvas(this)
+    fun createCheckBox(): AwtCheckBox = AwtCheckBox(this)
+    fun createTextField(): AwtTextField = AwtTextField(this)
+    fun <T> createComboBox(): AwtComboBox<T> = AwtComboBox(this)
 
     interface NativeButton : NativeComponent, NativeWithText {
         var icon: Bitmap?
@@ -48,7 +48,7 @@ internal open class NativeUiFactory {
         var checked: Boolean
             get() = false
             set(value) = Unit
-        fun onChange(block: () -> Unit) = Disposable { }
+        fun onChange(block: () -> Unit) = DisposableHandle { }
     }
 
     interface NativeComboBox<T> : NativeComponent {
@@ -62,16 +62,16 @@ internal open class NativeUiFactory {
 
         fun open(): Unit = Unit
         fun close(): Unit = Unit
-        fun onChange(block: () -> Unit) = Disposable { }
+        fun onChange(block: () -> Unit) = DisposableHandle { }
     }
 
     interface NativeComponent : Extra {
+
         val component: Component
         val factory: NativeUiFactory
         var bounds: RectangleInt
             get() = RectangleInt(0, 0, 0, 0)
             set(value) = Unit
-        //fun setBounds(x: Int, y: Int, width: Int, height: Int) = Unit
         var parent: NativeContainer?
             get() = null
             set(value) {
@@ -91,25 +91,19 @@ internal open class NativeUiFactory {
             get() = true
             set(value) = Unit
 
-        fun onMouseEvent(handler: (korlibs.event.MouseEvent) -> Unit): Disposable = Disposable { }
-        fun onFocus(handler: (FocusEvent) -> Unit): Disposable = Disposable { }
-        fun onResize(handler: (ReshapeEvent) -> Unit): Disposable = Disposable { }
-
+        fun onMouseEvent(handler: (korlibs.event.MouseEvent) -> Unit): DisposableHandle = DisposableHandle { }
+        fun onFocus(handler: (FocusEvent) -> Unit): DisposableHandle = DisposableHandle { }
+        fun onResize(handler: (ReshapeEvent) -> Unit): DisposableHandle = DisposableHandle { }
         fun repaintAll() = Unit
         fun focus(focus: Boolean) = Unit
         fun updateUI() = Unit
+        fun openFileDialog(file: VfsFile?, filter: (VfsFile) -> Boolean): VfsFile? = null
+        fun openColorPickerDialog(color: RGBA, listener: ((RGBA) -> Unit)?): RGBA? = color
 
-        fun openFileDialog(file: VfsFile?, filter: (VfsFile) -> Boolean): VfsFile? {
-            TODO()
-            return null
-        }
-
-        fun openColorPickerDialog(color: RGBA, listener: ((RGBA) -> Unit)?): RGBA? {
-            return color
-        }
     }
 
     interface NativeChildren {
+
         val numChildren: Int get() = 0
         fun getChildAt(index: Int): NativeComponent = TODO()
         fun insertChildAt(index: Int, child: NativeComponent): Unit = TODO()
@@ -117,6 +111,7 @@ internal open class NativeUiFactory {
         fun removeChildAt(index: Int): Unit = TODO()
 
         class Mixin : NativeChildren {
+
             val children = arrayListOf<NativeComponent>()
 
             override val numChildren: Int get() = children.size
@@ -128,9 +123,11 @@ internal open class NativeUiFactory {
                     children.add(index, child)
                 }
             }
+
             override fun removeChild(child: NativeComponent) {
                 children.remove(child)
             }
+
             override fun removeChildAt(index: Int) {
                 children.removeAt(index)
             }
@@ -167,7 +164,7 @@ internal open class NativeUiFactory {
     interface NativeTextField : NativeComponent, NativeWithText {
         fun select(range: IntRange? = 0 until Int.MAX_VALUE): Unit = Unit
         fun focus(): Unit = Unit
-        fun onKeyEvent(block: (KeyEvent) -> Unit): Disposable = Disposable { }
+        fun onKeyEvent(block: (KeyEvent) -> Unit): DisposableHandle = DisposableHandle { }
     }
 
     interface NativeWithText : NativeComponent {
@@ -175,6 +172,7 @@ internal open class NativeUiFactory {
             get() = ""
             set(value) = Unit
     }
+
     open fun createJScrollPane() = JScrollPane().also {
         it.verticalScrollBar.unitIncrement = 16
         it.horizontalScrollBar.unitIncrement = 16
@@ -185,11 +183,6 @@ internal open class NativeUiFactory {
         fileDialog.file = file?.absolutePath?.let { java.io.File(it) }?.absolutePath
         fileDialog.isVisible = true
         return localVfs(fileDialog.file)
-
-        //val fileChooser = JFileChooser()
-        //fileChooser.selectedFile = file?.absolutePath?.let { java.io.File(it) }
-        //val selection = fileChooser.showOpenDialog(component)
-        //return fileChooser.selectedFile?.let { localVfs(it) }
     }
 
     open fun awtOpenColorPickerDialog(component: Component, color: RGBA, listener: ((RGBA) -> Unit)?): RGBA? {
@@ -241,6 +234,7 @@ internal val awtToWrappersMap = WeakMap<Component, AwtComponent>()
 internal fun Component.toAwt(): AwtComponent? = awtToWrappersMap[this]
 
 internal open class AwtComponent(override val factory: NativeUiFactory, override val component: Component) : NativeUiFactory.NativeComponent, Extra by Extra.Mixin() {
+
     init {
         awtToWrappersMap[component] = this
     }
@@ -272,40 +266,44 @@ internal open class AwtComponent(override val factory: NativeUiFactory, override
 
     override var visible: Boolean
         get() = component.isVisible
-        set(value) { component.isVisible = value }
+        set(value) {
+            component.isVisible = value
+        }
 
     override var focusable: Boolean
         get() = component.isFocusable
-        set(value) { component.isFocusable = value }
+        set(value) {
+            component.isFocusable = value
+        }
 
     override var enabled: Boolean
         get() = component.isEnabled
-        set(value) { component.isEnabled = value }
+        set(value) {
+            component.isEnabled = value
+        }
 
-    //var lastMouseEvent: java.awt.event.MouseEvent? = null
-
-    override fun onFocus(handler: (FocusEvent) -> Unit): Disposable {
-        val event = korlibs.event.FocusEvent()
-
+    override fun onFocus(handler: (FocusEvent) -> Unit): DisposableHandle {
+        val event: FocusEvent = korlibs.event.FocusEvent()
         fun dispatch(e: java.awt.event.FocusEvent, type: korlibs.event.FocusEvent.Type) {
             event.type = type
             handler(event)
         }
+
         val listener = object : FocusAdapter() {
             override fun focusGained(e: java.awt.event.FocusEvent) = dispatch(e, FocusEvent.Type.FOCUS)
             override fun focusLost(e: java.awt.event.FocusEvent) = dispatch(e, FocusEvent.Type.BLUR)
         }
         component.addFocusListener(listener)
-        return Disposable {
+        return DisposableHandle {
             component.removeFocusListener(listener)
         }
     }
 
     companion object {
-        val blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), java.awt.Point(0, 0), "blank cursor");
+        val blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), java.awt.Point(0, 0), "blank cursor")
     }
 
-    override fun onMouseEvent(handler: (korlibs.event.MouseEvent) -> Unit): Disposable {
+    override fun onMouseEvent(handler: (korlibs.event.MouseEvent) -> Unit): DisposableHandle {
         val event = korlibs.event.MouseEvent()
 
         var lockingX = 0
@@ -371,7 +369,7 @@ internal open class AwtComponent(override val factory: NativeUiFactory, override
 
         component.addMouseListener(listener)
         component.addMouseMotionListener(listener)
-        return Disposable {
+        return DisposableHandle {
             component.removeMouseMotionListener(listener)
             component.removeMouseListener(listener)
         }
@@ -379,14 +377,14 @@ internal open class AwtComponent(override val factory: NativeUiFactory, override
 
     open val componentPane get() = component
 
-    override fun onResize(handler: (ReshapeEvent) -> Unit): Disposable {
+    override fun onResize(handler: (ReshapeEvent) -> Unit): DisposableHandle {
         val listener = object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent) {
                 handler(ReshapeEvent(component.x, component.y, componentPane.width, componentPane.height))
             }
         }
         component.addComponentListener(listener)
-        return Disposable {
+        return DisposableHandle {
             component.removeComponentListener(listener)
         }
     }
@@ -420,8 +418,9 @@ internal open class AwtComponent(override val factory: NativeUiFactory, override
 internal open class AwtButton(factory: NativeUiFactory, val button: JButton = JButton()) : AwtComponent(factory, button), NativeUiFactory.NativeButton {
     override var text: String
         get() = button.text
-        set(value) { button.text = value }
-
+        set(value) {
+            button.text = value
+        }
     override var icon: Bitmap? = null
         set(value) {
             field = value
@@ -437,26 +436,29 @@ internal open class AwtCanvas(factory: NativeUiFactory, val label: JLabel = JLab
         }
 }
 
-internal open class AwtCheckBox(factory: NativeUiFactory, val checkBox: JCheckBox = JCheckBox()) : AwtComponent(factory, checkBox),
-    NativeUiFactory.NativeCheckBox {
+internal open class AwtCheckBox(factory: NativeUiFactory, val checkBox: JCheckBox = JCheckBox()) : AwtComponent(factory, checkBox), NativeUiFactory.NativeCheckBox {
     override var text: String
         get() = checkBox.text
-        set(value) { checkBox.text = value }
+        set(value) {
+            checkBox.text = value
+        }
     override var checked: Boolean
         get() = checkBox.isSelected
-        set(value) { checkBox.isSelected = value }
+        set(value) {
+            checkBox.isSelected = value
+        }
 
-    override fun onChange(block: () -> Unit): Disposable {
+    override fun onChange(block: () -> Unit): DisposableHandle {
         val listener = ChangeListener { block() }
         checkBox.addChangeListener(listener)
-        return Disposable {
+        return DisposableHandle {
             checkBox.removeChangeListener(listener)
         }
     }
 }
 
-internal open class AwtComboBox<T>(factory: NativeUiFactory, val comboBox: JComboBox<T> = JComboBox<T>()) : AwtComponent(factory, comboBox),
-    NativeUiFactory.NativeComboBox<T> {
+internal open class AwtComboBox<T>(factory: NativeUiFactory, val comboBox: JComboBox<T> = JComboBox<T>()) : AwtComponent(factory, comboBox), NativeUiFactory.NativeComboBox<T> {
+
     override var items: List<T>
         get() {
             val model = comboBox.model
@@ -468,74 +470,64 @@ internal open class AwtComboBox<T>(factory: NativeUiFactory, val comboBox: JComb
 
     override var selectedItem: T?
         get() = comboBox.selectedItem as T?
-        set(value) { comboBox.selectedItem = value }
+        set(value) {
+            comboBox.selectedItem = value
+        }
 
     override fun open() {
         comboBox.showPopup()
-        //println("ComboBox.open")
     }
 
     override fun close() {
         comboBox.hidePopup()
     }
 
-
-    override fun onChange(block: () -> Unit): Disposable {
+    override fun onChange(block: () -> Unit): DisposableHandle {
         val listener = ActionListener { block() }
         comboBox.addActionListener(listener)
-        return Disposable {
+        return DisposableHandle {
             comboBox.removeActionListener(listener)
         }
     }
+
 }
 
-internal open class AwtContainer(
-    factory: NativeUiFactory,
-    val container: Container = factory.createJPanel(),
-    val childContainer: Container = container
-) : AwtComponent(factory, container), NativeUiFactory.NativeContainer {
+internal open class AwtContainer(factory: NativeUiFactory, val container: Container = factory.createJPanel(), val childContainer: Container = container) : AwtComponent(factory, container), NativeUiFactory.NativeContainer {
+
     init {
-        //container.layout = null
         childContainer.layout = null
     }
 
     override var backgroundColor: RGBA?
         get() = container.background?.toRgba()
         set(value) {
-            //container.isOpaque
-            //container.isOpaque = value != null
             container.background = value?.toAwt()
         }
 
-    /*
-    override var bounds: RectangleInt
-        get() {
-            val b = childContainer.bounds
-            return RectangleInt(b.x, b.y, b.width, b.height)
-        }
-        set(value) {
-            container.bounds = Rectangle(value.x, value.y, value.width, value.height)
-        }
-    */
-
     override val numChildren: Int get() = childContainer.componentCount
+
     override fun getChildAt(index: Int): NativeUiFactory.NativeComponent = awtToWrappersMap[childContainer.getComponent(index)] ?: error("Can't find component")
+
     override fun insertChildAt(index: Int, child: NativeUiFactory.NativeComponent) {
         childContainer.add((child as AwtComponent).component, index)
     }
+
     override fun removeChild(child: NativeUiFactory.NativeComponent) {
         childContainer.remove((child as AwtComponent).component)
     }
+
     override fun removeChildAt(index: Int) {
         childContainer.remove(index)
     }
+
 }
 
 internal open class AwtLabel(factory: NativeUiFactory, val label: JLabel = JLabel()) : AwtComponent(factory, label), NativeUiFactory.NativeLabel {
     override var text: String
         get() = label.text
-        set(value) { label.text = value }
-
+        set(value) {
+            label.text = value
+        }
     override var icon: Bitmap? = null
         set(value) {
             field = value
@@ -543,11 +535,13 @@ internal open class AwtLabel(factory: NativeUiFactory, val label: JLabel = JLabe
         }
 }
 
-internal open class AwtTextField(factory: NativeUiFactory, val textField: JTextField = JTextField()) : AwtComponent(factory, textField),
-    NativeUiFactory.NativeTextField {
+internal open class AwtTextField(factory: NativeUiFactory, val textField: JTextField = JTextField()) : AwtComponent(factory, textField), NativeUiFactory.NativeTextField {
+
     override var text: String
         get() = textField.text
-        set(value) { textField.text = value }
+        set(value) {
+            textField.text = value
+        }
 
     override fun select(range: IntRange?) {
         if (range == null) {
@@ -556,10 +550,11 @@ internal open class AwtTextField(factory: NativeUiFactory, val textField: JTextF
             textField.select(range.first, range.last + 1)
         }
     }
-    override fun focus() = textField.requestFocus()
-    override fun onKeyEvent(block: (KeyEvent) -> Unit): Disposable {
-        val event = KeyEvent()
 
+    override fun focus() = textField.requestFocus()
+
+    override fun onKeyEvent(block: (KeyEvent) -> Unit): DisposableHandle {
+        val event = KeyEvent()
         fun dispatch(e: java.awt.event.KeyEvent, type: KeyEvent.Type) {
             event.type = type
             event.keyCode = e.keyCode
@@ -578,21 +573,18 @@ internal open class AwtTextField(factory: NativeUiFactory, val textField: JTextF
             override fun keyReleased(e: java.awt.event.KeyEvent) = dispatch(e, KeyEvent.Type.UP)
         }
         textField.addKeyListener(listener)
-        return Disposable { textField.removeKeyListener(listener) }
+        return DisposableHandle { textField.removeKeyListener(listener) }
     }
+
 }
 
-internal open class AwtScrollPanel(
-    factory: NativeUiFactory,
-    val view: JFixedSizeContainer = AwtContainer(factory, JFixedSizeContainer()).container as JFixedSizeContainer,
-    val scrollPanel: JScrollPane = factory.createJScrollPane()
-) : AwtContainer(factory, scrollPanel, view), NativeUiFactory.NativeScrollPanel {
+internal open class AwtScrollPanel(factory: NativeUiFactory, val view: JFixedSizeContainer = AwtContainer(factory, JFixedSizeContainer()).container as JFixedSizeContainer, val scrollPanel: JScrollPane = factory.createJScrollPane()) :
+    AwtContainer(factory, scrollPanel, view), NativeUiFactory.NativeScrollPanel {
+
     override var bounds: RectangleInt
         get() = super<AwtContainer>.bounds
         set(value) {
             super<AwtContainer>.bounds = value
-            //scrollPanel.setViewportView()
-            //view.setBounds(0, 0, value.width, value.height)
         }
 
     override var xbar: Boolean? = null
@@ -604,6 +596,7 @@ internal open class AwtScrollPanel(
                 false -> ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
             }
         }
+
     override var ybar: Boolean? = null
         set(value) {
             field = value
@@ -640,6 +633,7 @@ open class JFixedSizeContainer : JPanel() {
     init {
         this.layout = null
     }
+
     internal var cachedBounds: Dimension? = null
     override fun isPreferredSizeSet(): Boolean = true
     override fun preferredSize(): Dimension {

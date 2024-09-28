@@ -48,6 +48,7 @@ class ViewDebuggerChanged(val view: View?) : Event()
 fun TreePath.withTree(tree: JTree): TreePathWithTree = TreePathWithTree(this, tree)
 
 class TreePathWithTree(val path: TreePath, val tree: JTree) : AbstractList<TreePathWithTree>() {
+
     val model: TreeModel get() = tree.model
     val node: Any? get() = path.lastPathComponent
     val parent: TreePathWithTree? by lazy {
@@ -90,19 +91,15 @@ class TreePathWithTree(val path: TreePath, val tree: JTree) : AbstractList<TreeP
         select()
         scroll()
     }
+
 }
 
-internal class ViewsDebuggerComponent constructor(
-    val views: Views,
-    val app: UiApplication,
-    rootView: View? = views.stage,
-    val coroutineContext: CoroutineContext = views.coroutineContext,
-    val actions: ViewsDebuggerActions = ViewsDebuggerActions(views),
-    val displayTree: Boolean = true
-) : JPanel(GridLayout(if (displayTree) 2 else 1, 1)) {
+internal class ViewsDebuggerComponent(val views: Views, val app: UiApplication, rootView: View? = views.stage, val coroutineContext: CoroutineContext = views.coroutineContext, val actions: ViewsDebuggerActions = ViewsDebuggerActions(views), val displayTree: Boolean = true) : JPanel(GridLayout(if (displayTree) 2 else 1, 1)) {
+
     init {
         actions.component = this
     }
+
     val uiProperties = UiEditProperties(app, rootView, views)
     val uiPropertiesPanel = JPanel()
         .also {
@@ -180,12 +177,9 @@ internal class ViewsDebuggerComponent constructor(
                     tree.setSelectionRow(row)
                     val view = selectedView
                     val isContainer = view is Container
-
                     if (view != null) {
                         val popupMenu = createPopupMenu()
-
                         val subMenuAdd = JMenu("Add")
-
                         for (factory in getViewFactories(views)) {
                             subMenuAdd.add(createMenuItem(factory.name).also {
                                 it.isEnabled = isContainer
@@ -197,7 +191,6 @@ internal class ViewsDebuggerComponent constructor(
                             })
                         }
                         popupMenu.add(subMenuAdd)
-
                         popupMenu.add(createSeparator())
                         popupMenu.add(createMenuItem("Cut").also {
                             it.addActionListener {
@@ -272,18 +265,14 @@ internal class ViewsDebuggerComponent constructor(
     }
 
     fun update() {
-        //tree.model.tree
-        //tree.treeDidChange()
         tree.updateUI()
         uiProperties.update()
     }
 
-
-
-    private fun scrollPane(view: Component): JScrollPane =
-        JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)
+    private fun scrollPane(view: Component): JScrollPane = JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)
 
     private fun getViewFactories(views: Views): List<ViewFactory> = views.viewFactories.toList()
+
     /*
     ArrayList<ViewFactory>().also { list ->
 
@@ -307,4 +296,5 @@ internal class ViewsDebuggerComponent constructor(
         icon != null -> JMenuItem(text, icon)
         else -> JMenuItem(text)
     }
+
 }

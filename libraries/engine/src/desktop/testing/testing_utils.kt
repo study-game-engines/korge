@@ -5,7 +5,6 @@ import korlibs.image.color.Colors
 import korlibs.io.lang.Environment
 import korlibs.korge.Korge
 import korlibs.korge.KorgeHeadless
-import korlibs.korge.annotations.KorgeExperimental
 import korlibs.korge.input.onClickSuspend
 import korlibs.korge.ui.uiButton
 import korlibs.korge.ui.uiScrollable
@@ -15,12 +14,8 @@ import korlibs.math.geom.Size
 import kotlinx.coroutines.sync.Mutex
 import java.awt.HeadlessException
 
-inline fun korgeScreenshotTestV2(
-    korgeConfig: Korge,
-    settings: KorgeScreenshotValidationSettings = KorgeScreenshotValidationSettings(),
-    crossinline callback: suspend Stage.(korgeScreenshotTester: KorgeScreenshotTester) -> Unit = {},
-) {
-//    System.setProperty("java.awt.headless", "false")
+inline fun korgeScreenshotTestV2(korgeConfig: Korge, settings: KorgeScreenshotValidationSettings = KorgeScreenshotValidationSettings(), crossinline callback: suspend Stage.(korgeScreenshotTester: KorgeScreenshotTester) -> Unit = {}) {
+    // System.setProperty("java.awt.headless", "false")
     val throwable = Throwable()
     val testClassName = throwable.stackTrace[0].className
     val testMethodName = throwable.stackTrace[0].methodName
@@ -66,11 +61,7 @@ inline fun korgeScreenshotTestV2(
         println("Diffs found...")
         val interactive = Environment["INTERACTIVE_SCREENSHOT"] == "true"
         if (interactive) {
-            val config = Korge(
-                backgroundColor = Colors.LIGHTGRAY,
-                windowSize = Size(1280, 720),
-                virtualSize = Size(700, 480)
-            ) {
+            val config = Korge(backgroundColor = Colors.LIGHTGRAY, windowSize = Size(1280, 720), virtualSize = Size(700, 480)) {
                 views.gameWindow.exitProcessOnClose = false
 
                 uiScrollable(size = Size(700.0, 480.0)) { uiScrollable ->
@@ -80,7 +71,6 @@ inline fun korgeScreenshotTestV2(
                         val viewsToAlign = mutableListOf<View>()
                         container {
                             viewsToAlign += text("Test method name: ${results.testMethodName}")
-                            //                            val testResultSection = container {
                             viewsToAlign += text("Golden name: ${testResult.goldenName}")
                             viewsToAlign += container {
                                 val fn = { headerText: String, bitmap: Bitmap? ->
@@ -90,27 +80,16 @@ inline fun korgeScreenshotTestV2(
                                         } else {
                                             text("$headerText (${bitmap.size.width.toInt()} x ${bitmap.size.height.toInt()})")
                                         }
-
-                                        val rect =
-                                            solidRect(
-                                                320,
-                                                240,
-                                                color = Colors.BLACK.withAd(0.75)
-                                            ) {
-                                                alignTopToBottomOf(headerText)
-                                            }
+                                        val rect = solidRect(320, 240, color = Colors.BLACK.withAd(0.75)) {
+                                            alignTopToBottomOf(headerText)
+                                        }
                                         if (bitmap == null) {
                                             text("Deleted") {
                                                 centerOn(rect)
                                             }
                                         } else {
                                             image(bitmap).apply {
-                                                scaleWhileMaintainingAspect(
-                                                    ScalingOption.ByWidthAndHeight(
-                                                        310.0,
-                                                        230.0
-                                                    )
-                                                )
+                                                scaleWhileMaintainingAspect(ScalingOption.ByWidthAndHeight(310.0, 230.0))
                                                 centerOn(rect)
                                             }
                                         }
@@ -118,10 +97,9 @@ inline fun korgeScreenshotTestV2(
                                     }
                                 }
                                 val oldImage = fn("Old Image", testResult.oldBitmap)
-                                val newImage =
-                                    fn("New Image", testResult.newBitmap).apply {
-                                        alignLeftToRightOf(oldImage, padding = 5.0)
-                                    }
+                                val newImage = fn("New Image", testResult.newBitmap).apply {
+                                    alignLeftToRightOf(oldImage, padding = 5.0)
+                                }
                             }
 
                             val separator = "\n * "

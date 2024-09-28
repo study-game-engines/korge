@@ -11,10 +11,11 @@ import korlibs.render.*
 import korlibs.render.osx.*
 import korlibs.render.win32.*
 import korlibs.render.x11.*
+import kotlinx.coroutines.DisposableHandle
 import java.awt.*
 import java.lang.reflect.*
 
-interface BaseOpenglContext : Disposable {
+interface BaseOpenglContext : DisposableHandle {
     val isCore: Boolean get() = false
     val scaleFactor: Float get() = 1f
     data class ContextInfo(

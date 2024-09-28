@@ -8,11 +8,8 @@ import korlibs.korge.view.*
 import korlibs.time.*
 import kotlinx.coroutines.sync.*
 
-data class KorgeScreenshotValidationSettings(
-    val validators: List<KorgeScreenshotValidator> = listOf(
-        DefaultValidator
-    )
-) {
+data class KorgeScreenshotValidationSettings(val validators: List<KorgeScreenshotValidator> = listOf(DefaultValidator)) {
+
     fun validate(goldenName: String, oldBitmap: Bitmap, newBitmap: Bitmap?): List<KorgeScreenshotValidatorResult> {
         return validators.map {
             it.validate(goldenName, oldBitmap, newBitmap)
@@ -20,14 +17,11 @@ data class KorgeScreenshotValidationSettings(
     }
 }
 
-data class KorgeScreenshotTestingContext(
-    val testClassName: String,
-    val testMethodName: String,
-) {
+data class KorgeScreenshotTestingContext(val testClassName: String, val testMethodName: String) {
+
     val testGoldensVfs = localCurrentDirVfs["testGoldens/${testClassName}"]
     private val localTestTime = DateTime.nowLocal()
-    val tempGoldensVfs =
-        localCurrentDirVfs["build/tmp/testGoldens/${testClassName}/${
+    val tempGoldensVfs = localCurrentDirVfs["build/tmp/testGoldens/${testClassName}/${
             KorgeScreenshotTester.PATH_DATE_FORMAT.format(localTestTime)
         }"]
 
@@ -46,13 +40,8 @@ data class KorgeScreenshotTestingContext(
     suspend fun init() {
         testGoldensVfs.mkdirs()
         tempGoldensVfs.mkdirs()
-
         val prefix = "${testMethodName}_"
-
-        existingGoldenNames = testGoldensVfs.listNames().filter {
-            it.startsWith(prefix)
-        }.map { it.removeSurrounding(prefix, ".png") }.toSet()
-
+        existingGoldenNames = testGoldensVfs.listNames().filter { it.startsWith(prefix) }.map { it.removeSurrounding(prefix, ".png") }.toSet()
         println("Existing golden names")
         println(existingGoldenNames)
     }
@@ -64,17 +53,11 @@ data class KorgeScreenshotTestingContext(
         val DATE_FORMAT = DateFormat("yyyy-dd-MM HH:mm:ss z")
         private const val LINE_BREAK_WIDTH = 100
     }
+
 }
 
-class KorgeScreenshotTester(
-    val views: Views,
-    private val context: KorgeScreenshotTestingContext,
-    private val defaultValidationSettings: KorgeScreenshotValidationSettings,
-    // We will unlock this mutex after the test ends (via `endTest`).
-    // This is to ensure that dependents have a safe way on waiting on the tester to finish.
-    private val testingLock: Mutex,
-    private val testResultsOutput: KorgeScreenshotTestResults,
-) {
+class KorgeScreenshotTester(val views: Views, private val context: KorgeScreenshotTestingContext, private val defaultValidationSettings: KorgeScreenshotValidationSettings, private val testingLock: Mutex, private val testResultsOutput: KorgeScreenshotTestResults) {
+
     private val recordedGoldenNames = mutableMapOf<String, KorgeScreenshotValidationSettings>()
 
     init {
@@ -83,14 +66,7 @@ class KorgeScreenshotTester(
         }
     }
 
-    // name: The name of the golden. (e.g: "cool_view").
-    // Note: You do not need to add a file extension to the end.
-    suspend fun recordGolden(
-        view: View,
-        goldenName: String,
-        settingOverride: KorgeScreenshotValidationSettings = defaultValidationSettings,
-        includeBackground: Boolean = true
-    ) {
+    suspend fun recordGolden(view: View, goldenName: String, settingOverride: KorgeScreenshotValidationSettings = defaultValidationSettings, includeBackground: Boolean = true) {
         val bitmap = views.simulateRenderFrame(view, includeBackground = includeBackground)
         require(!recordedGoldenNames.contains(goldenName)) {
             """
@@ -99,8 +75,7 @@ class KorgeScreenshotTester(
             """.trimIndent()
         }
         recordedGoldenNames[goldenName] = settingOverride
-        val fileName =
-            context.makeGoldenFileNameWithExtension(goldenName)
+        val fileName = context.makeGoldenFileNameWithExtension(goldenName)
         context.tempGoldensVfs[fileName].writeBitmap(bitmap, PNG)
     }
 
@@ -108,23 +83,13 @@ class KorgeScreenshotTester(
         println("Processing golden results")
         recordedGoldenNames.forEach { (goldenName, validationSetting) ->
             println("Processing: $goldenName")
-            val goldenFileName =
-                context.makeGoldenFileNameWithExtension(
-                    goldenName
-                )
+            val goldenFileName = context.makeGoldenFileNameWithExtension(goldenName)
             val testGoldenImage = context.testGoldensVfs[goldenFileName]
             val existsGoldenInGoldenDirectory = testGoldenImage.exists()
             if (existsGoldenInGoldenDirectory) {
                 val oldBitmap = testGoldenImage.readBitmap(PNG)
                 val newBitmap = context.tempGoldensVfs[goldenFileName].readBitmap(PNG)
-                testResultsOutput.results.add(
-                    KorgeScreenshotTestResult(
-                        goldenName,
-                        oldBitmap,
-                        newBitmap,
-                        validationSetting.validate(goldenName, oldBitmap, newBitmap)
-                    )
-                )
+                testResultsOutput.results.add(KorgeScreenshotTestResult(goldenName, oldBitmap, newBitmap, validationSetting.validate(goldenName, oldBitmap, newBitmap)))
             } else {
                 // This is a new golden, so we can just save it.
                 context.tempGoldensVfs[goldenFileName].copyTo(testGoldenImage)
@@ -133,19 +98,9 @@ class KorgeScreenshotTester(
 
         // Process any deleted goldens.
         (context.existingGoldenNames - recordedGoldenNames.keys).forEach { goldenName ->
-            val goldenFileName =
-                context.makeGoldenFileNameWithExtension(
-                    goldenName
-                )
+            val goldenFileName = context.makeGoldenFileNameWithExtension(goldenName)
             val oldBitmap = context.testGoldensVfs[goldenFileName].readBitmap(PNG)
-            testResultsOutput.results.add(
-                KorgeScreenshotTestResult(
-                    goldenName,
-                    oldBitmap,
-                    null,
-                    listOf(DeletedGoldenValidator.validate(goldenName, oldBitmap, null))
-                )
-            )
+            testResultsOutput.results.add(KorgeScreenshotTestResult(goldenName, oldBitmap, null, listOf(DeletedGoldenValidator.validate(goldenName, oldBitmap, null))))
         }
     }
 

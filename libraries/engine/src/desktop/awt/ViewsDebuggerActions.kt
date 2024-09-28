@@ -5,6 +5,7 @@ import korlibs.io.serialization.xml.*
 import korlibs.korge.view.*
 
 internal open class ViewsDebuggerActions(val views: Views) {
+
     var componentOrNull: ViewsDebuggerComponent? = null
     var component: ViewsDebuggerComponent
         get() = componentOrNull!!
@@ -190,4 +191,5 @@ internal open class ViewsDebuggerActions(val views: Views) {
             duplicate()
         }
     }
+
 }

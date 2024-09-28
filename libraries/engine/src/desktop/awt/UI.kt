@@ -6,13 +6,11 @@ import korlibs.image.color.*
 import korlibs.io.file.*
 import korlibs.io.lang.*
 import korlibs.math.geom.*
-
-//fun NativeUiFactory.createApp() = UiApplication(this)
+import kotlinx.coroutines.DisposableHandle
 
 internal open class UiApplication constructor(val factory: NativeUiFactory) : Extra by Extra.Mixin() {
     fun wrapContainer(native: Any?): UiContainer = UiContainer(this, factory.wrapNativeContainer(native)).also { container ->
         container.onResize {
-            //println("wrapContainer.container.onResize: ${container.bounds}")
             container.relayout()
         }
     }
@@ -21,6 +19,7 @@ internal open class UiApplication constructor(val factory: NativeUiFactory) : Ex
 internal var NativeUiFactory.NativeComponent.uiComponent by Extra.PropertyThis<NativeUiFactory.NativeComponent, UiComponent?> { null }
 
 internal open class UiComponent(val app: UiApplication, val component: NativeUiFactory.NativeComponent) : Extra by Extra.Mixin(), LengthExtensions {
+
     val nativeComponent get() = component.component
     init {
         component.uiComponent = this
@@ -69,18 +68,18 @@ internal open class UiComponent(val app: UiApplication, val component: NativeUiF
     fun show() { visible = true }
     fun hide() { visible = false }
     fun onClick(block: (MouseEvent) -> Unit) = onMouseEvent { if (it.typeClick) block(it) }
-    fun onResize(handler: (ReshapeEvent) -> Unit): Disposable = component.onResize(handler)
-
+    fun onResize(handler: (ReshapeEvent) -> Unit): DisposableHandle = component.onResize(handler)
     fun repaintAll() = component.repaintAll()
     open fun updateUI() = component.updateUI()
+
 }
 
 internal open class UiContainer(app: UiApplication, val container: NativeUiFactory.NativeContainer = app.factory.createContainer()) : UiComponent(app, container) {
+
     private val _children = arrayListOf<UiComponent>()
     val numChildren: Int get() = _children.size
     val size: Int get() = numChildren
     var backgroundColor: RGBA? by container::backgroundColor
-
     var layout: UiLayout? = VerticalUiLayout
 
     open fun computePreferredSize(available: SizeInt): SizeInt {
@@ -207,7 +206,7 @@ internal open class UiTextField(app: UiApplication, val textField: NativeUiFacto
     var text by textField::text
     fun select(range: IntRange? = 0 until Int.MAX_VALUE): Unit = textField.select(range)
     fun focus(): Unit = textField.focus()
-    fun onKeyEvent(block: (KeyEvent) -> Unit): Disposable = textField.onKeyEvent(block)
+    fun onKeyEvent(block: (KeyEvent) -> Unit): DisposableHandle = textField.onKeyEvent(block)
 }
 
 internal interface UiLayout {

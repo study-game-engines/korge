@@ -10,6 +10,7 @@ import java.util.logging.Level
 import java.util.logging.LogRecord
 
 actual object Console : BaseConsole() {
+
     override fun logInternal(kind: Kind, vararg msg: Any?) {
         val stream = if (kind == Kind.ERROR) System.err else System.out
         stream.println(logToString(kind, *msg))
@@ -24,6 +25,7 @@ actual object Console : BaseConsole() {
         msg.joinTo(this, ", ")
         if (color != null) appendReset()
     }
+
 }
 
 actual object DefaultLogOutput : Logger.Output {

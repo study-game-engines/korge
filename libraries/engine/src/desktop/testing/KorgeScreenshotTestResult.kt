@@ -1,6 +1,6 @@
 package korlibs.korge.testing
 
-import korlibs.image.bitmap.*
+import korlibs.image.bitmap.Bitmap
 
 sealed class KorgeScreenshotValidatorResult {
     object Success : KorgeScreenshotValidatorResult()
@@ -8,31 +8,19 @@ sealed class KorgeScreenshotValidatorResult {
 }
 
 interface KorgeScreenshotValidator {
-    fun validate(
-        goldenName: String,
-        oldBitmap: Bitmap,
-        newBitmap: Bitmap?
-    ): KorgeScreenshotValidatorResult
+    fun validate(goldenName: String, oldBitmap: Bitmap, newBitmap: Bitmap?): KorgeScreenshotValidatorResult
 }
 
 object DeletedGoldenValidator : KorgeScreenshotValidator {
-    override fun validate(
-        goldenName: String,
-        oldBitmap: Bitmap,
-        newBitmap: Bitmap?
-    ): KorgeScreenshotValidatorResult {
+    override fun validate(goldenName: String, oldBitmap: Bitmap, newBitmap: Bitmap?): KorgeScreenshotValidatorResult {
         if (newBitmap == null) return KorgeScreenshotValidatorResult.Error("Deleted golden `$goldenName`.")
         return KorgeScreenshotValidatorResult.Success
     }
-
 }
 
 object DefaultValidator : KorgeScreenshotValidator {
-    override fun validate(
-        goldenName: String,
-        oldBitmap: Bitmap,
-        newBitmap: Bitmap?
-    ): KorgeScreenshotValidatorResult {
+
+    override fun validate(goldenName: String, oldBitmap: Bitmap, newBitmap: Bitmap?): KorgeScreenshotValidatorResult {
         if (newBitmap == null) return DeletedGoldenValidator.validate(goldenName, oldBitmap, newBitmap)
         if (contentEquals(oldBitmap, newBitmap)) {
             return KorgeScreenshotValidatorResult.Success
@@ -48,19 +36,14 @@ object DefaultValidator : KorgeScreenshotValidator {
         }
         return true
     }
+
 }
 
-class AbsolutePixelDifferenceValidator(private val pixelTolerance: Long) :
-    KorgeScreenshotValidator {
-    override fun validate(
-        goldenName: String,
-        oldBitmap: Bitmap,
-        newBitmap: Bitmap?
-    ): KorgeScreenshotValidatorResult {
+class AbsolutePixelDifferenceValidator(private val pixelTolerance: Long) : KorgeScreenshotValidator {
+
+    override fun validate(goldenName: String, oldBitmap: Bitmap, newBitmap: Bitmap?): KorgeScreenshotValidatorResult {
         // Passthrough for other validators
-        if (newBitmap == null ||
-            oldBitmap.width != newBitmap.width || oldBitmap.height != newBitmap.height
-        ) return KorgeScreenshotValidatorResult.Success
+        if (newBitmap == null || oldBitmap.width != newBitmap.width || oldBitmap.height != newBitmap.height) return KorgeScreenshotValidatorResult.Success
         val diff = getNumPixelDifference(oldBitmap, newBitmap)
         if (diff > pixelTolerance) {
             return KorgeScreenshotValidatorResult.Error("Difference in pixels greater than allowed tolerance ($pixelTolerance): $diff")
@@ -78,16 +61,7 @@ class AbsolutePixelDifferenceValidator(private val pixelTolerance: Long) :
     }
 }
 
-data class KorgeScreenshotTestResult(
-    val goldenName: String,
-    val oldBitmap: Bitmap,
-    val newBitmap: Bitmap?,
-    val validationResults: List<KorgeScreenshotValidatorResult>
-) {
-    val hasValidationErrors
-        get() = validationResults.any {
-            it is KorgeScreenshotValidatorResult.Error
-        }
-
-    val validationErrors get() = validationResults.filterIsInstance<KorgeScreenshotValidatorResult.Error>()
+data class KorgeScreenshotTestResult(val goldenName: String, val oldBitmap: Bitmap, val newBitmap: Bitmap?, val validationResults: List<KorgeScreenshotValidatorResult>) {
+    val hasValidationErrors: Boolean get() = validationResults.any { it is KorgeScreenshotValidatorResult.Error }
+    val validationErrors: List<KorgeScreenshotValidatorResult.Error> get() = validationResults.filterIsInstance<KorgeScreenshotValidatorResult.Error>()
 }

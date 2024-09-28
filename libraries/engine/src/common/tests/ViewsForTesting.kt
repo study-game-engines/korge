@@ -1,47 +1,53 @@
 package korlibs.korge.tests
 
-import korlibs.event.*
-import korlibs.graphics.*
-import korlibs.graphics.log.*
-import korlibs.inject.*
+import korlibs.event.Key
+import korlibs.event.KeyEvent
+import korlibs.event.MouseButton
+import korlibs.event.MouseEvent
+import korlibs.graphics.AG
+import korlibs.graphics.log.AGBaseLog
+import korlibs.graphics.log.AGDummy
+import korlibs.graphics.log.AGLog
+import korlibs.inject.Injector
 import korlibs.io.async.*
-import korlibs.io.lang.*
-import korlibs.korge.*
-import korlibs.korge.input.*
-import korlibs.korge.internal.*
-import korlibs.korge.render.*
-import korlibs.korge.scene.*
-import korlibs.korge.view.*
+import korlibs.io.lang.WChar
+import korlibs.io.lang.WString
+import korlibs.io.lang.forEachCodePoint
+import korlibs.korge.Korge
+import korlibs.korge.KorgeConfig
+import korlibs.korge.KorgeRunner
+import korlibs.korge.input.MouseEvents
+import korlibs.korge.input.mouse
+import korlibs.korge.internal.DefaultViewport
+import korlibs.korge.render.RenderContext
+import korlibs.korge.scene.Scene
+import korlibs.korge.scene.sceneContainer
+import korlibs.korge.view.GameWindowLog
+import korlibs.korge.view.Stage
+import korlibs.korge.view.View
+import korlibs.korge.view.ViewsLog
 import korlibs.math.geom.*
-import korlibs.platform.*
-import korlibs.render.*
+import korlibs.platform.Platform
+import korlibs.render.GameWindowCoroutineDispatcher
 import korlibs.time.*
-import kotlinx.coroutines.*
-import kotlin.jvm.*
-import kotlin.time.*
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.delay
+import kotlin.jvm.JvmName
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-expect fun enrichTestGameWindow(window: ViewsForTesting.TestGameWindow)
+open class ViewsForTesting(val frameTime: Duration = 10.milliseconds, val windowSize: Size = DefaultViewport.SIZE, val virtualSize: Size = windowSize, val defaultDevicePixelRatio: Double = 1.0, val log: Boolean = false) {
 
-open class ViewsForTesting(
-    val frameTime: Duration = 10.milliseconds,
-    val windowSize: Size = DefaultViewport.SIZE,
-    val virtualSize: Size = windowSize,
-    val defaultDevicePixelRatio: Double = 1.0,
-    val log: Boolean = false,
-) {
-	val startTime = DateTime(0.0)
-	var time = startTime
-	val elapsed get() = time - startTime
+    val startTime = DateTime(0.0)
+    var time = startTime
+    val elapsed get() = time - startTime
     var devicePixelRatio = defaultDevicePixelRatio
-
-	val timeProvider = object : TimeProvider {
+    val timeProvider: TimeProvider = object : TimeProvider {
         override fun now(): DateTime = time
     }
-	val dispatcher = GameWindowCoroutineDispatcher(
-        nowProvider = { time.unixMillisDouble.fastMilliseconds },
-        fast = true,
-    )
+    val dispatcher = GameWindowCoroutineDispatcher(nowProvider = { time.unixMillisDouble.fastMilliseconds }, fast = true)
+
     inner class TestGameWindow(initialSize: Size, val dispatcher: GameWindowCoroutineDispatcher) : GameWindowLog() {
         override var androidContextAny: Any? = null
         override val devicePixelRatio: Double get() = this@ViewsForTesting.devicePixelRatio
@@ -49,13 +55,12 @@ open class ViewsForTesting(
         override var height: Int = initialSize.height.toInt()
         override val coroutineDispatcher = dispatcher
     }
+
     open fun filterLogDraw(str: String, kind: AGBaseLog.Kind): Boolean {
         return kind != AGBaseLog.Kind.SHADER
     }
 
-	val gameWindow = TestGameWindow(windowSize, dispatcher).also {
-        enrichTestGameWindow(it)
-    }
+    val gameWindow: TestGameWindow = TestGameWindow(windowSize, dispatcher)
     val ag: AG by lazy {
         createAg().also {
             it.mainFrameBuffer.setSize(0, 0, windowSize.width.toInt(), windowSize.height.toInt())
@@ -73,21 +78,23 @@ open class ViewsForTesting(
         }
     }
 
-	val viewsLog by lazy { ViewsLog(gameWindow, ag = ag, gameWindow = gameWindow, timeProvider = timeProvider).also { viewsLog ->
-        viewsLog.views.virtualWidth = virtualSize.width.toInt()
-        viewsLog.views.virtualHeight = virtualSize.height.toInt()
-        viewsLog.views.resized(windowSize.width.toInt(), windowSize.height.toInt())
-    } }
+    val viewsLog by lazy {
+        ViewsLog(gameWindow, ag = ag, gameWindow = gameWindow, timeProvider = timeProvider).also { viewsLog ->
+            viewsLog.views.virtualWidth = virtualSize.width.toInt()
+            viewsLog.views.virtualHeight = virtualSize.height.toInt()
+            viewsLog.views.resized(windowSize.width.toInt(), windowSize.height.toInt())
+        }
+    }
 
-	val injector get() = viewsLog.injector
+    val injector get() = viewsLog.injector
     val logAgOrNull get() = ag as? AGLog?
     val logAg get() = logAgOrNull ?: error("Must call ViewsForTesting(log = true) to access logAg")
     val dummyAg get() = ag as? AGDummy?
-	val input get() = viewsLog.input
-	val views get() = viewsLog.views
+    val input get() = viewsLog.input
+    val views get() = viewsLog.views
     val stage get() = views.stage
-	val stats get() = views.stats
-	val mouse: MPoint get() = input.mousePos.mutable
+    val stats get() = views.stats
+    val mouse: MPoint get() = input.mousePos.mutable
 
     fun resizeGameWindow(width: Int, height: Int, scaleMode: ScaleMode = views.scaleMode, scaleAnchor: Anchor = views.scaleAnchor) {
         ag.mainFrameBuffer.setSize(0, 0, width, height)
@@ -130,13 +137,13 @@ open class ViewsForTesting(
 
     suspend fun mouseDown(button: MouseButton = MouseButton.LEFT) {
         mouseEvent(MouseEvent.Type.DOWN, button, false)
-		simulateFrame(count = 2)
-	}
+        simulateFrame(count = 2)
+    }
 
-	suspend fun mouseUp(button: MouseButton = MouseButton.LEFT) {
+    suspend fun mouseUp(button: MouseButton = MouseButton.LEFT) {
         mouseEvent(MouseEvent.Type.UP, button, false)
         simulateFrame(count = 2)
-	}
+    }
 
     suspend fun mouseClick(button: MouseButton = MouseButton.LEFT) {
         mouseDown(button)
@@ -167,6 +174,7 @@ open class ViewsForTesting(
     suspend fun keyType(chars: WString, shift: Boolean = simulatedShift, ctrl: Boolean = simulatedCtrl, alt: Boolean = simulatedAlt, meta: Boolean = simulatedMeta) {
         chars.forEachCodePoint { _, codePoint, _ -> keyType(WChar(codePoint), shift, ctrl, alt, meta) }
     }
+
     suspend fun keyType(chars: String, shift: Boolean = simulatedShift, ctrl: Boolean = simulatedCtrl, alt: Boolean = simulatedAlt, meta: Boolean = simulatedMeta) {
         chars.forEachCodePoint { _, codePoint, _ -> keyType(WChar(codePoint), shift, ctrl, alt, meta) }
     }
@@ -252,33 +260,35 @@ open class ViewsForTesting(
             )
         )
     }
-    val View.viewMouse: MouseEvents get() {
-        this.mouse.views = views
-        return this.mouse
+
+    val View.viewMouse: MouseEvents
+        get() {
+            this.mouse.views = views
+            return this.mouse
+        }
+
+    suspend fun View.simulateClick() {
+        viewMouse.click(viewMouse)
+        simulateFrame()
     }
 
-	suspend fun View.simulateClick() {
-        viewMouse.click(viewMouse)
-		simulateFrame()
-	}
-
-	suspend fun View.simulateOver() {
+    suspend fun View.simulateOver() {
         viewMouse.over(viewMouse)
-		simulateFrame()
-	}
+        simulateFrame()
+    }
 
-	suspend fun View.simulateOut() {
+    suspend fun View.simulateOut() {
         viewMouse.out(viewMouse)
-		simulateFrame()
-	}
+        simulateFrame()
+    }
 
-	suspend fun View.isVisibleToUser(): Boolean {
-		if (!this.visible) return false
-		if (this.alphaF <= 0.0) return false
-		val bounds = this.getGlobalBounds()
-		if (bounds.area <= 0.0) return false
-		val module = injector.get<KorgeConfig>()
-		val visibleBounds = Rectangle(Point.ZERO, module.windowSize)
+    suspend fun View.isVisibleToUser(): Boolean {
+        if (!this.visible) return false
+        if (this.alphaF <= 0.0) return false
+        val bounds = this.getGlobalBounds()
+        if (bounds.area <= 0.0) return false
+        val module = injector.get<KorgeConfig>()
+        val visibleBounds = Rectangle(Point.ZERO, module.windowSize)
         return bounds.intersects(visibleBounds)
     }
 
@@ -295,41 +305,43 @@ open class ViewsForTesting(
         //suspendTest(timeout = timeout, cond = { !OS.isAndroid && !OS.isJs && !OS.isNative }) {
         KorgeRunner.prepareViewsBase(views, gameWindow, fixedSizeStep = frameTime.fast, forceRenderEveryFrame = forceRenderEveryFrame)
 
-		injector.mapInstance<KorgeConfig>(KorgeConfig(
-			title = "KorgeViewsForTesting",
-            windowSize = this@ViewsForTesting.windowSize,
-			virtualSize = this@ViewsForTesting.virtualSize,
-        ))
+        injector.mapInstance<KorgeConfig>(
+            KorgeConfig(
+                title = "KorgeViewsForTesting",
+                windowSize = this@ViewsForTesting.windowSize,
+                virtualSize = this@ViewsForTesting.virtualSize,
+            )
+        )
 
-		var completed = false
-		var completedException: Throwable? = null
+        var completed = false
+        var completedException: Throwable? = null
 
-		this@ViewsForTesting.dispatcher.dispatch(coroutineContext, Runnable {
-			launchImmediately(views.coroutineContext + dispatcher) {
-				try {
+        this@ViewsForTesting.dispatcher.dispatch(coroutineContext, Runnable {
+            launchImmediately(views.coroutineContext + dispatcher) {
+                try {
                     block(views.stage)
-				} catch (e: Throwable) {
-					completedException = e
-				} finally {
-					completed = true
-				}
-			}
-		})
+                } catch (e: Throwable) {
+                    completedException = e
+                } finally {
+                    completed = true
+                }
+            }
+        })
 
         //println("[a0]")
-		withTimeoutNullable(timeout ?: Duration.NIL) {
+        withTimeoutNullable(timeout ?: Duration.NIL) {
             //println("[a1]")
-			while (!completed) {
+            while (!completed) {
                 //println("FRAME")
-				simulateFrame()
-				dispatcher.executePending(availableTime = 1.seconds)
-			}
+                simulateFrame()
+                dispatcher.executePending(availableTime = 1.seconds)
+            }
 
             //println("[a2]")
-			if (completedException != null) throw completedException!!
-		}
+            if (completedException != null) throw completedException!!
+        }
         //println("[a3]")
-	}
+    }
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified S : Scene> sceneTest(
@@ -339,25 +351,25 @@ open class ViewsForTesting(
         frameTime: Duration = this.frameTime,
         crossinline block: suspend S.() -> Unit
     ): AsyncEntryPointResult = viewsTest(timeout, frameTime) {
-            config?.apply {
-                injector.configInjector()
-            }
-
-            injector.configureInjector()
-
-            val container = sceneContainer(views)
-            container.changeTo(S::class)
-
-            with(container.currentScene as S) {
-                block()
-            }
+        config?.apply {
+            injector.configInjector()
         }
+
+        injector.configureInjector()
+
+        val container = sceneContainer(views)
+        container.changeTo(S::class)
+
+        with(container.currentScene as S) {
+            block()
+        }
+    }
 
 
     private var simulatedFrames = 0
     private var lastDelay = PerformanceCounter.reference
-	private suspend fun simulateFrame(count: Int = 1) {
-		repeat(count) {
+    private suspend fun simulateFrame(count: Int = 1) {
+        repeat(count) {
             //println("SIMULATE: $frameTime")
             time += frameTime
             gameWindow.dispatchRenderEvent()
@@ -368,8 +380,8 @@ open class ViewsForTesting(
                 lastDelay = now
                 delay(1)
             }
-		}
-	}
+        }
+    }
 
     suspend fun delayFrame() {
         simulateFrame()

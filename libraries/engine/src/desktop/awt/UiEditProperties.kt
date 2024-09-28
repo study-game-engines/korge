@@ -27,16 +27,15 @@ import kotlin.reflect.jvm.*
 internal var UiApplication.views by Extra.PropertyThis<UiApplication, Views?> { null }
 
 internal class UiEditProperties(app: UiApplication, view: View?, val views: Views) : UiContainer(app) {
+
     val propsContainer = scrollPanel(xbar = false)
     var currentView: View? = null
 
     fun setView(view: View?) {
         setViewBase(view)
-
         root?.updateUI()
         root?.relayout()
         root?.repaintAll()
-
         update()
     }
 
@@ -88,7 +87,6 @@ internal class UiEditProperties(app: UiApplication, view: View?, val views: View
         if (view != null) {
             createPropsForInstance(view, propsContainer)
         }
-        //view?.buildDebugComponent(views, this@UiEditProperties.propsContainer)
     }
 
     data class Two<T>(val x: T, val y: T) {
@@ -130,16 +128,7 @@ internal class UiEditProperties(app: UiApplication, view: View?, val views: View
         }
     }
 
-    private inline fun <reified T> createOne(
-        noinline get: (p: Double) -> T, noinline extract: (T) -> Double,
-        obs: ObservableProperty<*>,
-        viewProp: ViewProperty,
-        name: String = viewProp.name,
-        rangeMin: Double = viewProp.min,
-        rangeMax: Double = viewProp.max,
-        clampMin: Boolean = viewProp.clampMin,
-        clampMax: Boolean = viewProp.clampMax,
-    ): UiComponent? {
+    private inline fun <reified T> createOne(noinline get: (p: Double) -> T, noinline extract: (T) -> Double, obs: ObservableProperty<*>, viewProp: ViewProperty, name: String = viewProp.name, rangeMin: Double = viewProp.min, rangeMax: Double = viewProp.max, clampMin: Boolean = viewProp.clampMin, clampMax: Boolean = viewProp.clampMax): UiComponent? {
         val rr = obs as ObservableProperty<T>
         val robs = ObservableProperty(name, { rr.value = get(it) }, { extract(rr.value) })
         return UiNumberEditableValue(app, robs, rangeMin, rangeMax, clampMin, clampMax, 0)
@@ -175,7 +164,7 @@ internal class UiEditProperties(app: UiApplication, view: View?, val views: View
 
     fun createUiEditableValueFor(instance: Any, type: KType, viewProp: ViewProperty, prop: KProperty1<View, Any?>?, obs: ObservableProperty<*>? = null): UiComponent? {
         val name = prop?.name ?: "Unknown"
-        val obs: ObservableProperty<Any?> = (obs ?: ObservableProperty<Any?>(
+        val obs: ObservableProperty<Any?> = (obs ?: ObservableProperty(
             name,
             internalSet = { (prop as KMutableProperty1<Any, Any?>).set(instance, it) },
             internalGet = { (prop as KProperty1<Any, Any?>).get(instance) }
@@ -191,7 +180,7 @@ internal class UiEditProperties(app: UiApplication, view: View?, val views: View
                 internalGet = { WrappedValue(obs.value) }
             ) as ObservableProperty<Any?>
 
-            return UiListEditableValue<Any?>(
+            return UiListEditableValue(
                 app,
                 {
                     (singletonInstance.provider(instance).values.toList() + (if (type.isMarkedNullable) listOf(null) else emptyList()))
@@ -226,12 +215,10 @@ internal class UiEditProperties(app: UiApplication, view: View?, val views: View
             type.isSubtypeOf(IntRange::class.starProjectedType) -> {
                 @Suppress("UNCHECKED_CAST")
                 prop as KMutableProperty1<Any, IntRange>
-
                 val vv = listOf(
                     ObservableProperty("x", { prop.set(instance, it.toInt()..prop.get(instance).last) }, { prop.get(instance).first.toDouble() }),
                     ObservableProperty("y", { prop.set(instance, prop.get(instance).first..it.toInt()) }, { prop.get(instance).last.toDouble() }),
                 ).map { UiNumberEditableValue(app, it, viewProp.min, viewProp.max, viewProp.clampMin, viewProp.clampMax, 0) }
-
                 UiTwoItemEditableValue(app, vv[0], vv[1])
             }
             type.isSubtypeOf(RectCorners::class.starProjectedType) -> createQuad({ RectCorners(it.x, it.y, it.z, it.w) }, { Four(it.topLeft.toDouble(), it.topRight.toDouble(), it.bottomRight.toDouble(), it.bottomLeft.toDouble()) }, instance, prop, viewProp)
@@ -360,10 +347,8 @@ internal fun UiComponent.findObservableProperties(out: ArrayList<ObservablePrope
     return out
 }
 
-internal class UiBooleanEditableValue(
-    app: UiApplication,
-    prop: ObservableProperty<Boolean>,
-) : UiEditableValue<Boolean>(app, prop), ObservablePropertyHolder<Boolean> {
+internal class UiBooleanEditableValue(app: UiApplication, prop: ObservableProperty<Boolean>) : UiEditableValue<Boolean>(app, prop), ObservablePropertyHolder<Boolean> {
+
     val initial = prop.value
 
     init {
@@ -396,6 +381,7 @@ internal class UiBooleanEditableValue(
             setValue(contentCheckBox.checked)
         }
     }
+
 }
 
 internal fun UiContainer.uiCollapsibleSection(name: String?, block: UiContainer.() -> Unit): UiCollapsibleSection {
@@ -404,9 +390,7 @@ internal fun UiContainer.uiCollapsibleSection(name: String?, block: UiContainer.
 
 internal class UiCollapsibleSection(app: UiApplication, val name: String?, val componentChildren: List<UiComponent>) : UiContainer(app) {
     companion object {
-        operator fun invoke(app: UiApplication, name: String?, block: UiContainer.() -> Unit): UiCollapsibleSection =
-            UiCollapsibleSection(app, name, listOf()).also { block(it.mycontainer) }
-
+        operator fun invoke(app: UiApplication, name: String?, block: UiContainer.() -> Unit): UiCollapsibleSection = UiCollapsibleSection(app, name, listOf()).also { block(it.mycontainer) }
         private fun createIcon(angle: Angle): NativeImage {
             return NativeImage(ICON_SIZE, ICON_SIZE).context2d {
                 val s = ICON_SIZE.toDouble()
@@ -455,7 +439,6 @@ internal fun <T> Views.completedEditing(prop: ObservableProperty<T>) {
     completedEditing(Unit)
 }
 
-
 internal open class UiEditableValue<T>(app: UiApplication, override val prop: ObservableProperty<T>) : UiContainer(app), ObservablePropertyHolder<T> {
     fun completedEditing() {
         app.views?.completedEditing(prop)
@@ -469,11 +452,8 @@ internal open class UiEditableValue<T>(app: UiApplication, override val prop: Ob
     }
 }
 
-internal class UiListEditableValue<T>(
-    app: UiApplication,
-    val itemsFactory: () -> List<T>,
-    prop: ObservableProperty<T>
-) : UiEditableValue<T>(app, prop) {
+internal class UiListEditableValue<T>(app: UiApplication, val itemsFactory: () -> List<T>, prop: ObservableProperty<T>) : UiEditableValue<T>(app, prop) {
+
     init {
         layout = UiFillLayout
         visible = true
@@ -516,16 +496,13 @@ internal class UiListEditableValue<T>(
 
     init {
         setValue(prop.value)
-
         prop.onChange {
             items = itemsFactory()
             setValue(it, false)
         }
-
         contentText.onClick {
             showEditor()
         }
-
         contentComboBox.onChange {
             hideEditor()
         }
@@ -535,32 +512,24 @@ internal class UiListEditableValue<T>(
             } else {
                 contentComboBox.open()
             }
-            //println(e)
         }
         addChild(contentText)
         addChild(contentComboBox)
     }
+
 }
 
-internal class UiNumberEditableValue(
-    app: UiApplication,
-    prop: ObservableProperty<Double>,
-    var min: Double = -1.0,
-    var max: Double = +1.0,
-    var clampMin: Boolean = false,
-    var clampMax: Boolean = false,
-    var decimalPlaces: Int = 2
-) : UiEditableValue<Double>(app, prop), ObservablePropertyHolder<Double> {
+internal class UiNumberEditableValue(app: UiApplication, prop: ObservableProperty<Double>, var min: Double = -1.0, var max: Double = +1.0, var clampMin: Boolean = false, var clampMax: Boolean = false, var decimalPlaces: Int = 2) : UiEditableValue<Double>(app, prop), ObservablePropertyHolder<Double> {
+
     var evalContext: () -> Any? = { null }
     val initial = prop.value
+
     companion object {
-        //val MAX_WIDTH = 300
         val MAX_WIDTH = 1000
     }
 
     init {
         prop.onChange {
-            //println("prop.onChange: $it")
             if (current != it) {
                 setValue(it, setProperty = false)
             }
@@ -570,8 +539,7 @@ internal class UiNumberEditableValue(
     val contentText = UiLabel(app).also { it.text = "" }.also { it.visible = true }
     val contentTextField = UiTextField(app).also { it.text = contentText.text }.also { it.visible = false }
     var current: Double = Double.NaN
-
-    val isEditorVisible get() = !contentText.visible
+    val isEditorVisible: Boolean get() = !contentText.visible
 
     override fun hideEditor() {
         if (!isEditorVisible) return
@@ -594,7 +562,6 @@ internal class UiNumberEditableValue(
     }
 
     fun setValue(value: Double, setProperty: Boolean = true) {
-        //println("setValue")
         var rvalue = value
         if (clampMin) rvalue = rvalue.coerceAtLeast(min)
         if (clampMax) rvalue = rvalue.coerceAtMost(max)
@@ -613,7 +580,6 @@ internal class UiNumberEditableValue(
 
     init {
         layout = UiFillLayout
-        //layout = HorizontalUiLayout
         visible = true
         contentText.onClick {
             showEditor()
@@ -622,13 +588,11 @@ internal class UiNumberEditableValue(
             if (e.typeDown && e.key == Key.RETURN) {
                 hideEditor()
             }
-            //println(e)
         }
         contentTextField.onFocus { e ->
             if (e.typeBlur) {
                 hideEditor()
             }
-            //println(e)
         }
         var startX = 0
         var startY = 0
@@ -646,11 +610,9 @@ internal class UiNumberEditableValue(
             if (e.typeDrag) {
                 val dx = (e.x - startX).toDouble()
                 val dy = (e.y - startY).toDouble()
-                //println("typeDrag: dx=$dx")
                 val lenAbs = dx.absoluteValue.convertRange(0.0, MAX_WIDTH.toDouble(), 0.0, max - min)
                 val len = lenAbs.withSign(dx)
                 setValue(startValue + len)
-                //println("//")
             }
         }
         setValue(initial)
@@ -672,7 +634,6 @@ internal class UiRowEditableValue(app: UiApplication, val labelText: String, val
         leftPadding.preferredSize(8.pt, 24.pt)
         label.preferredSize(100.pt, 24.pt)
         editor.preferredSize(100.percent - 100.pt - (8.pt * 2) - 8.pt, 24.pt)
-        //backgroundColor = Colors.RED
         addChild(leftPadding)
         addChild(label)
         addChild(editor)
@@ -681,15 +642,11 @@ internal class UiRowEditableValue(app: UiApplication, val labelText: String, val
                 editor.hideEditor()
             }
         }
-        //addChild(UiLabel(app).also { it.text = "text" }.also { it.bounds = RectangleInt(120, 0, 120, 32) })
     }
 }
 
-internal class UiTextEditableValue(
-    app: UiApplication,
-    prop: ObservableProperty<String>,
-    val kind: Kind
-) : UiEditableValue<String>(app, prop), ObservablePropertyHolder<String> {
+internal class UiTextEditableValue(app: UiApplication, prop: ObservableProperty<String>, val kind: Kind) : UiEditableValue<String>(app, prop), ObservablePropertyHolder<String> {
+
     open class Kind {
         object STRING : Kind()
         object COLOR : Kind()
@@ -698,14 +655,13 @@ internal class UiTextEditableValue(
 
     var evalContext: () -> Any? = { null }
     val initial = prop.value
+
     companion object {
-        //val MAX_WIDTH = 300
         val MAX_WIDTH = 1000
     }
 
     init {
         prop.onChange {
-            //println("prop.onChange: $it")
             if (current != it) {
                 setValue(it, setProperty = false)
             }

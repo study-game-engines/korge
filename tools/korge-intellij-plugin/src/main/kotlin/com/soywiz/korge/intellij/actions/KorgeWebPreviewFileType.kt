@@ -518,9 +518,9 @@ val jacksonObjectMapper = jacksonObjectMapper().also {
 }
 
 // https://plugins.jetbrains.com/docs/intellij/jcef.html#jbcefjsquery
-inline fun <reified T : Any> CefBrowser.registerCallback(name: String, coroutineContext: CoroutineContext = EmptyCoroutineContext, noinline block: suspend (T) -> Any?): Disposable =
+inline fun <reified T : Any> CefBrowser.registerCallback(name: String, coroutineContext: CoroutineContext = EmptyCoroutineContext, noinline block: suspend (T) -> Any?): DisposableHandle =
     registerCallback(name, T::class, coroutineContext, block)
-fun <T : Any> CefBrowser.registerCallback(name: String, clazz: KClass<T>, coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend (T) -> Any?): Disposable {
+fun <T : Any> CefBrowser.registerCallback(name: String, clazz: KClass<T>, coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend (T) -> Any?): DisposableHandle {
     val cefBrowser = this
     val jbCefBrowser = JBCefBrowser.getJBCefBrowser(cefBrowser) ?: error("Can't get JBCefBrowser")
     val jsQuery = JBCefJSQuery.create(jbCefBrowser as JBCefBrowserBase)

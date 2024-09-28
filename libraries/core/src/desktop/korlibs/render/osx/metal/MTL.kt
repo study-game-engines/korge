@@ -9,6 +9,7 @@ import korlibs.render.osx.*
 import korlibs.render.osx.NSMutableDictionary
 import korlibs.render.osx.NSString
 import korlibs.render.platform.*
+import kotlinx.coroutines.DisposableHandle
 import javax.swing.*
 
 val isUsingMetalPipeline: Boolean by lazy {
@@ -36,7 +37,7 @@ inline class FourCharCode(val value: Int) {
 }
 
 // https://developer.apple.com/documentation/metal/metal_sample_code_library/mixing_metal_and_opengl_rendering_in_a_view
-class CoreVideoOpenGLMetalSharedTexture(val width: Int, val height: Int) : Disposable {
+class CoreVideoOpenGLMetalSharedTexture(val width: Int, val height: Int) : DisposableHandle {
     val cvBufferProperties = run {
         NSMutableDictionary().also {
             it["OpenGLCompatibility"] = true
