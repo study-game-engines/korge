@@ -1,33 +1,40 @@
 package korlibs.event.gamepad
 
 import korlibs.concurrent.thread.NativeThread
-import korlibs.datastructure.*
-import korlibs.datastructure.iterators.*
-import korlibs.event.*
-import korlibs.io.concurrent.*
-import korlibs.io.concurrent.atomic.*
-import korlibs.io.file.*
-import korlibs.io.file.sync.*
-import korlibs.io.lang.*
-import korlibs.korge.internal.*
-import korlibs.math.*
+import korlibs.datastructure.Extra
+import korlibs.datastructure.iterators.fastForEach
+import korlibs.event.GameButton
+import korlibs.event.GamepadInfo
+import korlibs.event.GamepadInfoEmitter
+import korlibs.io.concurrent.close
+import korlibs.io.concurrent.createSingleThreadedDispatcher
+import korlibs.io.file.PathInfo
+import korlibs.io.file.baseName
+import korlibs.io.file.sync.SyncIO
+import korlibs.io.file.sync.SyncIOAPI
+import korlibs.math.clamp
+import korlibs.math.convertRange
+import korlibs.math.toInt
 import korlibs.memory.*
-import korlibs.platform.*
-import korlibs.time.*
-import kotlinx.atomicfu.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.*
-import kotlin.time.*
+import korlibs.platform.Endian
+import korlibs.time.DateTime
+import korlibs.time.fastMilliseconds
+import korlibs.time.seconds
+import kotlinx.atomicfu.atomic
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.time.Duration
 
-/**
- * <https://www.kernel.org/doc/Documentation/input/gamepad.txt>
- */
-@KorgeInternal
+// <https://www.kernel.org/doc/Documentation/input/gamepad.txt>
 class LinuxJoyEventAdapter @OptIn(SyncIOAPI::class) constructor(val syncIO: SyncIO = SyncIO) : AutoCloseable {
+
     companion object {
-        const val JS_EVENT_BUTTON = 0x01    /* button pressed/released */
-        const val JS_EVENT_AXIS = 0x02    /* joystick moved */
-        const val JS_EVENT_INIT = 0x80    /* initial state of device */
+        const val JS_EVENT_BUTTON: Int = 0x01  // button pressed/released
+        const val JS_EVENT_AXIS: Int = 0x02    // joystick moved
+        const val JS_EVENT_INIT: Int = 0x80    // initial state of device
     }
 
     data class DeviceInfo(val namedDevice: String, val finalDevice: String) : Extra by Extra.Mixin() {
@@ -95,7 +102,6 @@ class LinuxJoyEventAdapter @OptIn(SyncIOAPI::class) constructor(val syncIO: Sync
         readers.clear()
     }
 
-    @KorgeInternal
     class X11JoystickReader(val info: DeviceInfo, val platformSyncIO: SyncIO) : AutoCloseable {
         val index: Int = info.id
 
@@ -120,14 +126,15 @@ class LinuxJoyEventAdapter @OptIn(SyncIOAPI::class) constructor(val syncIO: Sync
         //} }
 
         private var _dispatcher: CoroutineDispatcher? = null
-        val dispatcher: CoroutineDispatcher get() {
-            if (_dispatcher == null) {
-                _dispatcher = Dispatchers.createSingleThreadedDispatcher("index").also {
-                    it.dispatch(EmptyCoroutineContext, Runnable { threadMain() })
+        val dispatcher: CoroutineDispatcher
+            get() {
+                if (_dispatcher == null) {
+                    _dispatcher = Dispatchers.createSingleThreadedDispatcher("index").also {
+                        it.dispatch(EmptyCoroutineContext, Runnable { threadMain() })
+                    }
                 }
+                return _dispatcher!!
             }
-            return _dispatcher!!
-        }
 
         fun threadMain() {
             val packet = ByteArray(8)

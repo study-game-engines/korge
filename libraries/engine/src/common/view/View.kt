@@ -80,14 +80,11 @@ abstract class View internal constructor(
     //    }
     //}
 
-    @KorgeInternal
-    open val anchorDispX: Float get() = 0f
-    @KorgeInternal
-    open val anchorDispY: Float get() = 0f
+        open val anchorDispX: Float get() = 0f
+        open val anchorDispY: Float get() = 0f
 
     /** Read-only internal children list, or null when not a [Container] */
-    @KorgeInternal
-    @PublishedApi
+        @PublishedApi
     internal open val _children: List<View>? get() = null
 
     /** Iterates all the children of this container in normal order of rendering. */
@@ -572,8 +569,7 @@ abstract class View internal constructor(
     /**
      * Like [setTransform] but without invalidation. If used at all, should be used with care and invalidate when required.
      */
-    @KorgeInternal
-    @Deprecated("")
+        @Deprecated("")
     fun _setTransform(t: MatrixTransform) {
         //transform.toMatrix(_localMatrix)
         _x = t.x; _y = t.y
@@ -1033,8 +1029,7 @@ abstract class View internal constructor(
         return if (this is Stage) this else null
     }
 
-    @KorgeInternal
-    fun getClippingAreaInternal(): Rectangle {
+        fun getClippingAreaInternal(): Rectangle {
         var out = Rectangle.INFINITE
         var count = 0
         forEachAscendant(true) {

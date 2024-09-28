@@ -63,10 +63,8 @@ class RenderContext(
     var projectionMatrixTransform = Matrix()
     var projectionMatrixTransformInv = Matrix()
     private var projMat: Matrix4 = Matrix4()
-    @KorgeInternal
-    var viewMat: Matrix4 = Matrix4()
-    @KorgeInternal
-    var viewMat2D: Matrix = Matrix()
+        var viewMat: Matrix4 = Matrix4()
+        var viewMat2D: Matrix = Matrix()
 
     var flipRenderTexture = true
     //var flipRenderTexture = false
@@ -171,8 +169,7 @@ class RenderContext(
 
     /** Allows to draw quads, sprites and nine patches using a precomputed global matrix or raw vertices */
     @Deprecated("Use useBatcher instead")
-    @KorgeInternal
-    val batch = BatchBuilder2D(this, batchMaxQuads)
+        val batch = BatchBuilder2D(this, batchMaxQuads)
 
     val dynamicVertexBufferPool = Pool { AGBuffer() }
 
@@ -180,8 +177,7 @@ class RenderContext(
     inline fun useBatcher(block: (BatchBuilder2D) -> Unit) = batch.use(block)
 
     /** [RenderContext2D] similar to the one from JS, that keeps a matrix (affine transformation) and allows to draw shapes using the current matrix */
-    @KorgeInternal
-    @Deprecated("Use useCtx2d instead")
+        @Deprecated("Use useCtx2d instead")
     val ctx2d = RenderContext2D(batch, agBitmapTextureManager)
 
     @Suppress("DEPRECATION")
@@ -311,13 +307,11 @@ class RenderContext(
      */
     fun refGcCloseable(closeable: AutoCloseable) = agAutoFreeManager.reference(closeable)
 
-    @KorgeInternal
-    fun beforeRender() {
+        fun beforeRender() {
         batch.beforeRender()
     }
 
-    @KorgeInternal
-    fun afterRender() {
+        fun afterRender() {
         flush()
         finish()
         batch.afterRender()

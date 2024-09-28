@@ -183,7 +183,6 @@ internal fun _interpolateScale(ratio: Ratio, l: Scale, r: Scale): Scale = ratio.
 internal fun _interpolateFloat(ratio: Ratio, l: Float, r: Float): Float = ratio.interpolate(l, r)
 @PublishedApi
 internal fun _interpolateColor(ratio: Ratio, l: RGBA, r: RGBA): RGBA = RGBA.mixRgba(l, r, ratio)
-@KorgeInternal
 fun _interpolateAngle(ratio: Ratio, l: Angle, r: Angle): Angle = ratio.interpolateAngleNormalized(l, r)
 @PublishedApi
 internal fun _interpolateAngleDenormalized(ratio: Ratio, l: Angle, r: Angle): Angle = ratio.interpolateAngleDenormalized(l, r)

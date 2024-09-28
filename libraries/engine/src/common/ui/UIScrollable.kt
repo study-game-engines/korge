@@ -76,15 +76,13 @@ open class UIScrollable(size: Size, cache: Boolean = true) : UIView(size, cache 
                 }
             }
 
-        @KorgeInternal
-        fun scrollBarPositionToScrollTopLeft(pos: Double): Double {
+                fun scrollBarPositionToScrollTopLeft(pos: Double): Double {
             val d = size - scaledSize
             if (d == 0.0) return 0.0
             return (pos / d) * scrollArea
         }
 
-        @KorgeInternal
-        fun scrollTopLeftToScrollBarPosition(pos: Double): Double {
+                fun scrollTopLeftToScrollBarPosition(pos: Double): Double {
             val d = scrollArea
             if (d == 0.0) return 0.0
             return (pos / d) * (size - scaledSize)

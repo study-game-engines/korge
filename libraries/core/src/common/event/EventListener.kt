@@ -9,6 +9,7 @@ import korlibs.io.lang.*
  * Supports registering for [Event] of [EventType] and dispatching events.
  */
 interface EventListener {
+
     /**
      * Registers a [handler] block to be executed when an event of [type] is [dispatch]ed
      */
@@ -20,7 +21,6 @@ interface EventListener {
         etypes.fastForEach { closeable += onEvent(it, handler) }
         return closeable
     }
-    //fun clearEventListeners()
 
     /**
      * Dispatched a [event] of [type] that will execute all the handlers registered with [onEvents]
@@ -30,7 +30,6 @@ interface EventListener {
     fun <T : BEvent> dispatch(type: EventType<T>, event: T, result: EventResult? = null): Boolean = dispatch(type, event, result, up = true, down = true)
     fun <T : BEvent> dispatchDown(type: EventType<T>, event: T, result: EventResult? = null): Boolean = dispatch(type, event, result, up = false, down = true)
     fun <T : BEvent> dispatchUp(type: EventType<T>, event: T, result: EventResult? = null): Boolean = dispatch(type, event, result, up = true, down = false)
-
     fun <T : BEvent> dispatch(event: T): Boolean = dispatch(event.fastCastTo<TEvent<T>>().type, event)
 
     fun <T : BEvent> dispatchWithResult(event: T, out: EventResult = EventResult()): EventResult {
@@ -42,11 +41,7 @@ interface EventListener {
 fun <T : BEvent> EventListener.dispatchUp(event: T): Boolean = dispatchUp(event.fastCastTo<TEvent<T>>().type, event)
 fun <T : BEvent> EventListener.dispatchDown(event: T): Boolean = dispatchDown(event.fastCastTo<TEvent<T>>().type, event)
 
-
-data class EventResult(
-    var iterationCount: Int = 0,
-    var resultCount: Int = 0,
-) {
+data class EventResult(var iterationCount: Int = 0, var resultCount: Int = 0) {
     fun reset() {
         iterationCount = 0
         resultCount = 0
@@ -59,6 +54,7 @@ interface EventListenerChildren : EventListener {
 }
 
 class EventListenerFastMap<K, V> {
+
     val keys: FastArrayList<K> = FastArrayList()
     val values: FastArrayList<V?> = FastArrayList()
     val counts: IntArrayList = IntArrayList()
@@ -181,13 +177,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
         return __eventListeners?.get(type) as? ListenerNode<T>
     }
 
-    override fun <T : BEvent> dispatch(
-        type: EventType<T>,
-        event: T,
-        result: EventResult?,
-        up: Boolean,
-        down: Boolean
-    ): Boolean {
+    override fun <T : BEvent> dispatch(type: EventType<T>, event: T, result: EventResult?, up: Boolean, down: Boolean): Boolean {
         //event._preventDefault = false
         val eventListenerCount = onEventCount(type)
         if (eventListenerCount <= 0) return false
@@ -205,7 +195,7 @@ open class BaseEventListener : EventListenerChildren, Extra {
         result?.let { it.iterationCount++ }
         return event.defaultPrevented
     }
-    // , result: EventResult?
+
     final override fun <T : BEvent> dispatch(type: EventType<T>, event: T, result: EventResult?): Boolean = super.dispatch(type, event, result)
     final override fun <T : BEvent> dispatch(event: T): Boolean = super.dispatch(event)
     final override fun <T : BEvent> dispatchWithResult(event: T, out: EventResult): EventResult = super.dispatchWithResult(event, out)

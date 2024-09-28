@@ -49,13 +49,11 @@ class RenderContext2D(
 
     inline fun getTexture(slice: BmpSlice): TextureCoords = agBitmapTextureManager.getTexture(slice)
 
-    @KorgeInternal
-	val mpool = Pool<MMatrix> { MMatrix() }
+    	val mpool = Pool<MMatrix> { MMatrix() }
 
     init { logger.trace { "RenderContext2D[1]" } }
 
-    @KorgeInternal
-	var m = Matrix.IDENTITY
+    	var m = Matrix.IDENTITY
 
     /** Blending mode to be used in the renders */
 	var blendMode = BlendMode.NORMAL

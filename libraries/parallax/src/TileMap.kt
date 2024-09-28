@@ -63,18 +63,17 @@ abstract class BaseTileMap(
     var repeatX = TileMapRepeat.NONE
     var repeatY = TileMapRepeat.NONE
 
-    private val t0 = MPoint(0, 0)
-    private val tt0 = MPoint(0, 0)
-    private val tt1 = MPoint(0, 0)
-    private val tt2 = MPoint(0, 0)
-    private val tt3 = MPoint(0, 0)
+    private val t0 = Point(0, 0)
+    private val tt0 = Point(0, 0)
+    private val tt1 = Point(0, 0)
+    private val tt2 = Point(0, 0)
+    private val tt3 = Point(0, 0)
 
     protected var contentVersion = 0
     private var cachedContentVersion = 0
 
     // @TODO: Use a TextureVertexBuffer or something
-    @KorgeInternal
-    private class Info(var tex: Bitmap, var vertices: TexturedVertexArray) {
+        private class Info(var tex: Bitmap, var vertices: TexturedVertexArray) {
         var vcount = 0
         var icount = 0
     }

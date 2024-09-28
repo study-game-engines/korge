@@ -290,20 +290,15 @@ class MouseEvents(val view: View) : Extra by Extra.Mixin(), AutoCloseable {
     var downPosTime = PerformanceCounter.reference
 
     // Global variants (Not related to the STAGE! but to the window coordinates, so can't be translated directly use *Stage variants instead or directly Stage.mouseXY!)
-    @KorgeInternal
-    var downPosGlobal = Point()
+        var downPosGlobal = Point()
 
-    @KorgeInternal
-    var upPosGlobal = Point()
+        var upPosGlobal = Point()
 
-    @KorgeInternal
-    var startedPosGlobal = Point()
+        var startedPosGlobal = Point()
 
-    @KorgeInternal
-    var lastPosGlobal = Point()
+        var lastPosGlobal = Point()
 
-    @KorgeInternal
-    var currentPosGlobal = Point()
+        var currentPosGlobal = Point()
 
     // Local variants
     val startedPosLocal: Point get() = view.globalToLocal(startedPosGlobal)

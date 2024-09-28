@@ -276,7 +276,7 @@ class PolygonScanline : RastScale() {
         return ss.contains(x)
     }
 
-    fun getAllLines(): List<MLine> = allEdges.map { MLine(it.ax.d, it.ay.d, it.bx.d, it.by.d) }
+    fun getAllLines(): List<Line> = allEdges.map { Line(it.ax.d, it.ay.d, it.bx.d, it.by.d) }
 
     fun getLineIntersection(x0: Int, y0: Int, x1: Int, y1: Int, out: LineIntersection = LineIntersection()): LineIntersection? {
         // @TODO: Optimize not iterating over all the edges, but only the ones between y0 and y1
@@ -387,7 +387,7 @@ class MEdge {
         }
 
         fun getIntersectXY(Ax: Double, Ay: Double, Bx: Double, By: Double, Cx: Double, Cy: Double, Dx: Double, Dy: Double): Point? {
-            return MLine.getIntersectXY(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy)
+            return Line.getIntersectXY(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy)
         }
     }
 

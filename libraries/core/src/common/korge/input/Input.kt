@@ -35,8 +35,7 @@ class Input : Extra by Extra.Mixin() {
 
     val numActiveTouches get() = activeTouches.size
 
-    @KorgeInternal
-    internal var _isTouchDeviceGen = { AGOpenglFactory.isTouchDevice }
+        internal var _isTouchDeviceGen = { AGOpenglFactory.isTouchDevice }
 
     val isTouchDevice: Boolean get() = _isTouchDeviceGen()
 
@@ -44,8 +43,7 @@ class Input : Extra by Extra.Mixin() {
     //fun getTouch(id: Int) = touches.firstOrNull { it.id == id } ?: touches.first { !it.active } ?: dummyTouch
     fun getTouch(id: Int) = touches.firstOrNull { it.id == id } ?: dummyTouch
 
-    @KorgeInternal
-    fun updateTouches(touchEvent: TouchEvent) {
+        fun updateTouches(touchEvent: TouchEvent) {
         touch.copyFrom(touchEvent)
     }
 
@@ -78,33 +76,25 @@ class Input : Extra by Extra.Mixin() {
     var mouseInside = true
     var clicked = false
 
-    @KorgeInternal
-    fun toggleButton(button: MouseButton, down: Boolean) {
+        fun toggleButton(button: MouseButton, down: Boolean) {
         mouseButtons = mouseButtons.setBits(button.bits, down)
     }
 
     val keys = InputKeys()
 
-    @KorgeInternal
-    val keysRaw = BooleanArray(KEYCODES)
+        val keysRaw = BooleanArray(KEYCODES)
 
-    @KorgeInternal
-    val keysRawPrev = BooleanArray(KEYCODES)
+        val keysRawPrev = BooleanArray(KEYCODES)
 
-    @KorgeInternal
-    val keysPressingTime = DoubleArray(KEYCODES)
+        val keysPressingTime = DoubleArray(KEYCODES)
 
-    @KorgeInternal
-    val keysLastTimeTriggered = DoubleArray(KEYCODES)
+        val keysLastTimeTriggered = DoubleArray(KEYCODES)
 
-    @KorgeInternal
-    val keysPressing = BooleanArray(KEYCODES)
+        val keysPressing = BooleanArray(KEYCODES)
 
-    @KorgeInternal
-    val keysJustPressed = BooleanArray(KEYCODES)
+        val keysJustPressed = BooleanArray(KEYCODES)
 
-    @KorgeInternal
-    val keysJustReleased = BooleanArray(KEYCODES)
+        val keysJustReleased = BooleanArray(KEYCODES)
 
     val gamepads = (0 until 8).map { GamepadInfo(it) }.toTypedArray()
     val connectedGamepads = arrayListOf<GamepadInfo>()
@@ -116,20 +106,17 @@ class Input : Extra by Extra.Mixin() {
         }
     }
 
-    @KorgeInternal
-    fun setKey(keyCode: Int, b: Boolean) {
+        fun setKey(keyCode: Int, b: Boolean) {
         val pKeyCode = keyCode and 0xFF
         if (pKeyCode in keysRaw.indices) keysRaw[pKeyCode] = b
     }
 
-    @KorgeInternal
-    fun startFrame(delta: FastDuration) {
+        fun startFrame(delta: FastDuration) {
         this.extra?.clear()
         keys.startFrame(delta)
     }
 
-    @KorgeInternal
-    fun endFrame(delta: FastDuration) {
+        fun endFrame(delta: FastDuration) {
         this.clicked = false
         keys.endFrame(delta)
         endFrameOldKeys(delta)
@@ -171,8 +158,7 @@ class Input : Extra by Extra.Mixin() {
         arraycopy(keysRaw, 0, keysRawPrev, 0, KEYCODES)
     }
 
-    @KorgeInternal
-    fun triggerOldKeyEvent(e: KeyEvent) {
+        fun triggerOldKeyEvent(e: KeyEvent) {
         when (e.type) {
             KeyEvent.Type.DOWN -> {
                 setKey(e.keyCode, true)
@@ -212,8 +198,7 @@ class InputKeys {
         this.meta = meta || this[Key.META]
     }
 
-    @KorgeInternal
-    fun triggerKeyEvent(e: KeyEvent) {
+        fun triggerKeyEvent(e: KeyEvent) {
         when (e.type) {
             KeyEvent.Type.UP,  KeyEvent.Type.DOWN -> {
                 triggerKeyEvent(e.key, e.type == KeyEvent.Type.UP, shift, ctrl, alt, meta)

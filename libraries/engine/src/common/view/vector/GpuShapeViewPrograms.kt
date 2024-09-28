@@ -9,7 +9,6 @@ import korlibs.korge.internal.*
 import korlibs.math.geom.*
 import kotlin.math.*
 
-@KorgeInternal
 object GpuShapeViewPrograms {
     object ShapeViewUB : UniformBlock(fixedLocation = 5) {
         val u_ProgramType by float()

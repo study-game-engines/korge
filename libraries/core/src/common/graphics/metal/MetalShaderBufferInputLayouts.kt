@@ -7,7 +7,6 @@ import korlibs.graphics.shader.VertexLayout
 import korlibs.korge.internal.*
 import korlibs.logger.Logger
 
-@KorgeInternal
 fun lazyMetalShaderBufferInputLayouts(
     vertexLayouts: List<VertexLayout>,
     uniforms: List<Uniform>
@@ -19,7 +18,6 @@ fun lazyMetalShaderBufferInputLayouts(
     )
 }
 
-@KorgeInternal
 class MetalShaderBufferInputLayouts(
     vertexLayouts: List<VertexLayout>,
     private val inputBuffers: List<List<VariableWithOffset>>

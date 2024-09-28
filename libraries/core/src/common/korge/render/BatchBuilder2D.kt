@@ -43,10 +43,8 @@ class BatchBuilder2D(
 ) {
     val maxTextures = BB_MAX_TEXTURES
 
-    @KorgeInternal
-    val viewMat: Matrix4 get() = ctx.viewMat
-    @KorgeInternal
-    val viewMat2D: Matrix get() = ctx.viewMat2D
+        val viewMat: Matrix4 get() = ctx.viewMat
+        val viewMat2D: Matrix get() = ctx.viewMat2D
 
     inline fun use(block: (BatchBuilder2D) -> Unit) = ctx.useBatcher(this, block)
 
@@ -563,17 +561,13 @@ class BatchBuilder2D(
 
         init { logger.trace { "BatchBuilder2D.Companion[0]" } }
 
-        @KorgeInternal
-		val a_ColMul: Attribute get() = DefaultShaders.a_Col
-        @KorgeInternal
-		val a_ColAdd: Attribute = Attribute("a_Col2", VarType.UByte4, normalized = true, fixedLocation = 3)
+        		val a_ColMul: Attribute get() = DefaultShaders.a_Col
+        		val a_ColAdd: Attribute = Attribute("a_Col2", VarType.UByte4, normalized = true, fixedLocation = 3)
 
 		init { logger.trace { "BatchBuilder2D.Companion[1]" } }
 
-        @KorgeInternal
-		val v_ColMul: Varying get() = DefaultShaders.v_Col
-        @KorgeInternal
-		val v_ColAdd: Varying = Varying("v_Col2", VarType.Float4)
+        		val v_ColMul: Varying get() = DefaultShaders.v_Col
+        		val v_ColAdd: Varying = Varying("v_Col2", VarType.Float4)
 
         val a_TexIndex: Attribute = Attribute("a_TexIndex", VarType.UByte1, normalized = false, precision = Precision.LOW, fixedLocation = 4)
 
@@ -587,15 +581,12 @@ class BatchBuilder2D(
 
 		init { logger.trace { "BatchBuilder2D.Companion[2]" } }
 
-        @KorgeInternal
-		val LAYOUT = VertexLayout(DefaultShaders.a_Pos, DefaultShaders.a_Tex, a_ColMul, a_ColAdd)
-        @KorgeInternal
-        val LAYOUT_TEX_INDEX = VertexLayout(a_TexIndex)
+        		val LAYOUT = VertexLayout(DefaultShaders.a_Pos, DefaultShaders.a_Tex, a_ColMul, a_ColAdd)
+                val LAYOUT_TEX_INDEX = VertexLayout(a_TexIndex)
 
 		init { logger.trace { "BatchBuilder2D.Companion[3]" } }
 
-        @KorgeInternal
-		val PROGRAM: Program = Program(
+        		val PROGRAM: Program = Program(
             vertex = VertexShaderDefault {
                 SET(v_Tex, a_Tex)
                 SET(v_TexIndex, a_TexIndex)
@@ -777,7 +768,6 @@ class BatchBuilder2D(
     }
 }
 
-@KorgeInternal
 val BB_MAX_TEXTURES = when {
     Platform.isLinux && Platform.arch.isArm && Platform.arch.is32Bits -> 1
     //"iosArm32" -> 1

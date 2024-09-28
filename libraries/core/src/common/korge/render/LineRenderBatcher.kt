@@ -153,8 +153,7 @@ class LineRenderBatcher(
     }
 
     /** Actually flushes all the pending lines. Shouldn't be called manually. You should call the [draw] method instead. */
-    @KorgeInternal
-    fun flush() {
+        fun flush() {
         //println("BLENDING=$blending")
         if (vertexCount > 0) {
             beforeFlush(this)

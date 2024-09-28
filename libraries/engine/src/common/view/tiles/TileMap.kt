@@ -38,8 +38,7 @@ class TileMap(
     private var cachedAnimationVersion = -1
 
     // @TODO: Use a TextureVertexBuffer or something
-    @KorgeInternal
-    private class Info(var tex: Bitmap, var vertices: ShrinkableTexturedVertexArray) {
+        private class Info(var tex: Bitmap, var vertices: ShrinkableTexturedVertexArray) {
         val verticesList = FastArrayList<ShrinkableTexturedVertexArray>().also {
             it.add(vertices)
         }

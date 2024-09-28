@@ -279,8 +279,7 @@ object KorgeRunner {
         }
     }
 
-    @KorgeInternal
-    fun prepareViewsBase(
+        fun prepareViewsBase(
         views: Views,
         eventDispatcher: EventListener,
         clearEachFrame: Boolean = true,

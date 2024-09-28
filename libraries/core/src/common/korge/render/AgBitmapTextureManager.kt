@@ -64,8 +64,7 @@ class AgBitmapTextureManager(
 	//var BmpCoordsWithBitmap._texture: Texture? by Extra.Property { null }
 
     /** Wrapper of [TextureBase] that contains all the [TextureCoords] slices referenced as [BitmapCoords] in our current cache */
-    @KorgeInternal
-	class BitmapTextureInfo {
+    	class BitmapTextureInfo {
         var usedMemory: Int = 0
         var textureBase: TextureBase = TextureBase(null, 0, 0)
 		val slices = FastIdentityMap<BitmapCoords, TextureCoords>()
@@ -84,8 +83,7 @@ class AgBitmapTextureManager(
     private val textureInfoPool = Pool(reset = { it.reset() }) { BitmapTextureInfo() }
 	private val bitmapsToTextureBase = FastIdentityMap<Bitmap, BitmapTextureInfo>()
 
-    @KorgeInternal
-    fun getBitmapsWithTextureInfoCopy(): Map<Bitmap, BitmapTextureInfo> = bitmapsToTextureBase.toMap()
+        fun getBitmapsWithTextureInfoCopy(): Map<Bitmap, BitmapTextureInfo> = bitmapsToTextureBase.toMap()
 
 	private var cachedBitmap: Bitmap? = null
 	private var cachedBitmapTextureInfo: BitmapTextureInfo? = null
@@ -186,8 +184,7 @@ class AgBitmapTextureManager(
     /**
      * Called automatically by the engine after the render has been executed (each frame). It executes a texture GC every [framesBetweenGC] frames.
      */
-    @KorgeInternal
-    fun afterRender() {
+        fun afterRender() {
         // Prevent leaks when not referenced anymore
         clearFastCacheAccess()
 
@@ -202,8 +199,7 @@ class AgBitmapTextureManager(
      * Performs a kind of Garbage Collection of textures references since the last GC.
      * This method is automatically executed every [framesBetweenGC] frames.
      **/
-    @KorgeInternal
-	fun gc() {
+    	fun gc() {
         //println("AgBitmapTextureManager.gc[${referencedBitmaps.size}] - [${referencedBitmapsSinceGC.size}]")
         referencedBitmaps.fastForEach { bmp ->
             when {

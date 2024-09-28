@@ -10,7 +10,6 @@ internal const val fragmentMainFunctionName = "fragmentMain"
 private const val vertexInputStructureName = "VertexInput"
 internal const val vertexInputStructureDeclarationName = "vertexInput"
 
-@KorgeInternal
 class MetalShaderGenerator(
     private val vertexShader: VertexShader,
     private val fragmentShader: FragmentShader,
@@ -45,8 +44,7 @@ class MetalShaderGenerator(
         fragmentBodyGenerator
     )
 
-    @KorgeInternal
-    data class Result(
+        data class Result(
         val result: String,
         val inputBuffers: MetalShaderBufferInputLayouts
     )

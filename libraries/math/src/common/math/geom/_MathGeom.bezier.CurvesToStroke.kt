@@ -26,7 +26,7 @@ enum class StrokePointsMode {
 interface StrokePoints {
     val vector: DoubleVectorArrayList
     val debugPoints: PointList
-    val debugSegments: List<MLine>
+    val debugSegments: List<Line>
     val mode: StrokePointsMode
 
     fun scale(scale: Double) {
@@ -52,7 +52,7 @@ class StrokePointsBuilder(
     })
 
     override val debugPoints: PointArrayList = PointArrayList()
-    override val debugSegments: ArrayList<MLine> = arrayListOf()
+    override val debugSegments: ArrayList<Line> = arrayListOf()
 
     override fun toString(): String = "StrokePointsBuilder($width, $vector)"
 
@@ -83,16 +83,16 @@ class StrokePointsBuilder(
         val nextTangent = next.tangent(Ratio.ZERO)
         val nextNormal = next.normal(Ratio.ZERO)
 
-        val currLine0 = MLine.fromPointAndDirection(commonPoint + currNormal * width, currTangent)
-        val currLine1 = MLine.fromPointAndDirection(commonPoint + currNormal * -width, currTangent)
+        val currLine0 = Line.fromPointAndDirection(commonPoint + currNormal * width, currTangent)
+        val currLine1 = Line.fromPointAndDirection(commonPoint + currNormal * -width, currTangent)
 
-        val nextLine0 = MLine.fromPointAndDirection(commonPoint + nextNormal * width, nextTangent)
-        val nextLine1 = MLine.fromPointAndDirection(commonPoint + nextNormal * -width, nextTangent)
+        val nextLine0 = Line.fromPointAndDirection(commonPoint + nextNormal * width, nextTangent)
+        val nextLine1 = Line.fromPointAndDirection(commonPoint + nextNormal * -width, nextTangent)
 
         //if (!nextLine1.dx.isFinite()) println((next as Bezier).roundDecimalPlaces(2))
 
-        val intersection0 = MLine.lineIntersectionPoint(currLine0, nextLine0)
-        val intersection1 = MLine.lineIntersectionPoint(currLine1, nextLine1)
+        val intersection0 = Line.lineIntersectionPoint(currLine0, nextLine0)
+        val intersection1 = Line.lineIntersectionPoint(currLine1, nextLine1)
         if (intersection0 == null || intersection1 == null) { // || !intersection0.x.isFinite() || !intersection1.x.isFinite()) {
             //println("currTangent=$currTangent, nextTangent=$nextTangent")
             //val signChanged = currTangent.x.sign != nextTangent.x.sign || currTangent.y.sign != nextTangent.y.sign
@@ -131,8 +131,8 @@ class StrokePointsBuilder(
             var p3: Point? = when {
                 //angle.absoluteValue > 190.degrees -> null
                 //else -> null
-                direction <= 0.0 -> MLine.lineIntersectionPoint(currLine1, nextLine1)
-                else -> MLine.lineIntersectionPoint(currLine0, nextLine0)
+                direction <= 0.0 -> Line.lineIntersectionPoint(currLine1, nextLine1)
+                else -> Line.lineIntersectionPoint(currLine0, nextLine0)
             }
 
             val p4Line = if (direction < 0.0) nextLine1 else nextLine0
@@ -155,8 +155,8 @@ class StrokePointsBuilder(
                 debugSegments.add(currLine1.scalePoints(1000.0).clone())
                 debugSegments.add(nextLine0.scalePoints(1000.0).clone())
                 debugSegments.add(currLine0.scalePoints(1000.0).clone())
-                debugSegments.add(MLine.fromPointAndDirection(commonPoint, currTangent).scalePoints(1000.0).clone())
-                debugSegments.add(MLine.fromPointAndDirection(commonPoint, nextTangent).scalePoints(1000.0).clone())
+                debugSegments.add(Line.fromPointAndDirection(commonPoint, currTangent).scalePoints(1000.0).clone())
+                debugSegments.add(Line.fromPointAndDirection(commonPoint, nextTangent).scalePoints(1000.0).clone())
                 debugPoints.add(p3)
                 debugPoints.add(p4)
                 debugPoints.add(p5)

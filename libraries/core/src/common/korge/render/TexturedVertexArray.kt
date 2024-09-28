@@ -46,11 +46,9 @@ class TexturedVertexArray(vcount: Int, val indices: ShortArray, icount: Int = in
         val EMPTY = TexturedVertexArray(0, ShortArray(0))
 
         // // @TODO: const val optimization issue in Kotlin/Native: https://youtrack.jetbrains.com/issue/KT-46425
-        @KorgeInternal
-        inline val COMPONENTS_PER_VERTEX get() = TEXTURED_ARRAY_COMPONENTS_PER_VERTEX
+                inline val COMPONENTS_PER_VERTEX get() = TEXTURED_ARRAY_COMPONENTS_PER_VERTEX
 
-        @KorgeInternal
-        inline val QUAD_INDICES get() = TEXTURED_ARRAY_QUAD_INDICES
+                inline val QUAD_INDICES get() = TEXTURED_ARRAY_QUAD_INDICES
 
         inline val EMPTY_INT_ARRAY get() = TEXTURED_ARRAY_EMPTY_INT_ARRAY
 
@@ -298,7 +296,6 @@ private fun IntArray.repeat(count: Int): IntArray {
 
 
 @PublishedApi internal const val TEXTURED_ARRAY_COMPONENTS_PER_VERTEX = 6
-@KorgeInternal
 @SharedImmutable
 @PublishedApi internal val TEXTURED_ARRAY_QUAD_INDICES = shortArrayOf(0, 1, 2,  3, 0, 2)
 @PublishedApi internal val TEXTURED_ARRAY_EMPTY_INT_ARRAY = IntArray(0)

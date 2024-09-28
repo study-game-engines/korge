@@ -11,7 +11,6 @@ import korlibs.korge.view.*
 import korlibs.math.geom.*
 import korlibs.memory.*
 
-@KorgeInternal
 class GpuShapeViewCommands {
     private var vertexIndex = 0
     private val bufferVertexData = floatArrayListOf()

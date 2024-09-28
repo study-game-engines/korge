@@ -92,12 +92,12 @@ class MBoundsBuilder {
     fun add(p: Point, transform: MMatrix?): MBoundsBuilder = add(p.x, p.y, transform)
 
     fun add(point: Point): MBoundsBuilder = add(point.x, point.y)
-    fun add(point: MPoint, transform: MMatrix): MBoundsBuilder = add(point.x, point.y, transform)
+    fun add(point: Point, transform: MMatrix): MBoundsBuilder = add(point.x, point.y, transform)
 
     fun addRect(x: Int, y: Int, width: Int, height: Int): MBoundsBuilder = addRect(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble())
     fun addRect(x: Double, y: Double, width: Double, height: Double): MBoundsBuilder = add(x, y).add(x + width, y + height)
 
-    fun add(ps: Iterable<MPoint>): MBoundsBuilder {
+    fun add(ps: Iterable<Point>): MBoundsBuilder {
         for (p in ps) add(p.immutable)
         return this
     }
@@ -124,7 +124,7 @@ class MBoundsBuilder {
         return this
     }
 
-    fun add(ps: Iterable<MPoint>, transform: MMatrix): MBoundsBuilder {
+    fun add(ps: Iterable<Point>, transform: MMatrix): MBoundsBuilder {
         for (p in ps) add(p, transform)
         return this
     }
@@ -155,6 +155,7 @@ class MBoundsBuilder {
 @KormaMutableApi
 @Deprecated("Use Line instead")
 data class MLine(var a: Point, var b: Point) {
+
     fun clone(): MLine = MLine(a, b)
     fun flipped(): MLine = MLine(b, a)
 
@@ -163,14 +164,14 @@ data class MLine(var a: Point, var b: Point) {
     val minY: Double get() = kotlin.math.min(a.y, b.y)
     val maxY: Double get() = kotlin.math.max(a.y, b.y)
 
-    fun round(): MLine {
+    fun round(): Line {
         a.round()
         b.round()
         return this
     }
 
     fun setTo(a: Point, b: Point): MLine = setTo(a.x, a.y, b.x, b.y)
-    fun setTo(a: MPoint, b: MPoint): MLine = setTo(a.x, a.y, b.x, b.y)
+    fun setTo(a: Point, b: Point): MLine = setTo(a.x, a.y, b.x, b.y)
 
     fun setTo(x0: Double, y0: Double, x1: Double, y1: Double): MLine {
         a = Point(x0, y0)
@@ -183,7 +184,7 @@ data class MLine(var a: Point, var b: Point) {
         return this
     }
 
-    fun directionVector(out: MPoint = MPoint()): MPoint {
+    fun directionVector(out: Point = Point()): Point {
         out.setTo(dx, dy)
         return out
     }
@@ -218,10 +219,10 @@ data class MLine(var a: Point, var b: Point) {
     }
 
     constructor() : this(Point(), Point())
-    constructor(p0: MPoint, p1: MPoint) : this(p0.point, p1.point)
-    constructor(x0: Double, y0: Double, x1: Double, y1: Double) : this(MPoint(x0, y0), MPoint(x1, y1))
-    constructor(x0: Float, y0: Float, x1: Float, y1: Float) : this(MPoint(x0, y0), MPoint(x1, y1))
-    constructor(x0: Int, y0: Int, x1: Int, y1: Int) : this(MPoint(x0, y0), MPoint(x1, y1))
+    constructor(p0: Point, p1: Point) : this(p0.point, p1.point)
+    constructor(x0: Double, y0: Double, x1: Double, y1: Double) : this(Point(x0, y0), Point(x1, y1))
+    constructor(x0: Float, y0: Float, x1: Float, y1: Float) : this(Point(x0, y0), Point(x1, y1))
+    constructor(x0: Int, y0: Int, x1: Int, y1: Int) : this(Point(x0, y0), Point(x1, y1))
 
     val x0: Double get() = a.x
     val y0: Double get() = a.y
@@ -282,11 +283,11 @@ data class MLine(var a: Point, var b: Point) {
     //        (q.y <= max(p.y, r.y)) && (q.y >= min(p.y, r.y)))
 
     companion object {
-        fun fromPointAndDirection(point: Point, direction: Point, scale: Double = 1.0, out: MLine = MLine()): MLine =
+        fun fromPointAndDirection(point: Point, direction: Point, scale: Double = 1.0, out: MLine = Line()): MLine =
             out.setTo(point.x, point.y, point.x + direction.x * scale, point.y + direction.y * scale)
-        fun fromPointAngle(point: Point, angle: Angle, length: Double = 1.0, out: MLine = MLine()): MLine = out.setToPolar(point.x, point.y, angle, length)
-        fun fromPointAndDirection(point: MPoint, direction: MPoint, scale: Double = 1.0, out: MLine = MLine()): MLine = out.setTo(point.x, point.y, point.x + direction.x * scale, point.y + direction.y * scale)
-        fun fromPointAngle(point: MPoint, angle: Angle, length: Double = 1.0, out: MLine = MLine()): MLine = out.setToPolar(point.x, point.y, angle, length)
+        fun fromPointAngle(point: Point, angle: Angle, length: Double = 1.0, out: MLine = Line()): MLine = out.setToPolar(point.x, point.y, angle, length)
+        fun fromPointAndDirection(point: Point, direction: Point, scale: Double = 1.0, out: MLine = Line()): MLine = out.setTo(point.x, point.y, point.x + direction.x * scale, point.y + direction.y * scale)
+        fun fromPointAngle(point: Point, angle: Angle, length: Double = 1.0, out: MLine = Line()): MLine = out.setToPolar(point.x, point.y, angle, length)
 
         fun length(Ax: Double, Ay: Double, Bx: Double, By: Double): Double = kotlin.math.hypot(Bx - Ax, By - Ay)
 
@@ -311,10 +312,10 @@ data class MLine(var a: Point, var b: Point) {
 }
 
 data class LineIntersection(
-    val line: MLine = MLine(),
+    val line: MLine = Line(),
     var intersection: Point = Point()
 ) {
-    val normalVector: MLine = MLine()
+    val normalVector: MLine = Line()
 
     fun setFrom(x0: Double, y0: Double, x1: Double, y1: Double, ix: Double, iy: Double, normalLength: Double) {
         line.setTo(x0, y0, x1, y1)
@@ -326,7 +327,7 @@ data class LineIntersection(
 }
 
 
-fun MLine.Companion.projectedPoint(
+fun Line.Companion.projectedPoint(
     v1x: Double,
     v1y: Double,
     v2x: Double,
@@ -340,7 +341,7 @@ fun MLine.Companion.projectedPoint(
     val e1y = v2y - v1y
     val e2x = px - v1x
     val e2y = py - v1y
-    val valDp = MPoint.dot(e1x, e1y, e2x, e2y)
+    val valDp = Point.dot(e1x, e1y, e2x, e2y)
     // get length of vectors
 
     val lenLineE1 = kotlin.math.hypot(e1x, e1y)
@@ -362,17 +363,14 @@ fun MLine.Companion.projectedPoint(
 
 fun MLine.Companion.projectedPoint(v1: Point, v2: Point, point: Point): Point = projectedPoint(v1.x, v1.y, v2.x, v2.y, point.x, point.y)
 
-fun MLine.Companion.lineIntersectionPoint(l1: MLine, l2: MLine): Point? = l1.getLineIntersectionPoint(l2)
+fun MLine.Companion.lineIntersectionPoint(l1: Line, l2: Line): Point? = l1.getLineIntersectionPoint(l2)
 
-fun MLine.Companion.segmentIntersectionPoint(
-    l1: MLine,
-    l2: MLine,
-): Point? = l1.getSegmentIntersectionPoint(l2)
+fun MLine.Companion.segmentIntersectionPoint(l1: Line, l2: Line): Point? = l1.getSegmentIntersectionPoint(l2)
 
 // @TODO: Should we create a common interface make projectedPoint part of it? (for ecample to project other kind of shapes)
 // https://math.stackexchange.com/questions/62633/orthogonal-projection-of-a-point-onto-a-line
 // http://www.sunshine2k.de/coding/java/PointOnLine/PointOnLine.html
-fun MLine.projectedPoint(point: Point): Point = MLine.projectedPoint(a, b, point)
+fun Line.projectedPoint(point: Point): Point = Line.projectedPoint(a, b, point)
 
 val MMatrix?.immutable: Matrix get() = if (this == null) Matrix.NIL else Matrix(a, b, c, d, tx, ty)
 
@@ -589,9 +587,9 @@ data class MMatrix(
     )
 
     /** Transform point without translation */
-    fun deltaTransformPoint(point: MPoint, out: MPoint = MPoint()) = deltaTransformPoint(point.x, point.y, out)
-    fun deltaTransformPoint(x: Float, y: Float, out: MPoint = MPoint()): MPoint = deltaTransformPoint(x.toDouble(), y.toDouble(), out)
-    fun deltaTransformPoint(x: Double, y: Double, out: MPoint = MPoint()): MPoint {
+    fun deltaTransformPoint(point: Point, out: Point = Point()) = deltaTransformPoint(point.x, point.y, out)
+    fun deltaTransformPoint(x: Float, y: Float, out: Point = Point()): Point = deltaTransformPoint(x.toDouble(), y.toDouble(), out)
+    fun deltaTransformPoint(x: Double, y: Double, out: Point = Point()): Point {
         out.x = deltaTransformX(x, y)
         out.y = deltaTransformY(x, y)
         return out
@@ -754,16 +752,16 @@ data class MMatrix(
     // Transform points
     fun transform(p: Point): Point = Point(transformX(p.x, p.y), transformY(p.x, p.y))
     @Deprecated("")
-    fun transform(p: MPoint, out: MPoint = MPoint()): MPoint = transform(p.x, p.y, out)
+    fun transform(p: Point, out: Point = Point()): Point = transform(p.x, p.y, out)
     @Deprecated("")
-    fun transform(px: Double, py: Double, out: MPoint = MPoint()): MPoint = out.setTo(transformX(px, py), transformY(px, py))
+    fun transform(px: Double, py: Double, out: Point = Point()): Point = out.setTo(transformX(px, py), transformY(px, py))
     @Deprecated("")
-    fun transform(px: Float, py: Float, out: MPoint = MPoint()): MPoint = out.setTo(transformX(px, py), transformY(px, py))
+    fun transform(px: Float, py: Float, out: Point = Point()): Point = out.setTo(transformX(px, py), transformY(px, py))
     @Deprecated("")
-    fun transform(px: Int, py: Int, out: MPoint = MPoint()): MPoint = out.setTo(transformX(px, py), transformY(px, py))
+    fun transform(px: Int, py: Int, out: Point = Point()): Point = out.setTo(transformX(px, py), transformY(px, py))
 
     @Deprecated("")
-    fun transformX(p: MPoint): Double = transformX(p.x, p.y)
+    fun transformX(p: Point): Double = transformX(p.x, p.y)
     @Deprecated("")
     fun transformX(px: Double, py: Double): Double = this.a * px + this.c * py + this.tx
     @Deprecated("")
@@ -772,7 +770,7 @@ data class MMatrix(
     fun transformX(px: Int, py: Int): Double = this.a * px + this.c * py + this.tx
 
     @Deprecated("")
-    fun transformY(p: MPoint): Double = transformY(p.x, p.y)
+    fun transformY(p: Point): Double = transformY(p.x, p.y)
     @Deprecated("")
     fun transformY(px: Double, py: Double): Double = this.d * py + this.b * px + this.ty
     @Deprecated("")
@@ -781,7 +779,7 @@ data class MMatrix(
     fun transformY(px: Int, py: Int): Double = this.d * py + this.b * px + this.ty
 
     @Deprecated("")
-    fun transformXf(p: MPoint): Float = transformX(p.x, p.y).toFloat()
+    fun transformXf(p: Point): Float = transformX(p.x, p.y).toFloat()
     @Deprecated("")
     fun transformXf(px: Double, py: Double): Float = transformX(px, py).toFloat()
     @Deprecated("")
@@ -790,7 +788,7 @@ data class MMatrix(
     fun transformXf(px: Int, py: Int): Float = transformX(px.toDouble(), py.toDouble()).toFloat()
 
     @Deprecated("")
-    fun transformYf(p: MPoint): Float = transformY(p.x, p.y).toFloat()
+    fun transformYf(p: Point): Float = transformY(p.x, p.y).toFloat()
     @Deprecated("")
     fun transformYf(px: Double, py: Double): Float = transformY(px, py).toFloat()
     @Deprecated("")
@@ -1986,20 +1984,20 @@ fun Matrix.toMatrix4(): Matrix4 {
 val MMatrix4.immutable: Matrix4 get() = Matrix4.fromColumns(data)
 val Matrix4.mutable: MMatrix4 get() = MMatrix4().setColumns4x4(copyToColumns(), 0)
 
-typealias MVector2D = MPoint
+typealias MVector2D = Point
 
-@Deprecated("Allocates") val MPoint.int: MPointInt get() = MPointInt(this.x.toInt(), this.y.toInt())
-@Deprecated("Allocates") val MPointInt.double: MPoint get() = MPoint(x.toDouble(), y.toDouble())
+@Deprecated("Allocates") val Point.int: MPointInt get() = MPointInt(this.x.toInt(), this.y.toInt())
+@Deprecated("Allocates") val MPointInt.double: Point get() = Point(x.toDouble(), y.toDouble())
 
 @Deprecated("")
-fun Point.toMPoint(out: MPoint = MPoint()): MPoint = out.setTo(x, y)
+fun Point.toMPoint(out: Point = Point()): Point = out.setTo(x, y)
 @Deprecated("")
-fun Point.mutable(out: MPoint = MPoint()): MPoint = out.setTo(x, y)
+fun Point.mutable(out: Point = Point()): Point = out.setTo(x, y)
 @Deprecated("")
-val Point.mutable: MPoint get() = mutable()
+val Point.mutable: Point get() = mutable()
 
 //@Deprecated("")
-//fun Point(p: MPoint): Point = Point(p.x.toFloat(), p.y.toFloat())
+//fun Point(p: Point): Point = Point(p.x.toFloat(), p.y.toFloat())
 
 @KormaMutableApi
 @Deprecated("Use Point instead")
@@ -2008,7 +2006,7 @@ data class MPoint(
     var y: Double
     //override var xf: Float,
     //override var yf: Float
-) : MutableInterpolable<MPoint>, Interpolable<MPoint>, Comparable<MPoint>, IsAlmostEquals<MPoint> {
+) : MutableInterpolable<Point>, Interpolable<Point>, Comparable<Point>, IsAlmostEquals<Point> {
     //constructor(x: Double, y: Double) : this(x.toFloat(), y.toFloat())
     constructor(p: Point) : this(p.x, p.y)
     constructor(x: Float, y: Float) : this(x.toDouble(), y.toDouble())
@@ -2022,9 +2020,9 @@ data class MPoint(
     val angle: Angle get() = Angle.between(0.0, 0.0, this.x, this.y)
     fun transformX(m: MMatrix?): Double = m?.transformX(this) ?: x
     fun transformY(m: MMatrix?): Double = m?.transformY(this) ?: y
-    val mutable: MPoint get() = MPoint(x, y)
+    val mutable: Point get() = Point(x, y)
     val immutable: Point get() = Point(x, y)
-    override fun isAlmostEquals(other: MPoint, epsilon: Double): Boolean =
+    override fun isAlmostEquals(other: Point, epsilon: Double): Boolean =
         this.x.isAlmostEquals(other.x, epsilon) && this.y.isAlmostEquals(other.y, epsilon)
 
     fun clear() = setToZero()
@@ -2040,105 +2038,105 @@ data class MPoint(
     fun ceil() = setTo(ceil(x), ceil(y))
 
     fun setToRoundDecimalPlaces(places: Int) = setTo(x.roundDecimalPlaces(places), y.roundDecimalPlaces(places))
-    fun setTo(x: Int, y: Int): MPoint = setTo(x.toDouble(), y.toDouble())
+    fun setTo(x: Int, y: Int): Point = setTo(x.toDouble(), y.toDouble())
 
-    fun setTo(x: Double, y: Double): MPoint {
+    fun setTo(x: Double, y: Double): Point {
         this.x = x
         this.y = y
         return this
     }
 
-    fun setTo(x: Float, y: Float): MPoint {
+    fun setTo(x: Float, y: Float): Point {
         this.x = x.toDouble()
         this.y = y.toDouble()
         return this
     }
 
-    fun setTo(p: Point): MPoint = setTo(p.x, p.y)
+    fun setTo(p: Point): Point = setTo(p.x, p.y)
 
     /** Updates a point from polar coordinates determined by an [angle] and a [length]. Angle 0 is pointing to the right, and the direction is counter-clock-wise */
-    fun setToPolar(angle: Angle, length: Double = 1.0): MPoint = setToPolar(0.0, 0.0, angle, length)
-    fun setToPolar(base: Point, angle: Angle, length: Float = 1f): MPoint = setToPolar(base.x.toFloat(), base.y.toFloat(), angle, length)
-    fun setToPolar(base: MPoint, angle: Angle, length: Double = 1.0): MPoint = setToPolar(base.x, base.y, angle, length)
-    fun setToPolar(x: Double, y: Double, angle: Angle, length: Double = 1.0): MPoint = setTo(x + angle.cosine * length, y + angle.sine * length)
-    fun setToPolar(x: Float, y: Float, angle: Angle, length: Float = 1f): MPoint = setTo(x + angle.cosine * length, y + angle.sine * length)
+    fun setToPolar(angle: Angle, length: Double = 1.0): Point = setToPolar(0.0, 0.0, angle, length)
+    fun setToPolar(base: Point, angle: Angle, length: Float = 1f): Point = setToPolar(base.x.toFloat(), base.y.toFloat(), angle, length)
+    fun setToPolar(base: Point, angle: Angle, length: Double = 1.0): Point = setToPolar(base.x, base.y, angle, length)
+    fun setToPolar(x: Double, y: Double, angle: Angle, length: Double = 1.0): Point = setTo(x + angle.cosine * length, y + angle.sine * length)
+    fun setToPolar(x: Float, y: Float, angle: Angle, length: Float = 1f): Point = setTo(x + angle.cosine * length, y + angle.sine * length)
 
     /** Rotates the vector/point -90 degrees (not normalizing it) */
-    fun setToNormal(): MPoint = setTo(-this.y, this.x)
+    fun setToNormal(): Point = setTo(-this.y, this.x)
     fun neg() = setTo(-this.x, -this.y)
     fun mul(s: Double) = setTo(this.x * s, this.y * s)
     fun mul(s: Float) = mul(s.toDouble())
     fun mul(s: Int) = mul(s.toDouble())
 
     fun add(p: Point) = this.setTo(x + p.x, y + p.y)
-    fun add(p: MPoint) = this.setToAdd(this, p)
-    fun add(x: Double, y: Double): MPoint = this.setTo(this.x + x, this.y + y)
+    fun add(p: Point) = this.setToAdd(this, p)
+    fun add(x: Double, y: Double): Point = this.setTo(this.x + x, this.y + y)
 
     fun sub(p: Point) = this.setTo(x - p.x, y - p.y)
-    fun sub(p: MPoint) = this.setToSub(this, p)
-    fun sub(x: Double, y: Double): MPoint = this.setTo(this.x - x, this.y - y)
+    fun sub(p: Point) = this.setToSub(this, p)
+    fun sub(x: Double, y: Double): Point = this.setTo(this.x - x, this.y - y)
 
     fun copyFrom(that: Point) = setTo(that.x, that.y)
-    fun copyFrom(that: MPoint) = setTo(that.x, that.y)
+    fun copyFrom(that: Point) = setTo(that.x, that.y)
 
-    fun setToTransform(mat: MMatrix, p: MPoint): MPoint = setToTransform(mat, p.x, p.y)
-    fun setToTransform(mat: MMatrix, x: Double, y: Double): MPoint = setTo(mat.transformX(x, y), mat.transformY(x, y))
+    fun setToTransform(mat: MMatrix, p: Point): Point = setToTransform(mat, p.x, p.y)
+    fun setToTransform(mat: MMatrix, x: Double, y: Double): Point = setTo(mat.transformX(x, y), mat.transformY(x, y))
 
-    fun setToAdd(a: MPoint, b: MPoint): MPoint = setTo(a.x + b.x, a.y + b.y)
-    fun setToSub(a: MPoint, b: MPoint): MPoint = setTo(a.x - b.x, a.y - b.y)
-    fun setToMul(a: MPoint, b: MPoint): MPoint = setTo(a.x * b.x, a.y * b.y)
-    fun setToMul(a: MPoint, s: Double): MPoint = setTo(a.x * s, a.y * s)
-    fun setToMul(a: MPoint, s: Float): MPoint = setToMul(a, s.toDouble())
-    fun setToDiv(a: MPoint, b: MPoint): MPoint = setTo(a.x / b.x, a.y / b.y)
-    fun setToDiv(a: MPoint, s: Double): MPoint = setTo(a.x / s, a.y / s)
-    fun setToDiv(a: MPoint, s: Float): MPoint = setToDiv(a, s.toDouble())
+    fun setToAdd(a: Point, b: Point): Point = setTo(a.x + b.x, a.y + b.y)
+    fun setToSub(a: Point, b: Point): Point = setTo(a.x - b.x, a.y - b.y)
+    fun setToMul(a: Point, b: Point): Point = setTo(a.x * b.x, a.y * b.y)
+    fun setToMul(a: Point, s: Double): Point = setTo(a.x * s, a.y * s)
+    fun setToMul(a: Point, s: Float): Point = setToMul(a, s.toDouble())
+    fun setToDiv(a: Point, b: Point): Point = setTo(a.x / b.x, a.y / b.y)
+    fun setToDiv(a: Point, s: Double): Point = setTo(a.x / s, a.y / s)
+    fun setToDiv(a: Point, s: Float): Point = setToDiv(a, s.toDouble())
 
-    operator fun plusAssign(that: MPoint) { setTo(this.x + that.x, this.y + that.y) }
-    operator fun minusAssign(that: MPoint) { setTo(this.x - that.x, this.y - that.y) }
-    operator fun remAssign(that: MPoint) { setTo(this.x % that.x, this.y % that.y) }
+    operator fun plusAssign(that: Point) { setTo(this.x + that.x, this.y + that.y) }
+    operator fun minusAssign(that: Point) { setTo(this.x - that.x, this.y - that.y) }
+    operator fun remAssign(that: Point) { setTo(this.x % that.x, this.y % that.y) }
     operator fun remAssign(scale: Double) { setTo(this.x % scale, this.y % scale) }
-    operator fun divAssign(that: MPoint) { setTo(this.x / that.x, this.y / that.y) }
+    operator fun divAssign(that: Point) { setTo(this.x / that.x, this.y / that.y) }
     operator fun divAssign(scale: Double) { setTo(this.x / scale, this.y / scale) }
-    operator fun timesAssign(that: MPoint) { setTo(this.x * that.x, this.y * that.y) }
+    operator fun timesAssign(that: Point) { setTo(this.x * that.x, this.y * that.y) }
     operator fun timesAssign(scale: Double) { setTo(this.x * scale, this.y * scale) }
 
-    @Deprecated("allocates") operator fun plus(that: MPoint): MPoint = MPoint(this.x + that.x, this.y + that.y)
-    @Deprecated("allocates") operator fun minus(that: MPoint): MPoint = MPoint(this.x - that.x, this.y - that.y)
-    @Deprecated("allocates") operator fun times(that: MPoint): MPoint = MPoint(this.x * that.x, this.y * that.y)
-    @Deprecated("allocates") operator fun div(that: MPoint): MPoint = MPoint(this.x / that.x, this.y / that.y)
-    @Deprecated("allocates") infix fun dot(that: MPoint): Double = this.x * that.x + this.y * that.y
+    @Deprecated("allocates") operator fun plus(that: Point): Point = Point(this.x + that.x, this.y + that.y)
+    @Deprecated("allocates") operator fun minus(that: Point): Point = Point(this.x - that.x, this.y - that.y)
+    @Deprecated("allocates") operator fun times(that: Point): Point = Point(this.x * that.x, this.y * that.y)
+    @Deprecated("allocates") operator fun div(that: Point): Point = Point(this.x / that.x, this.y / that.y)
+    @Deprecated("allocates") infix fun dot(that: Point): Double = this.x * that.x + this.y * that.y
 
-    @Deprecated("allocates") operator fun times(scale: Double): MPoint = MPoint(this.x * scale, this.y * scale)
-    @Deprecated("allocates") operator fun times(scale: Float): MPoint = this * scale.toDouble()
-    @Deprecated("allocates") operator fun times(scale: Int): MPoint = this * scale.toDouble()
+    @Deprecated("allocates") operator fun times(scale: Double): Point = Point(this.x * scale, this.y * scale)
+    @Deprecated("allocates") operator fun times(scale: Float): Point = this * scale.toDouble()
+    @Deprecated("allocates") operator fun times(scale: Int): Point = this * scale.toDouble()
 
-    @Deprecated("allocates") operator fun div(scale: Double): MPoint = MPoint(this.x / scale, this.y / scale)
-    @Deprecated("allocates") operator fun div(scale: Float): MPoint = this / scale.toDouble()
-    @Deprecated("allocates") operator fun div(scale: Int): MPoint = this / scale.toDouble()
+    @Deprecated("allocates") operator fun div(scale: Double): Point = Point(this.x / scale, this.y / scale)
+    @Deprecated("allocates") operator fun div(scale: Float): Point = this / scale.toDouble()
+    @Deprecated("allocates") operator fun div(scale: Int): Point = this / scale.toDouble()
 
     fun distanceTo(x: Double, y: Double): Double = hypot(x - this.x, y - this.y)
     fun distanceTo(x: Int, y: Int): Double = distanceTo(x.toDouble(), y.toDouble())
     fun distanceTo(x: Float, y: Float): Float = distanceTo(x.toDouble(), y.toDouble()).toFloat()
-    fun distanceTo(that: MPoint): Double = distanceTo(that.x, that.y)
+    fun distanceTo(that: Point): Double = distanceTo(that.x, that.y)
 
-    fun angleTo(other: MPoint): Angle = Angle.between(this.x, this.y, other.x, other.y)
+    fun angleTo(other: Point): Angle = Angle.between(this.x, this.y, other.x, other.y)
     fun angleTo(other: Point): Angle = Angle.between(this.x, this.y, other.x, other.y)
 
-    fun transformed(mat: MMatrix, out: MPoint = MPoint()): MPoint = out.setToTransform(mat, this)
+    fun transformed(mat: MMatrix, out: Point = Point()): Point = out.setToTransform(mat, this)
     operator fun get(index: Int): Double = when (index) {
         0 -> this.x; 1 -> this.y
         else -> throw IndexOutOfBoundsException("IPoint doesn't have $index component")
     }
-    fun copy() = MPoint(this.x, this.y)
+    fun copy() = Point(this.x, this.y)
 
-    @Deprecated("Allocates") val unit: MPoint get() = this / length
+    @Deprecated("Allocates") val unit: Point get() = this / length
     val squaredLength: Double get() = (x * x) + (y * y)
     val length: Double get() = hypot(this.x, this.y)
     val magnitude: Double get() = hypot(this.x, this.y)
-    @Deprecated("Allocates") val normalized: MPoint
+    @Deprecated("Allocates") val normalized: Point
         get() {
             val imag = 1.0 / magnitude
-            return MPoint(this.x * imag, this.y * imag)
+            return Point(this.x * imag, this.y * imag)
         }
 
     fun normalize() {
@@ -2149,17 +2147,17 @@ data class MPoint(
         }
     }
 
-    @Deprecated("Allocates") override fun interpolateWith(ratio: Ratio, other: MPoint): MPoint =
-        MPoint().setToInterpolated(ratio, this, other)
+    @Deprecated("Allocates") override fun interpolateWith(ratio: Ratio, other: Point): Point =
+        Point().setToInterpolated(ratio, this, other)
 
-    override fun setToInterpolated(ratio: Ratio, l: MPoint, r: MPoint): MPoint = setToInterpolated(ratio, l.x, l.y, r.x, r.y)
+    override fun setToInterpolated(ratio: Ratio, l: Point, r: Point): Point = setToInterpolated(ratio, l.x, l.y, r.x, r.y)
 
-    fun setToInterpolated(ratio: Ratio, lx: Double, ly: Double, rx: Double, ry: Double): MPoint =
+    fun setToInterpolated(ratio: Ratio, lx: Double, ly: Double, rx: Double, ry: Double): Point =
         this.setTo(ratio.interpolate(lx, rx), ratio.interpolate(ly, ry))
 
-    override fun compareTo(other: MPoint): Int = compare(this.x, this.y, other.x, other.y)
+    override fun compareTo(other: Point): Int = compare(this.x, this.y, other.x, other.y)
 
-    fun rotate(rotation: Angle, out: MPoint = MPoint()): MPoint =
+    fun rotate(rotation: Angle, out: Point = Point()): Point =
         out.setToPolar(Angle.between(0.0, 0.0, this.x, this.y) + rotation, this.length)
 
     override fun toString(): String = "(${this.x.niceStr}, ${this.y.niceStr})"
@@ -2167,53 +2165,53 @@ data class MPoint(
     @Deprecated("")
     companion object {
         @Deprecated("")
-        val POOL: ConcurrentPool<MPoint> = ConcurrentPool<MPoint>({ it.setTo(0.0, 0.0) }) { MPoint() }
+        val POOL: ConcurrentPool<Point> = ConcurrentPool<Point>({ it.setTo(0.0, 0.0) }) { Point() }
 
         @Deprecated("")
-        val Zero: MPoint = MPoint(0.0, 0.0)
+        val Zero: Point = Point(0.0, 0.0)
         @Deprecated("")
-        val One: MPoint = MPoint(1.0, 1.0)
+        val One: Point = Point(1.0, 1.0)
         @Deprecated("")
-        val Up: MPoint = MPoint(0.0, -1.0)
+        val Up: Point = Point(0.0, -1.0)
         @Deprecated("")
-        val Down: MPoint = MPoint(0.0, +1.0)
+        val Down: Point = Point(0.0, +1.0)
         @Deprecated("")
-        val Left: MPoint = MPoint(-1.0, 0.0)
+        val Left: Point = Point(-1.0, 0.0)
         @Deprecated("")
-        val Right: MPoint = MPoint(+1.0, 0.0)
+        val Right: Point = Point(+1.0, 0.0)
 
         //inline operator fun invoke(): Point = Point(0.0, 0.0) // @TODO: // e: java.lang.NullPointerException at org.jetbrains.kotlin.com.google.gwt.dev.js.JsAstMapper.mapFunction(JsAstMapper.java:562) (val pt = Array(1) { Point() })
-        operator fun invoke(): MPoint = MPoint(0.0, 0.0)
-        operator fun invoke(v: MPoint): MPoint = MPoint(v.x, v.y)
-        operator fun invoke(x: Double, y: Double): MPoint = MPoint(x, y)
-        operator fun invoke(x: Float, y: Float): MPoint = MPoint(x, y)
-        operator fun invoke(x: Int, y: Int): MPoint = MPoint(x, y)
-        operator fun invoke(xy: Int): MPoint = MPoint(xy.toDouble(), xy.toDouble())
-        operator fun invoke(xy: Float): MPoint = MPoint(xy.toDouble(), xy.toDouble())
-        operator fun invoke(xy: Double): MPoint = MPoint(xy, xy)
-        inline operator fun invoke(x: Number, y: Number): MPoint = MPoint(x.toDouble(), y.toDouble())
+        operator fun invoke(): Point = Point(0.0, 0.0)
+        operator fun invoke(v: Point): Point = Point(v.x, v.y)
+        operator fun invoke(x: Double, y: Double): Point = Point(x, y)
+        operator fun invoke(x: Float, y: Float): Point = Point(x, y)
+        operator fun invoke(x: Int, y: Int): Point = Point(x, y)
+        operator fun invoke(xy: Int): Point = Point(xy.toDouble(), xy.toDouble())
+        operator fun invoke(xy: Float): Point = Point(xy.toDouble(), xy.toDouble())
+        operator fun invoke(xy: Double): Point = Point(xy, xy)
+        inline operator fun invoke(x: Number, y: Number): Point = Point(x.toDouble(), y.toDouble())
 
         /** Constructs a point from polar coordinates determined by an [angle] and a [length]. Angle 0 is pointing to the right, and the direction is counter-clock-wise */
-        inline operator fun invoke(angle: Angle, length: Double = 1.0): MPoint = fromPolar(angle, length)
+        inline operator fun invoke(angle: Angle, length: Double = 1.0): Point = fromPolar(angle, length)
 
         fun angleArc(a: Point, b: Point): Angle = Angle.fromRadians(acos((a.dot(b)) / (a.length * b.length)))
-        fun angleArc(a: MPoint, b: MPoint): Angle = Angle.fromRadians(acos((a.dot(b)) / (a.length * b.length)))
-        fun angleFull(a: MPoint, b: MPoint): Angle = Angle.between(a.immutable, b.immutable)
+        fun angleArc(a: Point, b: Point): Angle = Angle.fromRadians(acos((a.dot(b)) / (a.length * b.length)))
+        fun angleFull(a: Point, b: Point): Angle = Angle.between(a.immutable, b.immutable)
 
-        fun middle(a: MPoint, b: MPoint): MPoint = MPoint((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
+        fun middle(a: Point, b: Point): Point = Point((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
 
         /** Constructs a point from polar coordinates determined by an [angle] and a [length]. Angle 0 is pointing to the right, and the direction is counter-clock-wise */
-        fun fromPolar(x: Double, y: Double, angle: Angle, length: Double = 1.0, out: MPoint = MPoint()): MPoint = out.setTo(x + angle.cosine * length, y + angle.sine * length)
-        fun fromPolar(angle: Angle, length: Double = 1.0, out: MPoint = MPoint()): MPoint = fromPolar(0.0, 0.0, angle, length, out)
-        fun fromPolar(base: MPoint, angle: Angle, length: Double = 1.0, out: MPoint = MPoint()): MPoint = fromPolar(base.x, base.y, angle, length, out)
+        fun fromPolar(x: Double, y: Double, angle: Angle, length: Double = 1.0, out: Point = Point()): Point = out.setTo(x + angle.cosine * length, y + angle.sine * length)
+        fun fromPolar(angle: Angle, length: Double = 1.0, out: Point = Point()): Point = fromPolar(0.0, 0.0, angle, length, out)
+        fun fromPolar(base: Point, angle: Angle, length: Double = 1.0, out: Point = Point()): Point = fromPolar(base.x, base.y, angle, length, out)
 
-        fun direction(a: MPoint, b: MPoint, out: MPoint = MPoint()): MPoint = out.setTo(b.x - a.x, b.y - a.y)
-        fun middle(a: MPoint, b: MPoint, out: MPoint = MPoint()): MPoint = out.setTo((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
+        fun direction(a: Point, b: Point, out: Point = Point()): Point = out.setTo(b.x - a.x, b.y - a.y)
+        fun middle(a: Point, b: Point, out: Point = Point()): Point = out.setTo((a.x + b.x) * 0.5, (a.y + b.y) * 0.5)
 
         fun angle(ax: Double, ay: Double, bx: Double, by: Double): Angle = Angle.between(ax, ay, bx, by)
         //acos(((ax * bx) + (ay * by)) / (hypot(ax, ay) * hypot(bx, by)))
 
-        fun compare(l: MPoint, r: MPoint): Int = compare(l.x, l.y, r.x, r.y)
+        fun compare(l: Point, r: Point): Int = compare(l.x, l.y, r.x, r.y)
         fun compare(lx: Double, ly: Double, rx: Double, ry: Double): Int {
             val ret = ly.compareTo(ry)
             return if (ret == 0) lx.compareTo(rx) else ret
@@ -2227,18 +2225,18 @@ data class MPoint(
         fun distanceSquared(x1: Double, y1: Double, x2: Double, y2: Double): Double = square(x1 - x2) + square(y1 - y2)
         fun distanceSquared(x1: Int, y1: Int, x2: Int, y2: Int): Int = square(x1 - x2) + square(y1 - y2)
 
-        fun distance(a: MPoint, b: MPoint): Double = distance(a.x, a.y, b.x, b.y)
+        fun distance(a: Point, b: Point): Double = distance(a.x, a.y, b.x, b.y)
         fun distance(a: MPointInt, b: MPointInt): Double = distance(a.x, a.y, b.x, b.y)
         fun distance(a: Double, b: Double): Double = kotlin.math.abs(a - b)
         fun distance(x1: Double, y1: Double, x2: Double, y2: Double): Double = kotlin.math.hypot(x1 - x2, y1 - y2)
         fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Double = distance(x1.toDouble(), y1.toDouble(), x2.toDouble(), y2.toDouble())
         fun distance(x1: Int, y1: Int, x2: Int, y2: Int): Double = distance(x1.toDouble(), y1.toDouble(), x2.toDouble(), y2.toDouble())
 
-        fun distanceSquared(a: MPoint, b: MPoint): Double = distanceSquared(a.x, a.y, b.x, b.y)
+        fun distanceSquared(a: Point, b: Point): Double = distanceSquared(a.x, a.y, b.x, b.y)
         fun distanceSquared(a: MPointInt, b: MPointInt): Int = distanceSquared(a.x, a.y, b.x, b.y)
 
         fun dot(aX: Double, aY: Double, bX: Double, bY: Double): Double = (aX * bX) + (aY * bY)
-        fun dot(a: MPoint, b: MPoint): Double = dot(a.x, a.y, b.x, b.y)
+        fun dot(a: Point, b: Point): Double = dot(a.x, a.y, b.x, b.y)
         fun isCollinear(xa: Double, ya: Double, x: Double, y: Double, xb: Double, yb: Double): Boolean {
             return (((x - xa) / (y - ya)) - ((xa - xb) / (ya - yb))).absoluteValue.isAlmostZero()
         }
@@ -2251,13 +2249,13 @@ data class MPoint(
 
         // https://algorithmtutor.com/Computational-Geometry/Determining-if-two-consecutive-segments-turn-left-or-right/
         /** < 0 left, > 0 right, 0 collinear */
-        fun orientation(p1: MPoint, p2: MPoint, p3: MPoint): Double =
+        fun orientation(p1: Point, p2: Point, p3: Point): Double =
             orientation(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
         fun orientation(ax: Double, ay: Double, bx: Double, by: Double, cx: Double, cy: Double): Double =
             crossProduct(cx - ax, cy - ay, bx - ax, by - ay)
 
         fun crossProduct(ax: Double, ay: Double, bx: Double, by: Double): Double = (ax * by) - (bx * ay)
-        fun crossProduct(p1: MPoint, p2: MPoint): Double = crossProduct(p1.x, p1.y, p2.x, p2.y)
+        fun crossProduct(p1: Point, p2: Point): Double = crossProduct(p1.x, p1.y, p2.x, p2.y)
 
         //val ax = x1 - x2
         //val ay = y1 - y2
@@ -2269,28 +2267,28 @@ data class MPoint(
     }
 }
 
-fun List<MPoint>.getPolylineLength(): Double = IPointList.getPolylineLength(size) { get(it).point }
+fun List<Point>.getPolylineLength(): Double = IPointList.getPolylineLength(size) { get(it).point }
 
-fun List<MPoint>.bounds(out: MRectangle = MRectangle(), bb: MBoundsBuilder = MBoundsBuilder()): MRectangle = bb.add(this).getBounds(out)
-fun Iterable<MPoint>.bounds(out: MRectangle = MRectangle(), bb: MBoundsBuilder = MBoundsBuilder()): MRectangle = bb.add(this).getBounds(out)
+fun List<Point>.bounds(out: MRectangle = MRectangle(), bb: MBoundsBuilder = MBoundsBuilder()): MRectangle = bb.add(this).getBounds(out)
+fun Iterable<Point>.bounds(out: MRectangle = MRectangle(), bb: MBoundsBuilder = MBoundsBuilder()): MRectangle = bb.add(this).getBounds(out)
 
-fun min(a: MPoint, b: MPoint, out: MPoint = MPoint()): MPoint = out.setTo(kotlin.math.min(a.x, b.x), kotlin.math.min(a.y, b.y))
-fun max(a: MPoint, b: MPoint, out: MPoint = MPoint()): MPoint = out.setTo(kotlin.math.max(a.x, b.x), kotlin.math.max(a.y, b.y))
-fun MPoint.clamp(min: Double, max: Double, out: MPoint = MPoint()): MPoint = out.setTo(x.clamp(min, max), y.clamp(min, max))
+fun min(a: Point, b: Point, out: Point = Point()): Point = out.setTo(kotlin.math.min(a.x, b.x), kotlin.math.min(a.y, b.y))
+fun max(a: Point, b: Point, out: Point = Point()): Point = out.setTo(kotlin.math.max(a.x, b.x), kotlin.math.max(a.y, b.y))
+fun Point.clamp(min: Double, max: Double, out: Point = Point()): Point = out.setTo(x.clamp(min, max), y.clamp(min, max))
 
 val Vector2I.mutable: MPointInt get() = MPointInt(x, y)
 
 @KormaMutableApi
 @Deprecated("Use PointInt instead")
-inline class MPointInt(val p: MPoint) : Comparable<MPointInt>, MutableInterpolable<MPointInt> {
+inline class MPointInt(val p: Point) : Comparable<MPointInt>, MutableInterpolable<MPointInt> {
     override fun compareTo(other: MPointInt): Int = compare(this.x, this.y, other.x, other.y)
 
     val point: Vector2I get() = Vector2I(x, y)
 
     companion object {
         operator fun invoke(): MPointInt = MPointInt(0, 0)
-        operator fun invoke(x: Int, y: Int): MPointInt = MPointInt(MPoint(x, y))
-        operator fun invoke(that: MPointInt): MPointInt = MPointInt(MPoint(that.x, that.y))
+        operator fun invoke(x: Int, y: Int): MPointInt = MPointInt(Point(x, y))
+        operator fun invoke(that: MPointInt): MPointInt = MPointInt(Point(that.x, that.y))
 
         fun compare(lx: Int, ly: Int, rx: Int, ry: Int): Int = PointInt.compare(lx, ly, rx, ry)
     }
@@ -2315,8 +2313,8 @@ inline class MPointInt(val p: MPoint) : Comparable<MPointInt>, MutableInterpolab
     override fun toString(): String = "($x, $y)"
 }
 
-fun MPoint.asInt(): MPointInt = MPointInt(this)
-fun MPointInt.asDouble(): MPoint = this.p
+fun Point.asInt(): MPointInt = MPointInt(this)
+fun MPointInt.asDouble(): Point = this.p
 
 @KormaMutableApi
 @Deprecated("Use Rectangle")
@@ -2326,7 +2324,7 @@ data class MRectangle(
 ) : MutableInterpolable<MRectangle>, Interpolable<MRectangle>, Sizeable, MSizeable, IsAlmostEquals<MRectangle> {
 
     operator fun contains(that: Point) = contains(that.x, that.y)
-    operator fun contains(that: MPoint) = contains(that.x, that.y)
+    operator fun contains(that: Point) = contains(that.x, that.y)
     operator fun contains(that: MPointInt) = contains(that.x, that.y)
     fun contains(x: Double, y: Double) = (x >= left && x < right) && (y >= top && y < bottom)
     fun contains(x: Float, y: Float) = contains(x.toDouble(), y.toDouble())
@@ -2417,7 +2415,7 @@ data class MRectangle(
         //          ▲
         //          │
         //        point2
-        operator fun invoke(point1: MPoint, point2: MPoint): MRectangle {
+        operator fun invoke(point1: Point, point2: Point): MRectangle {
             val left = minOf(point1.x, point2.x)
             val top = minOf(point1.y, point2.y)
             val right = maxOf(point1.x, point2.x)
@@ -2428,12 +2426,12 @@ data class MRectangle(
         operator fun invoke(): MRectangle = MRectangle(0.0, 0.0, 0.0, 0.0)
         operator fun invoke(x: Int, y: Int, width: Int, height: Int): MRectangle = MRectangle(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble())
         operator fun invoke(x: Float, y: Float, width: Float, height: Float): MRectangle = MRectangle(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble())
-        operator fun invoke(topLeft: MPoint, size: MSize): MRectangle = MRectangle(topLeft.x, topLeft.y, size.width, size.height)
+        operator fun invoke(topLeft: Point, size: MSize): MRectangle = MRectangle(topLeft.x, topLeft.y, size.width, size.height)
         operator fun invoke(topLeft: Point, size: Size): MRectangle = MRectangle(topLeft.x, topLeft.y, size.width, size.height)
         fun fromBounds(left: Double, top: Double, right: Double, bottom: Double): MRectangle = MRectangle().setBounds(left, top, right, bottom)
         fun fromBounds(left: Int, top: Int, right: Int, bottom: Int): MRectangle = MRectangle().setBounds(left, top, right, bottom)
         fun fromBounds(left: Float, top: Float, right: Float, bottom: Float): MRectangle = MRectangle().setBounds(left, top, right, bottom)
-        fun fromBounds(point1: MPoint, point2: MPoint): MRectangle = MRectangle(point1, point2)
+        fun fromBounds(point1: Point, point2: Point): MRectangle = MRectangle(point1, point2)
         fun isContainedIn(a: MRectangle, b: MRectangle): Boolean = a.x >= b.x && a.y >= b.y && a.x + a.width <= b.x + b.width && a.y + a.height <= b.y + b.height
     }
 
@@ -2449,7 +2447,7 @@ data class MRectangle(
     var bottom: Double ; get() = y + height ; set(value) { height = value - y }
 
     val pos: Point get() = Point(x, y)
-    val mPosition: MPoint get() = MPoint(x, y)
+    val mPosition: Point get() = Point(x, y)
     override val size: Size get() = Size(width, height)
     override val mSize: MSize get() = MSize(width, height)
 
@@ -2714,7 +2712,7 @@ inline class MRectangleInt(val rect: MRectangle) {
     operator fun contains(v: SizeInt): Boolean = (v.width <= width) && (v.height <= height)
     operator fun contains(v: MSizeInt): Boolean = contains(v.immutable)
     operator fun contains(that: Point) = contains(that.x, that.y)
-    operator fun contains(that: MPoint) = contains(that.x, that.y)
+    operator fun contains(that: Point) = contains(that.x, that.y)
     operator fun contains(that: Vector2I) = contains(that.x, that.y)
     operator fun contains(that: MPointInt) = contains(that.x, that.y)
     fun contains(x: Double, y: Double) = (x >= left && x < right) && (y >= top && y < bottom)
@@ -2776,7 +2774,7 @@ inline class MRectangleInt(val rect: MRectangle) {
     fun getAnchorPosition(anchor: Anchor, out: MPointInt = MPointInt()): MPointInt =
         out.setTo((x + width * anchor.sx).toInt(), (y + height * anchor.sy).toInt())
 
-    val center: MPoint get() = anchor(0.5, 0.5).double
+    val center: Point get() = anchor(0.5, 0.5).double
     inline fun anchor(ax: Number, ay: Number): MPointInt = anchor(ax.toDouble(), ay.toDouble())
     fun anchor(ax: Double, ay: Double): MPointInt = MPointInt((x + width * ax).toInt(), (y + height * ay).toInt())
 
@@ -2853,12 +2851,12 @@ val RectangleInt.mutable: MRectangleInt get() = MRectangleInt(x, y, width, heigh
 
 @KormaMutableApi
 @Deprecated("Use Size instead")
-inline class MSize(val p: MPoint) : MutableInterpolable<MSize>, Interpolable<MSize>, Sizeable, MSizeable {
+inline class MSize(val p: Point) : MutableInterpolable<MSize>, Interpolable<MSize>, Sizeable, MSizeable {
     companion object {
-        operator fun invoke(): MSize = MSize(MPoint(0, 0))
-        operator fun invoke(width: Double, height: Double): MSize = MSize(MPoint(width, height))
-        operator fun invoke(width: Int, height: Int): MSize = MSize(MPoint(width, height))
-        operator fun invoke(width: Float, height: Float): MSize = MSize(MPoint(width, height))
+        operator fun invoke(): MSize = MSize(Point(0, 0))
+        operator fun invoke(width: Double, height: Double): MSize = MSize(Point(width, height))
+        operator fun invoke(width: Int, height: Int): MSize = MSize(Point(width, height))
+        operator fun invoke(width: Float, height: Float): MSize = MSize(Point(width, height))
     }
 
     fun copy() = MSize(p.copy())
@@ -3226,7 +3224,7 @@ val MSize.immutable: Size get() = Size(width, height)
 fun MSize.asInt(): MSizeInt = MSizeInt(this)
 fun MSizeInt.asDouble(): MSize = this.float
 
-fun MPoint.asSize(): MSize = MSize(this)
+fun Point.asSize(): MSize = MSize(this)
 
 @Deprecated("")
 val Rectangle.mutable: MRectangle get() = MRectangle(x, y, width, height)

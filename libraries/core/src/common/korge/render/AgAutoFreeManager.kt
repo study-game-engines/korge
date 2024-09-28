@@ -41,8 +41,7 @@ class AgAutoFreeManager(
         }
     }
 
-    @KorgeInternal
-    fun gc() {
+        fun gc() {
         // Delete elements that didn't survive the last GC
         for (entry in availableInLastGC) {
             if (!cachedCloseables.contains(entry.closeable)) {

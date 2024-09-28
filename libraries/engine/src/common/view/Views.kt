@@ -117,11 +117,9 @@ class Views(
     var editingMode: Boolean = false
 
     /** Native width in pixels (in retina displays this will be twice the window width). Use [virtualWidth] instead */
-    @KorgeInternal
-	val nativeWidth get() = ag.mainFrameBuffer.width
+    	val nativeWidth get() = ag.mainFrameBuffer.width
     /** Native height in pixels (in retina displays this will be twice the window height). Use [virtualHeight] instead */
-    @KorgeInternal
-	val nativeHeight get() = ag.mainFrameBuffer.height
+    	val nativeHeight get() = ag.mainFrameBuffer.height
 
     // Later updated
     /** The defined virtual width */
@@ -157,8 +155,7 @@ class Views(
 		}
 	}
 
-    //@KorgeInternal
-	override fun close() {
+    override fun close() {
         launchImmediately {
             closeSuspend()
         }
@@ -173,8 +170,7 @@ class Views(
     }
 
     /** Mouse coordinates relative to the native window. Can't be used directly. Use [globalMousePos] instead */
-    @KorgeInternal
-    val windowMousePos: Point get() = bp.globalToWindowCoords(input.mousePos)
+        val windowMousePos: Point get() = bp.globalToWindowCoords(input.mousePos)
 
     /** Mouse coordinates relative to the [Stage] singleton */
     val globalMousePos get() = stage.mousePos
@@ -207,10 +203,8 @@ class Views(
 	private var actualSize = SizeInt()
 	private var targetSize = SizeInt()
 
-    @KorgeInternal
-    val actualWidth get() = actualSize.width
-    @KorgeInternal
-    val actualHeight get() = actualSize.height
+        val actualWidth get() = actualSize.width
+        val actualHeight get() = actualSize.height
 
     val onBeforeRender = Signal<RenderContext>()
     val onAfterRender = Signal<RenderContext>()
@@ -413,8 +407,7 @@ class Views(
 	}
 
     /*
-    @KorgeInternal
-    fun getWindowBounds(view: View, out: Rectangle = Rectangle()): Rectangle {
+        fun getWindowBounds(view: View, out: Rectangle = Rectangle()): Rectangle {
         val bounds = view.getGlobalBounds(out)
         return bounds.setBounds(
             globalToWindowX(bounds.left, bounds.top),

@@ -8,7 +8,6 @@ import korlibs.math.geom.*
  * A [texture] wrap that includes [scale] and [bounds] information.
  * Used internally for atlases.
  */
-@KorgeInternal
 data class TextureWithBitmapSlice(
 	val texture: BmpSlice,
 	val bitmapSlice: BmpSlice,

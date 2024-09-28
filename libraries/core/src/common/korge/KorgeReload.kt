@@ -11,7 +11,6 @@ import kotlin.reflect.*
 
 class ReloadClassContext(val injector: Injector, val refreshedClasses: Set<String>, val rootFolders: List<String>)
 
-@KorgeInternal
 open class KorgeReloadInternalImpl {
     open fun <T : Any> getReloadedClass(clazz: KClass<T>, context: ReloadClassContext): KClass<T> = clazz
     open fun transferKeepProperties(old: Any, new: Any) = Unit
