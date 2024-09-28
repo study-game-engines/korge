@@ -8,10 +8,7 @@ import korlibs.render.awt.*
 import kotlinx.coroutines.*
 import java.io.*
 
-fun GLCanvasWithKorge(
-    config: KorgeConfig,
-    block: suspend Stage.() -> Unit
-): GLCanvasWithKorge {
+fun GLCanvasWithKorge(config: KorgeConfig, block: suspend Stage.() -> Unit): GLCanvasWithKorge {
     val canvas = GLCanvasWithKorge()
     val korge = GLCanvasKorge(false, canvas, config)
     korge.initNoWait(block)
@@ -52,7 +49,7 @@ class GLCanvasKorge internal constructor(
                         println("GLCanvasKorge.init[d]: ${Thread.currentThread()}")
                         //println("[A]")
                         this@GLCanvasKorge.stage = this@copy
-                        config.main?.invoke(this)
+                        config.main.invoke(this)
                         block()
                     }
                 ).start()
@@ -91,11 +88,9 @@ class GLCanvasKorge internal constructor(
     }
 
     companion object {
-        suspend operator fun invoke(
-            canvas: GLCanvasWithKorge,
-            virtualSize: Size? = null,
-        ): GLCanvasKorge {
+        suspend operator fun invoke(canvas: GLCanvasWithKorge, virtualSize: Size? = null): GLCanvasKorge {
             return GLCanvasKorge(true, canvas, KorgeConfig(virtualSize = virtualSize ?: DefaultViewport.SIZE)).apply { init() }
         }
     }
+
 }

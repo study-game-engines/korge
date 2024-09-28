@@ -3,8 +3,8 @@ package korlibs.korge
 import korlibs.korge.view.*
 
 open class ViewsNodeId(val views: Views) {
-    var lastId: Long = 1L
 
+    var lastId: Long = 1L
     var View.nodeId by extraViewProp { lastId++ }
 
     init {
@@ -23,4 +23,5 @@ open class ViewsNodeId(val views: Views) {
         }
         return null
     }
+
 }

@@ -1,24 +1,24 @@
 package korlibs.korge.view.property
 
-import korlibs.datastructure.iterators.*
+import korlibs.datastructure.iterators.fastForEach
 import kotlin.reflect.*
-import kotlin.reflect.full.*
-import kotlin.reflect.jvm.*
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.superclasses
+import kotlin.reflect.jvm.isAccessible
 
 abstract class BasePWithProperty(val callable: KCallable<*>, val viewProp: ViewProperty, val clazz: KClass<*>) {
     val kname get() = callable.name
     val ktype = callable.returnType
     val order: Int get() = viewProp.order
     val name: String get() = viewProp.name.takeIf { it.isNotBlank() } ?: kname
-    //abstract fun invoke(instance: Any): Any?
     abstract fun get(instance: Any): Any?
     abstract fun set(instance: Any, value: String?)
 }
 
 class PropWithProperty(val prop: KProperty<*>, viewProp: ViewProperty, clazz: KClass<*>) : BasePWithProperty(prop, viewProp, clazz) {
-    //override fun invoke(instance: Any): Any? = prop.getter.call(instance)
     override fun get(instance: Any): Any? = prop.getter.call(instance)
-
     override fun set(instance: Any, value: String?) {
         val clazz = ktype.classifier as KClass<*>
         val fvalue = when (clazz) {
@@ -29,9 +29,9 @@ class PropWithProperty(val prop: KProperty<*>, viewProp: ViewProperty, clazz: KC
         (prop as KMutableProperty<*>).setter.call(instance, fvalue)
     }
 }
+
 class ActionWithProperty(val func: KFunction<*>, viewProp: ViewProperty, clazz: KClass<*>) : BasePWithProperty(func, viewProp, clazz) {
-    //override fun invoke(instance: Any) { func.call(instance) }
-    override fun get(instance: Any): Any? = Unit
+    override fun get(instance: Any): Any = Unit
     override fun set(instance: Any, value: String?) {
         func.call(instance)
     }
@@ -65,7 +65,7 @@ class ViewClassInfoGroup(
     val actionsAndProps = (props?.flatProperties ?: emptyList()) + (actions?.flatProperties ?: emptyList())
 }
 
-class ViewPropsInfo (val clazz: KClass<*>) {
+class ViewPropsInfo(val clazz: KClass<*>) {
     companion object {
         val CACHE = LinkedHashMap<KClass<*>, ViewPropsInfo>()
 

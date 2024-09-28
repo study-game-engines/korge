@@ -10,6 +10,7 @@ import korlibs.memory.*
 import korlibs.render.awt.*
 
 class IPCViewsCompleter : ViewsCompleter {
+
     override fun completeViews(views: Views) {
         val korgeIPC = KorgeIPCInfo.DEFAULT_PATH_OR_NULL
         if (korgeIPC != null) {
