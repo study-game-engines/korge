@@ -33,14 +33,12 @@ fun AGDefaultCanvas(): HTMLCanvasElement {
 }
 
 fun AGWebgl(config: AGConfig, canvas: HTMLCanvasElement = AGDefaultCanvas()): AGOpengl = AGOpengl(
-    KmlGlJsCanvas(
-        canvas, jsObject(
-            "premultipliedAlpha" to false, // To be like the other targets
-            "alpha" to false,
-            "stencil" to true,
-            "antialias" to config.antialiasHint
-        )
-    )
+    KmlGlJsCanvas(canvas, jsObject(
+        "premultipliedAlpha" to false, // To be like the other targets
+        "alpha" to false,
+        "stencil" to true,
+        "antialias" to config.antialiasHint
+    ))
 ).also { ag ->
     (window.asDynamic()).ag = ag
 

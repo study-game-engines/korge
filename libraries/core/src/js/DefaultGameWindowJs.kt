@@ -2,42 +2,52 @@ package korlibs.render
 
 import korlibs.event.*
 import korlibs.event.Touch
-import korlibs.graphics.*
-import korlibs.graphics.gl.*
-import korlibs.image.bitmap.*
-import korlibs.image.format.*
-import korlibs.io.async.*
-import korlibs.io.file.*
-import korlibs.math.geom.*
-import korlibs.platform.*
-import kotlinx.browser.*
-import kotlinx.coroutines.*
+import korlibs.graphics.AGConfig
+import korlibs.graphics.gl.AGDefaultCanvas
+import korlibs.graphics.gl.AGOpengl
+import korlibs.graphics.gl.AGWebgl
+import korlibs.graphics.gl.isCanvasCreatedAndHandled
+import korlibs.image.bitmap.Bitmap
+import korlibs.image.format.toHtmlNative
+import korlibs.io.async.launchImmediately
+import korlibs.io.file.toVfs
+import korlibs.math.geom.Point
+import korlibs.math.geom.Rectangle
+import korlibs.platform.Platform
+import kotlinx.browser.document
+import kotlinx.browser.window
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancelAndJoin
 import org.w3c.dom.*
 import org.w3c.dom.TouchEvent
-import org.w3c.dom.events.*
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.events.WheelEvent
 
 private external val navigator: dynamic
 
-open class JsGameWindow : GameWindow() {
-}
+open class JsGameWindow : GameWindow()
 
-open class BrowserCanvasJsGameWindow(
-    val canvas: HTMLCanvasElement = AGDefaultCanvas()
-) : JsGameWindow() {
-    val tDevicePixelRatio: Double get() = window.devicePixelRatio.toDouble()
-    override val devicePixelRatio: Double get() = when {
-        tDevicePixelRatio <= 0f -> 1.0
-        tDevicePixelRatio.isNaN() -> 1.0
-        tDevicePixelRatio.isInfinite() -> 1.0
-        else -> tDevicePixelRatio
-    }
+open class BrowserCanvasJsGameWindow(val canvas: HTMLCanvasElement = AGDefaultCanvas()) : JsGameWindow() {
+
+    val tDevicePixelRatio: Double get() = window.devicePixelRatio
+
+    override val devicePixelRatio: Double
+        get() = when {
+            tDevicePixelRatio <= 0f -> 1.0
+            tDevicePixelRatio.isNaN() -> 1.0
+            tDevicePixelRatio.isInfinite() -> 1.0
+            else -> tDevicePixelRatio
+        }
+
     // @TODO: Improve this: https://gist.github.com/scryptonite/5242987
     //override val pixelsPerInch: Float get() = 96f * devicePixelRatio
 
     override val ag: AGOpengl = AGWebgl(AGConfig(), canvas)
     override val dialogInterface: DialogInterfaceJs = DialogInterfaceJs()
     private var isTouchDeviceCache: Boolean? = null
+
     fun is_touch_device(): Boolean {
         if (isTouchDeviceCache == null) {
             isTouchDeviceCache = try {
@@ -300,7 +310,9 @@ open class BrowserCanvasJsGameWindow(
 
     override var title: String
         get() = document.title
-        set(value) { document.title = value }
+        set(value) {
+            document.title = value
+        }
     override val width: Int get() = canvas.clientWidth
     override val height: Int get() = canvas.clientHeight
     override val bufferWidth: Int get() = canvas.width
@@ -364,7 +376,9 @@ open class BrowserCanvasJsGameWindow(
         }
     override var visible: Boolean
         get() = canvas.style.visibility == "visible"
-        set(value) { canvas.style.visibility = if (value) "visible" else "hidden" }
+        set(value) {
+            canvas.style.visibility = if (value) "visible" else "hidden"
+        }
 
     override fun setSize(width: Int, height: Int) {
         // Do nothing!

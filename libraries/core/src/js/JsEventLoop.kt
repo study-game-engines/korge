@@ -29,6 +29,7 @@ open class LocalJsEventLoop(precise: Boolean = false, immediateRun: Boolean = fa
 }
 
 object JsEventLoop : BaseEventLoop() {
+
     override var paused: Boolean = false
 
     override fun close() = Unit

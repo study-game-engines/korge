@@ -23,14 +23,14 @@ class KmlGlJsCanvas(val canvas: HTMLCanvasElement, val glOpts: dynamic) : KmlGl(
     var webglVersion = 1
     val gl: WebGLRenderingContext =
         (null ?: canvas.getContext("webgl2", glOpts)?.also { webglVersion = 2 } ?: canvas.getContext("webgl", glOpts) ?: canvas.getContext("experimental-webgl", glOpts)).unsafeCast<WebGLRenderingContext?>()?.also {
-                println("Created WebGL version=$webglVersion, opts=${JSON.stringify(glOpts)}")
-            }?.also {
-                it.getExtension("OES_standard_derivatives")
-                it.getExtension("OES_texture_float")
-                it.getExtension("OES_texture_float_linear")
-                it.getExtension("OES_element_index_uint")
-                Unit
-            } ?: run {
+            println("Created WebGL version=$webglVersion, opts=${JSON.stringify(glOpts)}")
+        }?.also {
+            it.getExtension("OES_standard_derivatives")
+            it.getExtension("OES_texture_float")
+            it.getExtension("OES_texture_float_linear")
+            it.getExtension("OES_element_index_uint")
+            Unit
+        } ?: run {
             try {
                 document.body?.prepend((document.createElement("div") as HTMLElement).apply {
                     style.color = "red"
@@ -381,11 +381,7 @@ class KmlGlJsCanvas(val canvas: HTMLCanvasElement, val glOpts: dynamic) : KmlGl(
         gl.asDynamic().uniformBlockBinding(program.get<WebGLProgram>(), uniformBlockIndex, uniformBlockBinding)
     }
 
-    val vertexArrayObject: WebGLExtension = WebGLExtension(
-        this, "OES_vertex_array_object", coreSince = 2, functions = listOf(
-            "createVertexArrayOES", "deleteVertexArrayOES", "isVertexArrayOES", "bindVertexArrayOES"
-        ), suffix = "OES"
-    )
+    val vertexArrayObject: WebGLExtension = WebGLExtension(this, "OES_vertex_array_object", coreSince = 2, functions = listOf("createVertexArrayOES", "deleteVertexArrayOES", "isVertexArrayOES", "bindVertexArrayOES"), suffix = "OES")
     override val isVertexArraysSupported: Boolean get() = vertexArrayObject.supported
 
     override fun genVertexArrays(n: Int, arrays: Buffer) {

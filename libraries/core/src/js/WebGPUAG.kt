@@ -46,43 +46,23 @@ class WebGPUAG(val device: GPUDevice) : AG() {
             fragment = GPUFragmentState(
                 module = shaderModule,
                 entryPoint = "fs_main",
-                targets = arrayOf(
-                    GPUColorTargetState(
-                        format = GPUTextureFormat.RGBA8UNORM_SRGB,
-                    ),
-                ),
+                targets = arrayOf(GPUColorTargetState(format = GPUTextureFormat.RGBA8UNORM_SRGB)),
             ),
         )
     )
 
-    val captureInfo = createCapture(
-        device,
-        dimensions.width,
-        dimensions.height,
-    )
+    val captureInfo = createCapture(device, dimensions.width, dimensions.height)
     val texture = captureInfo.texture
     val outputBuffer = captureInfo.outputBuffer
 
     companion object {
         suspend operator fun invoke(): WebGPUAG {
-            val adapter: GPUAdapter = navigator.gpu.requestAdapter().await()
-                ?: error("No WebGPU adapter found")
+            val adapter: GPUAdapter = navigator.gpu.requestAdapter().await() ?: error("No WebGPU adapter found")
             return WebGPUAG(adapter.requestDevice().await())
         }
     }
 
-
-    override fun clear(
-        frameBuffer: AGFrameBufferBase,
-        frameBufferInfo: AGFrameBufferInfo,
-        color: RGBA,
-        depth: Float,
-        stencil: Int,
-        clearColor: Boolean,
-        clearDepth: Boolean,
-        clearStencil: Boolean,
-        scissor: AGScissor
-    ) {
+    override fun clear(frameBuffer: AGFrameBufferBase, frameBufferInfo: AGFrameBufferInfo, color: RGBA, depth: Float, stencil: Int, clearColor: Boolean, clearDepth: Boolean, clearStencil: Boolean, scissor: AGScissor) {
         val encoder = device.createCommandEncoder();
         val renderPass = encoder.beginRenderPass(
             GPURenderPassDescriptor(
@@ -95,41 +75,30 @@ class WebGPUAG(val device: GPUDevice) : AG() {
                     ),
                 ),
             )
-            //GPURenderPassDescriptor()
-        );
-        renderPass.setPipeline(renderPipeline);
-        renderPass.draw(3, 1);
-        renderPass.end();
-        copyToBuffer(encoder, texture, outputBuffer, dimensions);
-        device.queue.submit(arrayOf(encoder.finish()));
+        )
+        renderPass.setPipeline(renderPipeline)
+        renderPass.draw(3, 1)
+        renderPass.end()
+        copyToBuffer(encoder, texture, outputBuffer, dimensions)
+        device.queue.submit(arrayOf(encoder.finish()))
     }
 
     override fun readToMemory(frameBuffer: AGFrameBufferBase, frameBufferInfo: AGFrameBufferInfo, x: Int, y: Int, width: Int, height: Int, data: Any, kind: AGReadKind) {
-
+        // no op
     }
 
-    private fun copyToBuffer(
-        encoder: GPUCommandEncoder,
-        texture: GPUTexture,
-        outputBuffer: GPUBuffer,
-        dimensions: SizeInt,
-    ) {
-        val padded = getRowPadding(dimensions.width).padded;
-
+    private fun copyToBuffer(encoder: GPUCommandEncoder, texture: GPUTexture, outputBuffer: GPUBuffer, dimensions: SizeInt) {
+        val padded = getRowPadding(dimensions.width).padded
         encoder.copyTextureToBuffer(
             GPUImageCopyTexture(texture = texture,),
             GPUImageCopyBuffer(buffer = outputBuffer, bytesPerRow = padded),
             GPUExtent3DDictStrict(width = dimensions.width, height = dimensions.height),
-        );
+        )
     }
 
     data class CreateCapture(val texture: GPUTexture, val outputBuffer: GPUBuffer)
 
-    private fun createCapture(
-        device: GPUDevice,
-        width: Int,
-        height: Int,
-    ): CreateCapture {
+    private fun createCapture(device: GPUDevice, width: Int, height: Int): CreateCapture {
         val padded = getRowPadding(width).padded;
         val outputBuffer = device.createBuffer(GPUBufferDescriptor(
             label = "Capture",
@@ -144,7 +113,6 @@ class WebGPUAG(val device: GPUDevice) : AG() {
                 usage = (GPUTextureUsage.RENDER_ATTACHMENT or GPUTextureUsage.COPY_SRC),
             )
         )
-
         return CreateCapture(texture, outputBuffer)
     }
 
@@ -157,10 +125,9 @@ class WebGPUAG(val device: GPUDevice) : AG() {
         val padded: Int,
     )
     /** Buffer-Texture copies must have [`bytes_per_row`] aligned to this number. */
-    val COPY_BYTES_PER_ROW_ALIGNMENT = 256;
+    val COPY_BYTES_PER_ROW_ALIGNMENT = 256
     /** Number of bytes per pixel. */
-    val BYTES_PER_PIXEL = 4;
-
+    val BYTES_PER_PIXEL = 4
 
     private fun getRowPadding(width: Int): Padding {
         // It is a WebGPU requirement that
