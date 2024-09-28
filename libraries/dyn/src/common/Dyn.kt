@@ -27,9 +27,9 @@ val Any?.dyn: Dyn get() = Dyn(this)
 @Suppress("DEPRECATION")
 inline class Dyn(val value: Any?) : Comparable<Dyn> {
 
-    val dyn get() = this
-    val isNull get() = value == null
-    val isNotNull get() = value != null
+    val dyn: Dyn get() = this
+    val isNull: Boolean get() = value == null
+    val isNotNull: Boolean get() = value != null
 
     inline fun <T> casted(): T = value as T
 
@@ -49,14 +49,15 @@ inline class Dyn(val value: Any?) : Comparable<Dyn> {
     fun not(): Dyn = (!toBool()).dyn
 
     operator fun plus(r: Dyn): Dyn {
-        val l = this
-        val out: Any? = when (l.value) {
+        val l: Dyn = this
+        val out: Any = when (l.value) {
             is String -> l.toString() + r.toString()
             is Iterable<*> -> l.toIterableAny() + r.toIterableAny()
             else -> l.toDouble() + r.toDouble()
         }
         return out.dyn
     }
+
     operator fun minus(r: Dyn): Dyn = (this.toDouble() - r.toDouble()).dyn
     operator fun times(r: Dyn): Dyn = (this.toDouble() * r.toDouble()).dyn
     operator fun div(r: Dyn): Dyn = (this.toDouble() / r.toDouble()).dyn
