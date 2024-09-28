@@ -1,25 +1,29 @@
 package korlibs.render.awt
 
-import korlibs.datastructure.*
-import korlibs.event.*
-import korlibs.ffi.osx.*
-import korlibs.graphics.*
-import korlibs.image.awt.*
-import korlibs.io.dynamic.*
-import korlibs.io.file.*
-import korlibs.io.file.std.*
-import korlibs.math.*
-import korlibs.math.geom.*
-import korlibs.platform.*
-import korlibs.render.*
+import korlibs.datastructure.extraPropertyThis
+import korlibs.event.DropFileEvent
+import korlibs.event.EventListener
+import korlibs.event.GestureEvent
+import korlibs.event.reset
+import korlibs.graphics.AG
+import korlibs.image.awt.toAwt
+import korlibs.io.dynamic.Dyn
+import korlibs.io.dynamic.dyn
+import korlibs.io.file.VfsFile
+import korlibs.io.file.std.toVfs
+import korlibs.math.geom.Size
+import korlibs.math.toIntCeil
+import korlibs.platform.Platform
+import korlibs.render.CustomCursor
+import korlibs.render.GameWindow
+import korlibs.render.ICursor
 import java.awt.*
-import java.awt.Point
-import java.awt.datatransfer.*
+import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.*
-import java.awt.image.*
-import java.io.*
-import javax.imageio.*
-import javax.swing.*
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
+import javax.swing.JFrame
 
 fun JFrame.setIconIncludingTaskbarFromResource(path: String) {
     runCatching {
@@ -146,47 +150,52 @@ fun Component.setKorgeDropTarget(dispatcher: EventListener) {
     }
 }
 
-val Component.devicePixelRatio: Double get() {
-    if (GraphicsEnvironment.isHeadless()) {
-        return 1.0
-    } else {
-        // transform
-        // https://stackoverflow.com/questions/20767708/how-do-you-detect-a-retina-display-in-java
-        val config = graphicsConfiguration
-            ?: GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration
-        return config.defaultTransform.scaleX
+val Component.devicePixelRatio: Double
+    get() {
+        if (GraphicsEnvironment.isHeadless()) {
+            return 1.0
+        } else {
+            // transform
+            // https://stackoverflow.com/questions/20767708/how-do-you-detect-a-retina-display-in-java
+            val config = graphicsConfiguration
+                ?: GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration
+            return config.defaultTransform.scaleX
+        }
     }
-}
 
-val Component.pixelsPerInch: Double get() {
-    if (GraphicsEnvironment.isHeadless()) {
-        return AG.defaultPixelsPerInch
-    } else {
-        // maybe this is not just windows specific :
-        // https://stackoverflow.com/questions/32586883/windows-scaling
-        // somehow this value is not update when you change the scaling in the windows settings while the jvm is running :(
-        return Toolkit.getDefaultToolkit().screenResolution.toDouble()
+val Component.pixelsPerInch: Double
+    get() {
+        if (GraphicsEnvironment.isHeadless()) {
+            return AG.defaultPixelsPerInch
+        } else {
+            // maybe this is not just windows specific :
+            // https://stackoverflow.com/questions/32586883/windows-scaling
+            // somehow this value is not update when you change the scaling in the windows settings while the jvm is running :(
+            return Toolkit.getDefaultToolkit().screenResolution.toDouble()
+        }
     }
-}
 
 
-val korlibs.render.Cursor.jvmCursor: java.awt.Cursor get() = java.awt.Cursor(when (this) {
-    korlibs.render.Cursor.DEFAULT -> java.awt.Cursor.DEFAULT_CURSOR
-    korlibs.render.Cursor.CROSSHAIR -> java.awt.Cursor.CROSSHAIR_CURSOR
-    korlibs.render.Cursor.TEXT -> java.awt.Cursor.TEXT_CURSOR
-    korlibs.render.Cursor.HAND -> java.awt.Cursor.HAND_CURSOR
-    korlibs.render.Cursor.MOVE -> java.awt.Cursor.MOVE_CURSOR
-    korlibs.render.Cursor.WAIT -> java.awt.Cursor.WAIT_CURSOR
-    korlibs.render.Cursor.RESIZE_EAST -> java.awt.Cursor.E_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_SOUTH -> java.awt.Cursor.S_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_WEST -> java.awt.Cursor.W_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_NORTH -> java.awt.Cursor.N_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_NORTH_EAST -> java.awt.Cursor.NE_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_NORTH_WEST -> java.awt.Cursor.NW_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_SOUTH_EAST -> java.awt.Cursor.SE_RESIZE_CURSOR
-    korlibs.render.Cursor.RESIZE_SOUTH_WEST -> java.awt.Cursor.SW_RESIZE_CURSOR
-    else -> java.awt.Cursor.DEFAULT_CURSOR
-})
+val korlibs.render.Cursor.jvmCursor: java.awt.Cursor
+    get() = java.awt.Cursor(
+        when (this) {
+            korlibs.render.Cursor.DEFAULT -> java.awt.Cursor.DEFAULT_CURSOR
+            korlibs.render.Cursor.CROSSHAIR -> java.awt.Cursor.CROSSHAIR_CURSOR
+            korlibs.render.Cursor.TEXT -> java.awt.Cursor.TEXT_CURSOR
+            korlibs.render.Cursor.HAND -> java.awt.Cursor.HAND_CURSOR
+            korlibs.render.Cursor.MOVE -> java.awt.Cursor.MOVE_CURSOR
+            korlibs.render.Cursor.WAIT -> java.awt.Cursor.WAIT_CURSOR
+            korlibs.render.Cursor.RESIZE_EAST -> java.awt.Cursor.E_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_SOUTH -> java.awt.Cursor.S_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_WEST -> java.awt.Cursor.W_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_NORTH -> java.awt.Cursor.N_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_NORTH_EAST -> java.awt.Cursor.NE_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_NORTH_WEST -> java.awt.Cursor.NW_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_SOUTH_EAST -> java.awt.Cursor.SE_RESIZE_CURSOR
+            korlibs.render.Cursor.RESIZE_SOUTH_WEST -> java.awt.Cursor.SW_RESIZE_CURSOR
+            else -> java.awt.Cursor.DEFAULT_CURSOR
+        }
+    )
 
 val CustomCursor.jvmCursor: java.awt.Cursor by extraPropertyThis {
     val toolkit = Toolkit.getDefaultToolkit()
@@ -200,36 +209,17 @@ val CustomCursor.jvmCursor: java.awt.Cursor by extraPropertyThis {
     }
 }
 
-val ICursor.jvmCursor: java.awt.Cursor get() {
-    return when (this) {
-        is korlibs.render.Cursor -> this.jvmCursor
-        is CustomCursor -> this.jvmCursor
-        else -> java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR)
+val ICursor.jvmCursor: java.awt.Cursor
+    get() {
+        return when (this) {
+            is korlibs.render.Cursor -> this.jvmCursor
+            is CustomCursor -> this.jvmCursor
+            else -> java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR)
+        }
     }
-}
 
 fun Component.hapticFeedbackGenerate(kind: GameWindow.HapticFeedbackKind) {
     when {
-        Platform.os.isMac -> {
-            val KIND_GENERIC = 0
-            val KIND_ALIGNMENT = 1
-            val KIND_LEVEL_CHANGE = 2
-
-            val PERFORMANCE_TIME_DEFAULT = 0
-            val PERFORMANCE_TIME_NOW = 1
-            val PERFORMANCE_TIME_DRAW_COMPLETED = 2
-
-            val kindInt = when (kind) {
-                GameWindow.HapticFeedbackKind.GENERIC -> KIND_GENERIC
-                GameWindow.HapticFeedbackKind.ALIGNMENT -> KIND_ALIGNMENT
-                GameWindow.HapticFeedbackKind.LEVEL_CHANGE -> KIND_LEVEL_CHANGE
-            }
-            val performanceTime = PERFORMANCE_TIME_NOW
-
-            NSClass("NSHapticFeedbackManager")
-                .msgSendRef("defaultPerformer")
-                .msgSendVoid("performFeedbackPattern:performanceTime:", kindInt.toLong(), performanceTime.toLong())
-        }
         else -> {
             Unit
         }

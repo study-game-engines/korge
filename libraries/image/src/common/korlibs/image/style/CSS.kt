@@ -3,20 +3,22 @@
 package korlibs.image.style
 
 import korlibs.datastructure.*
-import korlibs.ffi.osx.*
-import korlibs.image.annotation.*
-import korlibs.image.color.*
-import korlibs.io.lang.*
-import korlibs.io.util.*
+import korlibs.image.annotation.KorimExperimental
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.image.color.interpolate
+import korlibs.io.lang.invalidOp
+import korlibs.io.lang.substr
 import korlibs.math.geom.*
 import korlibs.math.interpolation.*
-import korlibs.time.*
-import korlibs.util.*
+import korlibs.time.milliseconds
+import korlibs.time.seconds
+import korlibs.util.SimpleStrReader
+import korlibs.util.skipWhile
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
-import kotlin.native.concurrent.*
-import kotlin.time.*
+import kotlin.time.Duration
 
 @KorimExperimental
 class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
@@ -32,23 +34,28 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
     interface Selector {
         val str: String
     }
+
     data class IdSelector(val token: Token) : Selector {
         override val str: String get() = token.str
         val id: String = str.substr(1)
     }
+
     data class ClassSelector(val token: Token) : Selector {
         override val str: String get() = token.str
         val className: String = str.substr(1)
     }
+
     data class UnknownSelector(val token: Token) : Selector {
         override val str: String get() = token.str
     }
+
     data class Expression(val expr: List<Token>) : Extra by Extra.Mixin() {
         val exprStr = this.expr.joinToString(" ") { it.str }
     }
 
     data class Declaration(val property: String, val expr: Expression?) {
     }
+
     interface IRuleSet
 
     data class Declarations(val declarations: List<Declaration>) : Extra by Extra.Mixin() {
@@ -62,6 +69,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
     data class KeyFrame constructor(val ratio: Ratio, val declarations: Declarations) {
         operator fun get(key: String): Expression? = declarations.declarationsMap[key]
         val easing: Easing = this["animation-timing-function"]?.easing ?: Easing.LINEAR
+
         companion object {
             val DUMMY = KeyFrame(Ratio.ZERO, Declarations(emptyList()))
         }
@@ -76,6 +84,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
     data class KeyFrames(val id: Token, val partialKeyFrames: List<KeyFrame>) : IRuleSet {
         val propertyNames = partialKeyFrames.flatMap { it.declarations.declarations.map { it.property } }.distinct()
         val fullKeyFrames = FastArrayList<KeyFrame>()
+
         init {
             @Suppress("USELESS_CAST") val currentMap = propertyNames.associateWith { null as Expression? }.toMutableMap()
             for (frame in partialKeyFrames) {
@@ -191,7 +200,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
         }
 
         fun parseNumberDropSuffix(str: String): Double? {
-            return str.trimEnd { it != '.' && it !in '0'..'9'  }.toDoubleOrNull()
+            return str.trimEnd { it != '.' && it !in '0'..'9' }.toDoubleOrNull()
         }
 
         fun parseTime(str: String): Duration? {
@@ -199,6 +208,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
             if (str.endsWith("s")) return str.removeSuffix("s").toDoubleOrNull()?.seconds
             return parseNumberDropSuffix(str)?.milliseconds
         }
+
         fun parseAngle(str: String): Angle? {
             if (str.endsWith("deg")) return str.removeSuffix("deg").toDoubleOrNull()?.degrees
             if (str.endsWith("rad")) return str.removeSuffix("rad").toDoubleOrNull()?.radians
@@ -306,7 +316,7 @@ class CSS(val allRules: List<IRuleSet>, unit: Unit = Unit) {
                 }
             }
             return parseEasing(tokenize(str).map { it.str.lowercase() }.reader())
-       }
+        }
 
         fun parseSizeAsDouble(size: String): Double {
             return size.filter { it !in 'a'..'z' && it !in 'A'..'Z' }.toDoubleOrNull() ?: 16.0
@@ -426,11 +436,15 @@ val CSS.Declarations.animation: CSS.Animation? by extraPropertyThis {
 
 fun CSS.InterpolationResult.getColor(key: String, default: RGBA = Colors.TRANSPARENT): RGBA =
     this.ratio.toRatio().interpolate(k0[key]?.color ?: default, k1[key]?.color ?: default)
+
 fun CSS.InterpolationResult.getRatio(key: String, default: Ratio = Ratio.ZERO): Ratio =
     this.ratio.toRatio().interpolate(k0[key]?.ratio ?: default, k1[key]?.ratio ?: default)
+
 fun CSS.InterpolationResult.getMatrix(key: String, default: Matrix = Matrix()): Matrix =
     this.ratio.toRatio().interpolate(k0[key]?.matrix?.takeIf { it.isNotNIL } ?: default, k1[key]?.matrix ?: default)
+
 fun CSS.InterpolationResult.getTransform(key: String, default: MatrixTransform = MatrixTransform.IDENTITY): MatrixTransform =
     this.ratio.toRatio().interpolate(k0[key]?.transform ?: default, k1[key]?.transform ?: default)
+
 fun CSS.InterpolationResult.getEasing(key: String, default: Easing = Easing.LINEAR): Easing =
     k0[key]?.easing ?: default

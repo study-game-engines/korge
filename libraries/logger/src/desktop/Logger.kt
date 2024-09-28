@@ -1,4 +1,4 @@
-@file:JvmName("LoggerDesktop")
+@file:JvmName("Logger@desktop")
 
 package korlibs.logger
 

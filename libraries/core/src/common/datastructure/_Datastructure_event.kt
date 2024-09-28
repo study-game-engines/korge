@@ -1,5 +1,3 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package korlibs.datastructure.event
 
 import korlibs.concurrent.lock.Lock
@@ -18,7 +16,6 @@ expect fun createPlatformEventLoop(precise: Boolean = true): SyncEventLoop
 
 interface EventLoop : Pauseable, AutoCloseable {
     companion object
-
     fun setImmediate(task: () -> Unit)
     fun setTimeout(time: Duration, task: () -> Unit): AutoCloseable
     fun setInterval(time: Duration, task: () -> Unit): AutoCloseable
@@ -47,7 +44,7 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
             }
 
         override fun compareTo(other: TimedTask): Int {
-            return this.timeMark.compareTo(other.timeMark)
+            return timeMark.compareTo(other.timeMark)
         }
 
         override fun close() {
@@ -57,13 +54,11 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
 
     }
 
-    private val startTime = TimeSource.Monotonic.markNow()
-
+    private val startTime: TimeSource.Monotonic.ValueTimeMark = TimeSource.Monotonic.markNow()
     var nowProvider: () -> Duration = { startTime.elapsedNow() }
-
     private val now: Duration get() = nowProvider()
-    private val tasks = ArrayDeque<() -> Unit>()
-    private val timedTasks = TGenPriorityQueue<TimedTask> { a, b -> a.compareTo(b) }
+    private val tasks: ArrayDeque<() -> Unit> = ArrayDeque()
+    private val timedTasks: TGenPriorityQueue<TimedTask> = TGenPriorityQueue { a, b -> a.compareTo(b) }
 
     fun setImmediateFirst(task: () -> Unit) {
         lock {
@@ -89,7 +84,7 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
 
     private fun _queueAfter(time: Duration, interval: Boolean, task: () -> Unit): AutoCloseable {
         return lock {
-            val task = TimedTask(this, now, time, interval, task)
+            val task: TimedTask = TimedTask(this, now, time, interval, task)
             if (running) {
                 timedTasks.add(task)
             } else {
@@ -103,7 +98,6 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
     override fun close() {
         val oldImmediateRun = immediateRun
         try {
-            // Run pending tasks including pending timers, but won't allow to add new tasks because running=false
             immediateRun = true
             runAvailableNextTasks()
             running = false
@@ -119,7 +113,9 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
 
     fun wait(waitTime: Duration) {
         if (immediateRun) return
-        lock { lock.wait(waitTime) }
+        lock {
+            lock.wait(waitTime)
+        }
     }
 
     fun runAvailableNextTasks(runTimers: Boolean = true): Int {
@@ -189,11 +185,9 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
         while (running) {
             pauseable.checkPaused()
             val somethingExecuted = waitAndRunNextTask()
-
             if (lock { !somethingExecuted && tasks.isEmpty() && timedTasks.isEmpty() }) {
                 break
             }
-
             if (stopwatch.elapsed >= 0.1.seconds) {
                 stopwatch.restart()
                 NativeThread.sleep(10.milliseconds)
@@ -211,14 +205,14 @@ open class SyncEventLoop(var immediateRun: Boolean = false) : BaseEventLoop(), P
 
     private var thread: NativeThread? = null
 
-    open fun start(): Unit {
+    open fun start() {
         if (thread != null) return
         thread = nativeThread {
             runTasksForever { running }
         }
     }
 
-    open fun stop(): Unit {
+    open fun stop() {
         running = false
         thread = null
     }

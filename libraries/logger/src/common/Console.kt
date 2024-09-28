@@ -1,14 +1,10 @@
 package korlibs.logger
 
-import kotlin.native.concurrent.ThreadLocal
-
 @PublishedApi
-internal var baseConsoleHook: ((
-    kind: BaseConsole.Kind, msg: Array<out Any?>,
-    logInternal: (kind: BaseConsole.Kind, msg: Array<out Any?>) -> Unit,
-) -> Unit)? = null
+internal var baseConsoleHook: ((kind: BaseConsole.Kind, msg: Array<out Any?>, logInternal: (kind: BaseConsole.Kind, msg: Array<out Any?>) -> Unit) -> Unit)? = null
 
-open class BaseConsole() : AnsiEscape {
+open class BaseConsole : AnsiEscape {
+
     enum class Kind(val level: Int, val color: AnsiEscape.Color?) {
         ERROR(0, AnsiEscape.Color.RED),
         WARN(1, AnsiEscape.Color.YELLOW),
@@ -22,9 +18,7 @@ open class BaseConsole() : AnsiEscape {
         override fun toString(): String = msg.joinToString(", ")
     }
 
-    inline fun capture(
-        block: () -> Unit
-    ): List<LogEntry> = arrayListOf<LogEntry>().also { out ->
+    inline fun capture(block: () -> Unit): List<LogEntry> = arrayListOf<LogEntry>().also { out ->
         hook(hook = { kind, msg, _ ->
             out += LogEntry(kind, msg.toList())
         }) {
@@ -32,13 +26,7 @@ open class BaseConsole() : AnsiEscape {
         }
     }
 
-    inline fun <T> hook(
-        noinline hook: (
-            kind: BaseConsole.Kind, msg: Array<out Any?>,
-            logInternal: (kind: BaseConsole.Kind, msg: Array<out Any?>) -> Unit,
-        ) -> Unit,
-        block: () -> T
-    ): T {
+    inline fun <T> hook(noinline hook: (kind: BaseConsole.Kind, msg: Array<out Any?>, logInternal: (kind: BaseConsole.Kind, msg: Array<out Any?>) -> Unit) -> Unit, block: () -> T): T {
         val old = baseConsoleHook
         try {
             baseConsoleHook = hook
@@ -92,4 +80,3 @@ expect object Console : BaseConsole
 fun Console.assert(cond: Boolean, msg: String) {
     if (cond) throw AssertionError(msg)
 }
-

@@ -1,16 +1,14 @@
 package korlibs.render.osx.metal
 
 import com.sun.jna.*
-import korlibs.ffi.osx.*
-import korlibs.io.dynamic.*
-import korlibs.io.lang.*
-import korlibs.memory.*
+import korlibs.io.dynamic.Dyn
+import korlibs.io.dynamic.dyn
+import korlibs.memory.extract8
+import korlibs.memory.insert8
 import korlibs.render.osx.*
-import korlibs.render.osx.NSMutableDictionary
-import korlibs.render.osx.NSString
-import korlibs.render.platform.*
+import korlibs.render.platform.awtGetPeer
 import kotlinx.coroutines.DisposableHandle
-import javax.swing.*
+import javax.swing.JFrame
 
 val isUsingMetalPipeline: Boolean by lazy {
     runCatching {
@@ -32,6 +30,7 @@ inline class FourCharCode(val value: Int) {
     val c1: Char get() = value.extract8(16).toChar()
     val c2: Char get() = value.extract8(8).toChar()
     val c3: Char get() = value.extract8(0).toChar()
+
     constructor(c0: Char, c1: Char, c2: Char, c3: Char) : this(0.insert8(c0.code, 24).insert8(c1.code, 16).insert8(c2.code, 8).insert8(c3.code, 0))
     constructor(str: String) : this(str[0], str[1], str[2], str[3])
 }
@@ -61,6 +60,7 @@ class CoreVideoOpenGLMetalSharedTexture(val width: Int, val height: Int) : Dispo
     }.getPointer(0L)
 
     val glTexture = CoreVideo.CVOpenGLTextureGetName(_CVGLTexture)
+
     init {
         println("pixelBuffer=$pixelBuffer")
         println("glTextureCache=$glTextureCache")
@@ -93,6 +93,7 @@ interface MetalGlobals : Library {
 
 open class MTLRegion : Structure {
     override fun getFieldOrder() = listOf("x", "y", "z", "width", "height", "depth")
+
     companion object {
         fun make2D(x: Long, y: Long, width: Long, height: Long): MTLRegion.ByValue {
             return MTLRegion.ByValue().also {
@@ -105,6 +106,7 @@ open class MTLRegion : Structure {
             }
         }
     }
+
     @JvmField var x: Long = 0L
     @JvmField var y: Long = 0L
     @JvmField var z: Long = 0L
@@ -182,33 +184,41 @@ open class MTLClearColor : Structure {
 interface MTLArchitecture : ObjcDynamicInterface {
     @get:ObjcDesc("name", "@16@0:8") val name: String
 }
+
 interface MTLFunction : ObjcDynamicInterface {
 
 }
+
 interface MTLLibrary : ObjcDynamicInterface {
     @ObjcDesc("newFunctionWithName:", "@24@0:8@16") fun newFunction(name: NSString): MTLFunction?
 }
+
 interface MTLRenderPipelineState : ObjcDynamicInterface {
 
 }
+
 interface MTLCommandEncoder : ObjcDynamicInterface {
     @ObjcDesc("endEncoding", "v16@0:8") fun endEncoding(): Unit
 }
+
 interface MTLRenderCommandEncoder : MTLCommandEncoder {
     @ObjcDesc("setRenderPipelineState:", "v24@0:8@16") fun setRenderPipelineState(setRenderPipelineState: MTLRenderPipelineState?): Unit
     @ObjcDesc("setVertexBuffer:offset:atIndex:", "v40@0:8@16Q24Q32") fun setVertexBuffer(setVertexBuffer: MTLBuffer?, offset: Long, atIndex: Long): Unit
     @ObjcDesc("drawPrimitives:vertexStart:vertexCount:instanceCount:", "v48@0:8Q16Q24Q32Q40") fun drawPrimitives(primitiveType: Long, vertexStart: Long, vertexCount: Long, instanceCount: Long): Unit
 
 }
+
 interface MTLCommandBuffer : ObjcDynamicInterface {
     @ObjcDesc("renderCommandEncoderWithDescriptor:", "@24@0:8@16") fun renderCommandEncoder(descriptor: MTLRenderPassDescriptor?): MTLRenderCommandEncoder?
     @ObjcDesc("presentDrawable:", "v24@0:8@16") fun presentDrawable(presentDrawable: CAMetalDrawable?): Unit
     @ObjcDesc("commit", "v16@0:8") fun commit(): Unit
     @ObjcDesc("waitUntilCompleted", "v16@0:8") fun waitUntilCompleted(): Unit
 }
+
 interface MTLCommandQueue : ObjcDynamicInterface {
     @ObjcDesc("commandBuffer", "@16@0:8") fun commandBuffer(): MTLCommandBuffer?
 }
+
 interface MTLDevice : ObjcDynamicInterface {
     @get:ObjcDesc("architecture", "@16@0:8") val architecture: MTLArchitecture
     @get:ObjcDesc("name", "@16@0:8") val name: String
@@ -254,6 +264,7 @@ interface MTLRenderPassDescriptor : ObjcDynamicInterface {
     companion object {
         operator fun invoke(): MTLRenderPassDescriptor = ObjcDynamicInterface.createNew<MTLRenderPassDescriptor>()
     }
+
     @get:ObjcDesc("colorAttachments") val colorAttachments: MTLRenderPassColorAttachmentDescriptorArray
 }
 
@@ -287,7 +298,9 @@ interface CAMetalDrawable : ObjcDynamicInterface {
 
 interface MTLTexture : MTLResource {
     @ObjcDesc("getBytes:bytesPerRow:bytesPerImage:fromRegion:mipmapLevel:slice:", "v104@0:8^v16Q24Q32{?={?=QQQ}{?=QQQ}}40Q88Q96") fun getBytes(
-        getBytes: Pointer, bytesPerRow: Long, bytesPerImage: Long, fromRegion: MTLRegion.ByValue, mipmapLevel: Long, slice: Long): Unit
+        getBytes: Pointer, bytesPerRow: Long, bytesPerImage: Long, fromRegion: MTLRegion.ByValue, mipmapLevel: Long, slice: Long
+    ): Unit
+
     @get:ObjcDesc("width", "Q16@0:8") val width: Long
     @get:ObjcDesc("height", "Q16@0:8") val height: Long
     @get:ObjcDesc("textureType", "Q16@0:8") val textureType: Long

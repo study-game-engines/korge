@@ -1,4 +1,4 @@
-@file:JvmName("DynApiJvm")
+@file:JvmName("DynApi@jvm")
 
 package korlibs.io.dynamic
 

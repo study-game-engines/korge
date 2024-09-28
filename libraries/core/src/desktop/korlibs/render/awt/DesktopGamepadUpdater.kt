@@ -1,9 +1,11 @@
 package korlibs.render.awt
 
-import korlibs.event.gamepad.*
-import korlibs.platform.*
-import korlibs.render.*
-import korlibs.time.*
+import korlibs.event.gamepad.LinuxJoyEventAdapter
+import korlibs.event.gamepad.XInputGamepadEventAdapter
+import korlibs.platform.Platform
+import korlibs.render.GameWindow
+import korlibs.time.Stopwatch
+import korlibs.time.seconds
 
 internal object DesktopGamepadUpdater {
     private var exceptionStopwatch: Stopwatch? = null
@@ -20,7 +22,6 @@ internal object DesktopGamepadUpdater {
             when {
                 Platform.isWindows -> xinputEventAdapter.updateGamepads(window.gamepadEmitter)
                 Platform.isLinux -> linuxJoyEventAdapter.updateGamepads(window.gamepadEmitter)
-                Platform.isMac -> macosGamepadEventAdapter.updateGamepads(window)
                 else -> Unit //println("undetected OS: ${OS.rawName}")
             }
         } catch (e: Throwable) {
@@ -32,5 +33,4 @@ internal object DesktopGamepadUpdater {
 
     private val xinputEventAdapter by lazy { XInputGamepadEventAdapter() }
     private val linuxJoyEventAdapter by lazy { LinuxJoyEventAdapter() }
-    private val macosGamepadEventAdapter by lazy { MacosGamepadEventAdapter() }
 }

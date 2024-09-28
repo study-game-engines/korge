@@ -2,5 +2,4 @@
 
 package korlibs.datastructure.event
 
-actual fun createPlatformEventLoop(precise: Boolean): SyncEventLoop =
-    SyncEventLoop(precise)
+actual fun createPlatformEventLoop(precise: Boolean): SyncEventLoop = SyncEventLoop(precise)
