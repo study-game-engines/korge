@@ -1,17 +1,21 @@
 package korlibs.graphics
 
-import korlibs.datastructure.*
-import korlibs.graphics.shader.*
-import korlibs.logger.*
-import korlibs.memory.*
+import korlibs.datastructure.FastArrayList
+import korlibs.graphics.shader.Attribute
+import korlibs.graphics.shader.ProgramLayout
+import korlibs.graphics.shader.VertexLayout
+import korlibs.logger.Logger
+import korlibs.memory.Buffer
+import korlibs.memory.getUnalignedArrayInt8
+import korlibs.memory.setArray
 
 private val logger by lazy {
     Logger("AGVertexArrayObjectFlattener")
 }
 
-fun AGVertexArrayObject.flatten(): AGVertexArrayObject  = AGVertexArrayObject(
+fun AGVertexArrayObject.flatten(): AGVertexArrayObject = AGVertexArrayObject(
     this.list.flatMap { vertexData ->
-        when(vertexData.layout.items.size) {
+        when (vertexData.layout.items.size) {
             1 -> listOf(vertexData)
             else -> vertexData.layout.items.map { item ->
                 AGVertexData(
@@ -33,7 +37,7 @@ fun AGBuffer.extractDataOf(attribute: Attribute, layout: VertexLayout): AGBuffer
             val data = mem!!.getUnalignedArrayInt8(offset, ByteArray(attribute.totalBytes))
             logger.trace { "extracting data of $attribute from $data" }
             check(data.size == attribute.totalBytes)
-            setUnalignedArrayInt8(localOffset, data)
+            setArray(localOffset, data)
         }
     }.let { AGBuffer().upload(it) }
 }
