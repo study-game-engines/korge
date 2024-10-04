@@ -45,7 +45,6 @@ class MainSpine : ScaledScene(1280, 720) {
         println("result=$result")
         */
 
-
         fun createSkel(): Pair<Skeleton, AnimationState> {
             val skeleton =
                 Skeleton(skeletonData) // Skeleton holds skeleton state (bone positions, slot attachments, etc).

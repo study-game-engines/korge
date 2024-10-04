@@ -1,32 +1,3 @@
-/******************************************************************************
- * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
- *
- * Copyright (c) 2013-2020, Esoteric Software LLC
- *
- * Integration of the Spine Runtimes into software or otherwise creating
- * derivative works of the Spine Runtimes is permitted under the terms and
- * conditions of Section 2 of the Spine Editor License Agreement:
- * http://esotericsoftware.com/spine-editor-license
- *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
- * "Products"), provided that each user of the Products must obtain their own
- * Spine Editor license and redistribution of the Products in any form must
- * include this license and copyright notice.
- *
- * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
- * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package com.esotericsoftware.spine.attachments
 
 import com.esotericsoftware.spine.SpineRegion
@@ -36,10 +7,8 @@ import com.esotericsoftware.spine.utils.*
 import com.esotericsoftware.spine.utils.SpineUtils.arraycopy
 import korlibs.image.color.*
 
-/** An attachment that displays a textured quadrilateral.
- *
- *
- * See [Region attachments](http://esotericsoftware.com/spine-regions) in the Spine User Guide.  */
+// An attachment that displays a textured quadrilateral.
+// http://esotericsoftware.com/spine-regions
 class RegionAttachment(name: String) : Attachment(name) {
 
     private var _region: SpineRegion? = null
@@ -70,50 +39,28 @@ class RegionAttachment(name: String) : Attachment(name) {
             }
         }
 
-    /** The name of the texture region for this attachment.  */
-    var path: String? = null
+    var path: String? = null // The name of the texture region for this attachment.
+    var x: Float = 0.toFloat() // The local x translation.
+    var y: Float = 0.toFloat() // The local y translation.
+    var scaleX: Float = 1f // The local scaleX.
+    var scaleY: Float = 1f // The local scaleY.
+    var rotation: Float = 0.toFloat() // The local rotation.
+    var width: Float = 0.toFloat() // The width of the region attachment in Spine.
+    var height: Float = 0.toFloat() // The height of the region attachment in Spine.
+    val uVs: FloatArray = FloatArray(8)
+    val offset: FloatArray = FloatArray(8) // For each of the 4 vertices, a pair of `x,y` values that is the local position of the vertex.
+    val color: RGBAf = RGBAf(1f, 1f, 1f, 1f) // The color to tint the region attachment.
 
-    /** The local x translation.  */
-    var x: Float = 0.toFloat()
-
-    /** The local y translation.  */
-    var y: Float = 0.toFloat()
-
-    /** The local scaleX.  */
-    var scaleX = 1f
-
-    /** The local scaleY.  */
-    var scaleY = 1f
-
-    /** The local rotation.  */
-    var rotation: Float = 0.toFloat()
-
-    /** The width of the region attachment in Spine.  */
-    var width: Float = 0.toFloat()
-
-    /** The height of the region attachment in Spine.  */
-    var height: Float = 0.toFloat()
-    val uVs = FloatArray(8)
-
-    /** For each of the 4 vertices, a pair of `x,y` values that is the local position of the vertex.
-     *
-     *
-     * See [.updateOffset].  */
-    val offset = FloatArray(8)
-
-    /** The color to tint the region attachment.  */
-    val color = RGBAf(1f, 1f, 1f, 1f)
-
-    /** Calculates the [.offset] using the region settings. Must be called after changing region settings.  */
+    // Calculates the [.offset] using the region settings. Must be called after changing region settings
     fun updateOffset() {
-        val width = width
-        val height = height
-        var localX2 = width / 2
-        var localY2 = height / 2
-        var localX = -localX2
-        var localY = -localY2
+        val width: Float = width
+        val height: Float = height
+        var localX2: Float = width / 2
+        var localY2: Float = height / 2
+        var localX: Float = -localX2
+        var localY: Float = -localY2
         if (region is SpineRegion) {
-            val region = this.region as SpineRegion?
+            val region: SpineRegion? = this.region as SpineRegion?
             localX += region!!.offsetX / region.originalWidth * width
             localY += region.offsetY / region.originalHeight * height
             if (region.rotate) {
@@ -124,26 +71,26 @@ class RegionAttachment(name: String) : Attachment(name) {
                 localY2 -= (region.originalHeight - region.offsetY - region.packedHeight) / region.originalHeight * height
             }
         }
-        val scaleX = scaleX
-        val scaleY = scaleY
+        val scaleX: Float = scaleX
+        val scaleY: Float = scaleY
         localX *= scaleX
         localY *= scaleY
         localX2 *= scaleX
         localY2 *= scaleY
-        val rotation = rotation
-        val cos = kotlin.math.cos((SpineUtils.degRad * rotation).toDouble()).toFloat()
-        val sin = kotlin.math.sin((SpineUtils.degRad * rotation).toDouble()).toFloat()
-        val x = x
-        val y = y
-        val localXCos = localX * cos + x
-        val localXSin = localX * sin
-        val localYCos = localY * cos + y
-        val localYSin = localY * sin
-        val localX2Cos = localX2 * cos + x
-        val localX2Sin = localX2 * sin
-        val localY2Cos = localY2 * cos + y
-        val localY2Sin = localY2 * sin
-        val offset = this.offset
+        val rotation: Float = rotation
+        val cos: Float = kotlin.math.cos((SpineUtils.degRad * rotation).toDouble()).toFloat()
+        val sin: Float = kotlin.math.sin((SpineUtils.degRad * rotation).toDouble()).toFloat()
+        val x: Float = x
+        val y: Float = y
+        val localXCos: Float = localX * cos + x
+        val localXSin: Float = localX * sin
+        val localYCos: Float = localY * cos + y
+        val localYSin: Float = localY * sin
+        val localX2Cos: Float = localX2 * cos + x
+        val localX2Sin: Float = localX2 * sin
+        val localY2Cos: Float = localY2 * cos + y
+        val localY2Sin: Float = localY2 * sin
+        val offset: FloatArray = this.offset
         offset[BLX] = localXCos - localYSin
         offset[BLY] = localYCos + localXSin
         offset[ULX] = localXCos - localY2Sin
@@ -154,7 +101,8 @@ class RegionAttachment(name: String) : Attachment(name) {
         offset[BRY] = localYCos + localX2Sin
     }
 
-    /** Transforms the attachment's four vertices to world coordinates.
+    /**
+     * Transforms the attachment's four vertices to world coordinates.
      *
      *
      * See [World transforms](http://esotericsoftware.com/spine-runtime-skeletons#World-transforms) in the Spine
@@ -164,14 +112,14 @@ class RegionAttachment(name: String) : Attachment(name) {
      * @param stride The number of `worldVertices` entries between the value pairs written.
      */
     fun computeWorldVertices(bone: Bone, worldVertices: FloatArray, offset: Int, stride: Int) {
-        var offset = offset
-        val vertexOffset = this.offset
-        val x = bone.worldX
-        val y = bone.worldY
-        val a = bone.a
-        val b = bone.b
-        val c = bone.c
-        val d = bone.d
+        var offset: Int = offset
+        val vertexOffset: FloatArray = this.offset
+        val x: Float = bone.worldX
+        val y: Float = bone.worldY
+        val a: Float = bone.a
+        val b: Float = bone.b
+        val c: Float = bone.c
+        val d: Float = bone.d
         var offsetX: Float
         var offsetY: Float
 
@@ -200,7 +148,7 @@ class RegionAttachment(name: String) : Attachment(name) {
     }
 
     override fun copy(): Attachment {
-        val copy = RegionAttachment(name)
+        val copy: RegionAttachment = RegionAttachment(name)
         copy.region = region
         copy.path = path
         copy.x = x
@@ -217,13 +165,14 @@ class RegionAttachment(name: String) : Attachment(name) {
     }
 
     companion object {
-        val BLX = 0
-        val BLY = 1
-        val ULX = 2
-        val ULY = 3
-        val URX = 4
-        val URY = 5
-        val BRX = 6
-        val BRY = 7
+        val BLX: Int = 0
+        val BLY: Int = 1
+        val ULX: Int = 2
+        val ULY: Int = 3
+        val URX: Int = 4
+        val URY: Int = 5
+        val BRX: Int = 6
+        val BRY: Int = 7
     }
+
 }

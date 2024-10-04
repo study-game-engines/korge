@@ -1,66 +1,27 @@
-/******************************************************************************
- * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
- *
- * Copyright (c) 2013-2020, Esoteric Software LLC
- *
- * Integration of the Spine Runtimes into software or otherwise creating
- * derivative works of the Spine Runtimes is permitted under the terms and
- * conditions of Section 2 of the Spine Editor License Agreement:
- * http://esotericsoftware.com/spine-editor-license
- *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
- * "Products"), provided that each user of the Products must obtain their own
- * Spine Editor license and redistribution of the Products in any form must
- * include this license and copyright notice.
- *
- * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
- * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package com.esotericsoftware.spine.attachments
 
 import com.esotericsoftware.spine.SpineRegion
 import com.esotericsoftware.spine.utils.SpineUtils.arraycopy
 import korlibs.image.color.*
 
-/** An attachment that displays a textured mesh. A mesh has hull vertices and internal vertices within the hull. Holes are not
+/**
+ * An attachment that displays a textured mesh. A mesh has hull vertices and internal vertices within the hull. Holes are not
  * supported. Each vertex has UVs (texture coordinates) and triangles are used to map an image on to the mesh.
- *
- *
- * See [Mesh attachments](http://esotericsoftware.com/spine-meshes) in the Spine User Guide.  */
+ */
+// http://esotericsoftware.com/spine-meshes
 class MeshAttachment(name: String) : VertexAttachment(name) {
+
     var region: SpineRegion? = null
 
-    /** The name of the texture region for this attachment.  */
-    var path: String? = null
+
+    var path: String? = null // The name of the texture region for this attachment
     /** The UV pair for each vertex, normalized within the texture region.  */
-    /** Sets the texture coordinates for the region. The values are u,v pairs for each vertex.  */
-    lateinit var regionUVs: FloatArray
+    lateinit var regionUVs: FloatArray // Sets the texture coordinates for the region. The values are u,v pairs for each vertex.
+    var uVs: FloatArray? = null // The UV pair for each vertex, normalized within the entire texture.
+    lateinit var triangles: ShortArray // Triplets of vertex indices which describe the mesh's triangulation.
+    val color = RGBAf(1f, 1f, 1f, 1f) // The color to tint the mesh.
+    var hullLength: Int = 0 // The number of entries at the beginning of [.vertices] that make up the mesh hull.
 
-    /** The UV pair for each vertex, normalized within the entire texture.
-     *
-     *
-     * See [.updateUVs].  */
-    var uVs: FloatArray? = null
-
-    /** Triplets of vertex indices which describe the mesh's triangulation.  */
-    lateinit var triangles: ShortArray
-
-    /** The color to tint the mesh.  */
-    val color = RGBAf(1f, 1f, 1f, 1f)
-
-    /** The number of entries at the beginning of [.vertices] that make up the mesh hull.  */
-    var hullLength: Int = 0
     /** The parent mesh if this is a linked mesh, else null. A linked mesh shares the [.bones], [.vertices],
      * [.regionUVs], [.triangles], [.hullLength], [.edges], [.width], and [.height] with the
      * parent mesh, but may have a different [.name] or [.path] (and therefore a different texture).  */
@@ -82,22 +43,14 @@ class MeshAttachment(name: String) : VertexAttachment(name) {
             }
         }
 
-    // Nonessential.
-    /** Vertex index pairs describing edges for controling triangulation. Mesh triangles will never cross edges. Only available if
-     * nonessential data was exported. Triangulation is not performed at runtime.  */
-    var edges: ShortArray? = null
+    var edges: ShortArray? = null // Vertex index pairs describing edges for controling triangulation. Mesh triangles will never cross edges. Only available if nonessential data was exported. Triangulation is not performed at runtime
+    var width: Float = 0.toFloat() // The width of the mesh's image. Available only when nonessential data was exported.
+    var height: Float = 0.toFloat() // The height of the mesh's image. Available only when nonessential data was exported.
 
-    /** The width of the mesh's image. Available only when nonessential data was exported.  */
-    var width: Float = 0.toFloat()
-
-    /** The height of the mesh's image. Available only when nonessential data was exported.  */
-    var height: Float = 0.toFloat()
-
-    /** Calculates [.uvs] using [.regionUVs] and the [.region]. Must be called after changing the region UVs or
-     * region.  */
+    // Calculates [.uvs] using [.regionUVs] and the [.region]. Must be called after changing the region UVs or region
     fun updateUVs() {
         val regionUVs = this.regionUVs
-        if (this.uVs == null || this.uVs!!.size != regionUVs!!.size) this.uVs = FloatArray(regionUVs!!.size)
+        if (this.uVs == null || this.uVs!!.size != regionUVs.size) this.uVs = FloatArray(regionUVs.size)
         val uvs = this.uVs
         val n = uvs!!.size
         var u: Float
@@ -170,18 +123,18 @@ class MeshAttachment(name: String) : VertexAttachment(name) {
             width = region!!.u2 - u
             height = region!!.v2 - v
         }
-        var i = 0
-        while (i < n) {
-            uvs[i] = u + regionUVs[i] * width
-            uvs[i + 1] = v + regionUVs[i + 1] * height
-            i += 2
+        var index: Int = 0
+        while (index < n) {
+            uvs[index] = u + regionUVs[index] * width
+            uvs[index + 1] = v + regionUVs[index + 1] * height
+            index += 2
         }
     }
 
     override fun copy(): Attachment {
         if (this.parentMesh != null) return newLinkedMesh()
 
-        val copy = MeshAttachment(name)
+        val copy: MeshAttachment = MeshAttachment(name)
         copy.region = region
         copy.path = path
         copy.color.setTo(color)
@@ -205,9 +158,9 @@ class MeshAttachment(name: String) : VertexAttachment(name) {
         return copy
     }
 
-    /** Returns a new mesh with the [.parentMesh] set to this mesh's parent mesh, if any, else to this mesh.  */
+    // Returns a new mesh with the [.parentMesh] set to this mesh's parent mesh, if any, else to this mesh
     fun newLinkedMesh(): MeshAttachment {
-        val mesh = MeshAttachment(name)
+        val mesh: MeshAttachment = MeshAttachment(name)
         mesh.region = region
         mesh.path = path
         mesh.color.setTo(color)
@@ -216,4 +169,5 @@ class MeshAttachment(name: String) : VertexAttachment(name) {
         mesh.updateUVs()
         return mesh
     }
+
 }

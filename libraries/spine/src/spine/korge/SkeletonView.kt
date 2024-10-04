@@ -1,35 +1,46 @@
 package com.esotericsoftware.spine.korge
 
-import com.esotericsoftware.spine.*
+import com.esotericsoftware.spine.AnimationState
 import com.esotericsoftware.spine.BlendMode
-import com.esotericsoftware.spine.attachments.*
-import com.esotericsoftware.spine.effect.*
+import com.esotericsoftware.spine.Skeleton
+import com.esotericsoftware.spine.Slot
+import com.esotericsoftware.spine.attachments.ClippingAttachment
+import com.esotericsoftware.spine.attachments.MeshAttachment
+import com.esotericsoftware.spine.attachments.RegionAttachment
+import com.esotericsoftware.spine.attachments.SkeletonAttachment
+import com.esotericsoftware.spine.effect.VertexEffect
+import com.esotericsoftware.spine.utils.SkeletonClipping
+import com.esotericsoftware.spine.utils.SpineVector2
+import com.esotericsoftware.spine.utils.setSize
+import com.esotericsoftware.spine.utils.toArray
+import korlibs.datastructure.FastArrayList
+import korlibs.datastructure.FloatArrayList
+import korlibs.datastructure.iterators.fastForEach
+import korlibs.image.bitmap.Bitmap
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
 import korlibs.image.color.RGBAf
-import com.esotericsoftware.spine.utils.*
-import korlibs.datastructure.*
-import korlibs.datastructure.iterators.*
-import korlibs.time.*
-import korlibs.memory.*
-import korlibs.korge.render.*
+import korlibs.korge.render.RenderContext
 import korlibs.korge.view.*
-import korlibs.korge.view.property.*
-import korlibs.image.bitmap.*
-import korlibs.image.color.*
-import korlibs.math.*
-import korlibs.math.geom.*
-import korlibs.math.interpolation.*
+import korlibs.korge.view.property.ViewProperty
+import korlibs.korge.view.property.ViewPropertyProvider
+import korlibs.math.clamp01
+import korlibs.math.convertRange
+import korlibs.math.geom.BoundsBuilder
+import korlibs.math.geom.MBoundsBuilder
+import korlibs.math.geom.Point
+import korlibs.math.geom.Rectangle
+import korlibs.math.interpolation.Ratio
+import korlibs.time.TimeSpan
+import korlibs.time.milliseconds
+import korlibs.time.seconds
 
-inline fun Container.skeletonView(skeleton: Skeleton, animationState: AnimationState, block: @ViewDslMarker SkeletonView.() -> Unit = {})
-    = SkeletonView(skeleton, animationState).addTo(this, block)
+inline fun Container.skeletonView(skeleton: Skeleton, animationState: AnimationState, block: @ViewDslMarker SkeletonView.() -> Unit = {}): SkeletonView {
+    return SkeletonView(skeleton, animationState).addTo(this, block)
+}
 
 class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) : View() {
-    init {
-        if (animationState != null) {
-            addUpdater { delta ->
-                update(delta)
-            }
-        }
-    }
+
 
     @ViewProperty
     var ratio: Ratio = Ratio.ZERO
@@ -37,13 +48,19 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
             field = value
             running = false
             animationState?.tracks?.filterNotNull()?.fastForEach {
-                //println("TRACK: it.trackTime=${it.trackTime}, value=${value}, it.animationTime=${it.animationTime}")
-
                 it.trackTime = value.toFloat().clamp01().convertRange(0f, 1f, it.animationStart, it.animationEnd - 0.01f)
             }
         }
 
-    var running = true
+    var running: Boolean = true
+
+    init {
+        if (animationState != null) {
+            addUpdater { delta ->
+                update(delta)
+            }
+        }
+    }
 
     @ViewProperty
     fun play() {
@@ -76,47 +93,41 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
     }
 
     var premultipliedAlpha: Boolean = false
-    private val vertices = FloatArrayList(32)
-    private val clipper = SkeletonClipping()
-    /** @return May be null.
-     */
-    /** @param vertexEffect May be null.
-     */
+    private val vertices: FloatArrayList = FloatArrayList(32)
+    private val clipper: SkeletonClipping = SkeletonClipping()
     var vertexEffect: VertexEffect? = null
-    private val temp = SpineVector2()
-    private val temp2 = SpineVector2()
-    private val temp3 = RGBAf()
-    private val temp4 = RGBAf()
-    private val temp5 = RGBAf()
-    private val temp6 = RGBAf()
-
+    private val temp: SpineVector2 = SpineVector2()
+    private val temp2: SpineVector2 = SpineVector2()
+    private val temp3: RGBAf = RGBAf()
+    private val temp4: RGBAf = RGBAf()
+    private val temp5: RGBAf = RGBAf()
+    private val temp6: RGBAf = RGBAf()
     private var currentSpineBlendMode: BlendMode? = null
 
-    private fun renderSkeleton(ctx: RenderContext?, skeleton: Skeleton, bb: MBoundsBuilder?) {
-        val tempPosition = this.temp
-        val tempUV = this.temp2
-        val tempLight1 = this.temp3
-        val tempDark1 = this.temp4
-        val tempLight2 = this.temp5
-        val tempDark2 = this.temp6
-        val vertexEffect = this.vertexEffect
+    private fun renderSkeleton(ctx: RenderContext?, skeleton: Skeleton, bb: BoundsBuilder?) {
+        val tempPosition: SpineVector2 = this.temp
+        val tempUV: SpineVector2 = this.temp2
+        val tempLight1: RGBAf = this.temp3
+        val tempDark1: RGBAf = this.temp4
+        val tempLight2: RGBAf = this.temp5
+        val tempDark2: RGBAf = this.temp6
+        val vertexEffect: VertexEffect? = this.vertexEffect
         vertexEffect?.begin(skeleton)
-
-        val premultipliedAlpha = this.premultipliedAlpha
+        val premultipliedAlpha: Boolean = this.premultipliedAlpha
         var blendMode: BlendMode? = null
-        var verticesLength = 0
+        var verticesLength: Int = 0
         lateinit var vertices: FloatArray
         var uvs: FloatArray? = null
         lateinit var triangles: ShortArray
         var color: RGBAf? = null
-        val skeletonColor = skeleton.color
-        val r = skeletonColor.r
-        val g = skeletonColor.g
-        val b = skeletonColor.b
-        val a = skeletonColor.a
-        val drawOrder = skeleton.drawOrder
-        var i = 0
-        val n = drawOrder.size
+        val skeletonColor: RGBAf = skeleton.color
+        val r: Float = skeletonColor.r
+        val g: Float = skeletonColor.g
+        val b: Float = skeletonColor.b
+        val a: Float = skeletonColor.a
+        val drawOrder: FastArrayList<Slot> = skeleton.drawOrder
+        var i: Int = 0
+        val n: Int = drawOrder.size
         while (i < n) {
             val slot = drawOrder[i]
             if (!slot.bone.isActive) {
@@ -232,17 +243,17 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
     }
 
     private fun applyVertexEffect(vertices: FloatArray, verticesLength: Int, stride: Int, light: RGBA, dark: RGBA) {
-        val tempPosition = this.temp
-        val tempUV = this.temp2
-        val tempLight1 = this.temp3
-        val tempDark1 = this.temp4
-        val tempLight2 = this.temp5
-        val tempDark2 = this.temp6
-        val vertexEffect = this.vertexEffect
+        val tempPosition: SpineVector2 = this.temp
+        val tempUV: SpineVector2 = this.temp2
+        val tempLight1: RGBAf = this.temp3
+        val tempDark1: RGBAf = this.temp4
+        val tempLight2: RGBAf = this.temp5
+        val tempDark2: RGBAf = this.temp6
+        val vertexEffect: VertexEffect? = this.vertexEffect
         tempLight1.setTo(light)
         tempDark1.setTo(dark)
         if (stride == 5) {
-            var v = 0
+            var v: Int = 0
             while (v < verticesLength) {
                 tempPosition.x = vertices[v]
                 tempPosition.y = vertices[v + 1]
@@ -259,7 +270,7 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
                 v += stride
             }
         } else {
-            var v = 0
+            var v: Int = 0
             while (v < verticesLength) {
                 tempPosition.x = vertices[v]
                 tempPosition.y = vertices[v + 1]
@@ -279,7 +290,7 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
         }
     }
 
-    private fun draw(bb: MBoundsBuilder?, ctx: RenderContext?, texture: Bitmap, verticesData: FloatArray, verticesOffset: Int, verticesCount: Int, triangle: ShortArray, trianglesOffset: Int, trianglesCount: Int, blendMode: BlendMode?) {
+    private fun draw(bb: BoundsBuilder?, ctx: RenderContext?, texture: Bitmap, verticesData: FloatArray, verticesOffset: Int, verticesCount: Int, triangle: ShortArray, trianglesOffset: Int, trianglesCount: Int, blendMode: BlendMode?) {
         val vertexSize = 5
         val vertexCount = verticesCount / vertexSize
         if (bb != null) {
@@ -287,8 +298,7 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
                 val index = n * vertexSize
                 val x = verticesData[index + 0]
                 val y = verticesData[index + 1]
-                //println("Point($x, $y)")
-                bb.add(x, -y)
+                bb + Point(x, -y)
             }
         }
         ctx?.useBatcher { batch ->
@@ -326,13 +336,12 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
         }
     }
 
-    private val bb = MBoundsBuilder()
+    private val bb: BoundsBuilder = BoundsBuilder()
 
     override fun getLocalBoundsInternal(): Rectangle {
-        bb.reset()
         updateAdjustSkeleton()
         renderSkeleton(null, skeleton, bb)
-        return bb.getBounds().immutable
+        return bb.bounds
     }
 
     // @TODO: We shouldn't do this
@@ -383,4 +392,5 @@ class SkeletonView(val skeleton: Skeleton, val animationState: AnimationState?) 
     companion object {
         private val quadTriangles = shortArrayOf(0, 1, 2, 2, 3, 0)
     }
+
 }
