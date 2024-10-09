@@ -1,7 +1,7 @@
 artifact "korge:jseval"
 
 source {
- include project(":korge:utils")
- include project(":korge:concurrent")
- include project(":korge:serialization")
+    include project(":korge:utils")
+    include project(":korge:concurrent")
+    include project(":korge:serialization")
 }

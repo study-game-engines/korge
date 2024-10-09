@@ -1,6 +1,6 @@
 artifact "korge:io-nodejs"
 
 source {
- include project(":korge:utils")
- include project(":korge:io")
+    include project(":korge:utils")
+    include project(":korge:io")
 }

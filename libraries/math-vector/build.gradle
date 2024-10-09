@@ -1,6 +1,6 @@
 artifact "korge:math-vector"
 
 source {
- include project(":korge:math-core")
- include project(":korge:utils")
+    include project(":korge:math-core")
+    include project(":korge:utils")
 }
