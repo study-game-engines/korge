@@ -27,7 +27,7 @@ import korlibs.io.compression.*
 import korlibs.io.compression.deflate.*
 import korlibs.io.file.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.math.geom.*
 import korlibs.math.geom.collider.HitTestDirection
 import korlibs.math.geom.collider.HitTestDirectionFlags

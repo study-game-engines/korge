@@ -29,7 +29,7 @@ import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*
 import korlibs.logger.*
 import korlibs.memory.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import kotlin.math.*
 
 /**

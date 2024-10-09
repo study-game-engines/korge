@@ -1,7 +1,7 @@
 package korlibs.io.net.http
 
 import korlibs.io.lang.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import korlibs.io.stream.*
 
 class HttpRestClient(val endpoint: HttpClientEndpoint) {

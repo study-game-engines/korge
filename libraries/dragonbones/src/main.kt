@@ -4,8 +4,8 @@ import korlibs.image.bitmap.mipmaps
 import korlibs.image.format.readBitmap
 import korlibs.io.async.*
 import korlibs.io.file.std.resourcesVfs
-import korlibs.io.serialization.json.Json
-import korlibs.io.serialization.json.parseFast
+import korlibs.io.*
+import korlibs.io.*
 import korlibs.korge.*
 import korlibs.korge.dragonbones.KorgeDbFactory
 import korlibs.korge.input.MouseEvents

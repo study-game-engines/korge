@@ -1,6 +1,5 @@
 @file:Suppress("PackageDirectoryMismatch")
-
-package korlibs.io.serialization.json
+package korlibs.io
 
 import korlibs.datastructure.*
 import korlibs.io.util.*

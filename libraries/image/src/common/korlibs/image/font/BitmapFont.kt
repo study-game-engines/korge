@@ -13,8 +13,8 @@ import korlibs.image.vector.*
 import korlibs.io.dynamic.*
 import korlibs.io.file.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.json.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
+import korlibs.io.*
 import korlibs.io.util.*
 import korlibs.math.*
 import korlibs.math.geom.*

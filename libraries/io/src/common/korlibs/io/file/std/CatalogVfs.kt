@@ -7,7 +7,7 @@ import korlibs.logger.Logger
 import korlibs.io.dynamic.dyn
 import korlibs.io.file.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.json.Json
+import korlibs.io.*
 import korlibs.io.stream.*
 import korlibs.io.util.*
 import kotlinx.coroutines.flow.Flow

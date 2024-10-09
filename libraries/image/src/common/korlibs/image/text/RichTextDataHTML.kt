@@ -2,7 +2,7 @@ package korlibs.image.text
 
 import korlibs.datastructure.*
 import korlibs.image.color.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.io.util.*
 
 fun RichTextData.Companion.fromHTML(

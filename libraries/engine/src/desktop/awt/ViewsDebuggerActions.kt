@@ -1,7 +1,7 @@
 package korlibs.korge.awt
 
 import korlibs.io.async.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.korge.view.*
 
 internal open class ViewsDebuggerActions(val views: Views) {

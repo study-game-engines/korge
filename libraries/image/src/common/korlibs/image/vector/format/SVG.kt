@@ -9,7 +9,7 @@ import korlibs.image.text.*
 import korlibs.image.vector.*
 import korlibs.io.file.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.io.util.*
 import korlibs.logger.*
 import korlibs.math.geom.*

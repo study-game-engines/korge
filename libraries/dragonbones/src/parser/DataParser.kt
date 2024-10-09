@@ -24,7 +24,7 @@ package com.dragonbones.parser
 
 import com.dragonbones.core.*
 import com.dragonbones.model.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 
 /**
  * @private

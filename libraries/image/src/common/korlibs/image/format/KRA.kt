@@ -11,7 +11,7 @@ import korlibs.io.async.runBlockingNoSuspensions
 import korlibs.io.file.std.ZipVfs
 import korlibs.io.lang.UTF8
 import korlibs.io.lang.toString
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.io.stream.SyncStream
 import korlibs.io.stream.hasMore
 import korlibs.io.stream.openSync

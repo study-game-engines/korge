@@ -36,7 +36,7 @@ import com.soywiz.korgw.*
 import com.soywiz.korgw.awt.*
 import com.soywiz.korinject.*
 import korlibs.io.async.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.math.geom.*
 import korlibs.math.geom.Anchor
 import kotlinx.coroutines.*

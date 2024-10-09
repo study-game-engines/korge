@@ -2,7 +2,7 @@ package korlibs.korge.resources
 
 import korlibs.io.dynamic.*
 import korlibs.io.file.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import korlibs.crypto.*
 
 data class ResourceVersion(val name: String, val loaderVersion: Int, val sha1: String, val configSha1: String = "") {

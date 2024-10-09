@@ -9,7 +9,7 @@ import korlibs.korge3d.format.ColladaParser
 import korlibs.korge3d.format.readColladaLibrary
 import korlibs.io.async.suspendTestNoJs
 import korlibs.io.file.std.resourcesVfs
-import korlibs.io.serialization.xml.toXml
+import korlibs.io.*
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals

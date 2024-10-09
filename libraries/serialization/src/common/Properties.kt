@@ -4,6 +4,8 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
+expect object SystemProperties : Properties
+
 open class Properties(map: Map<String, String>? = null) {
     //private val map = FastStringMap<String>()
     // This is required to work with K/N memory model

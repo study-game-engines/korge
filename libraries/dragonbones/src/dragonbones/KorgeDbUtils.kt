@@ -6,7 +6,7 @@ import korlibs.image.bitmap.*
 import korlibs.image.format.*
 import korlibs.io.dynamic.*
 import korlibs.io.file.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 
 suspend fun VfsFile.readDbAtlas(factory: KorgeDbFactory): TextureAtlasData? {
 	val jsonFile = this

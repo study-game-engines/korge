@@ -3,8 +3,8 @@ package korlibs.image.atlas
 import korlibs.datastructure.*
 import korlibs.image.format.*
 import korlibs.io.dynamic.*
-import korlibs.io.serialization.json.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
+import korlibs.io.*
 import korlibs.math.geom.*
 
 //e: java.lang.UnsupportedOperationException: Class literal annotation arguments are not yet supported: Factory

@@ -11,9 +11,9 @@ import korlibs.image.text.HorizontalAlign
 import korlibs.image.text.VerticalAlign
 import korlibs.image.tiles.TileMapObjectAlignment
 import korlibs.io.file.VfsFile
-import korlibs.io.serialization.xml.Xml
-import korlibs.io.serialization.xml.XmlBuilder
-import korlibs.io.serialization.xml.buildXml
+import korlibs.io.*
+import korlibs.io.*
+import korlibs.io.*
 import korlibs.math.*
 import korlibs.math.geom.*
 import korlibs.number.*

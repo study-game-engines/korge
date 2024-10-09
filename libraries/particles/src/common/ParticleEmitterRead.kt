@@ -7,7 +7,7 @@ import korlibs.image.color.*
 import korlibs.image.format.*
 import korlibs.io.file.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.math.geom.*
 
 suspend fun VfsFile.readParticleEmitter(): ParticleEmitter {

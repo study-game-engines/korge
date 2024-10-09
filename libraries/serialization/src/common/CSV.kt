@@ -1,6 +1,5 @@
 @file:Suppress("PackageDirectoryMismatch")
-
-package korlibs.io.serialization.csv
+package korlibs.io
 
 import korlibs.util.*
 

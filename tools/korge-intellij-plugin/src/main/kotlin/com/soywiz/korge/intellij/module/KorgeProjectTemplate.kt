@@ -3,7 +3,7 @@ package com.soywiz.korge.intellij.module
 import com.intellij.openapi.project.*
 import com.soywiz.korge.intellij.config.*
 import com.soywiz.korge.intellij.util.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import org.intellij.lang.annotations.*
 
 @Suppress("unused")

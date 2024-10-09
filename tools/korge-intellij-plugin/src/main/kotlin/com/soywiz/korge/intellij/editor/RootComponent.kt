@@ -5,7 +5,7 @@ import com.intellij.ide.*
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.ide.*
 import korlibs.io.async.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import java.awt.*
 import javax.swing.*
 

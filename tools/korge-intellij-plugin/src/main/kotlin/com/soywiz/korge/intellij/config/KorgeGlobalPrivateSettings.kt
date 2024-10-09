@@ -12,7 +12,7 @@ import com.soywiz.korge.intellij.*
 import com.soywiz.korge.intellij.util.*
 import korlibs.io.async.delay
 import korlibs.io.async.launchImmediately
-import korlibs.io.serialization.json.Json
+import korlibs.io.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.awt.*

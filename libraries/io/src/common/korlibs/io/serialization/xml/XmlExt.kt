@@ -1,4 +1,4 @@
-package korlibs.io.serialization.xml
+package korlibs.io
 
 import korlibs.io.file.*
 

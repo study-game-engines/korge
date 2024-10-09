@@ -5,7 +5,7 @@ import korlibs.encoding.*
 import korlibs.io.file.*
 import korlibs.io.internal.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import korlibs.io.stream.*
 import korlibs.memory.*
 import korlibs.time.*

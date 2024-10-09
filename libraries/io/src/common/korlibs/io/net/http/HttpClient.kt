@@ -11,7 +11,7 @@ import korlibs.io.lang.UTF8
 import korlibs.io.lang.toByteArray
 import korlibs.io.lang.toString
 import korlibs.io.net.URL
-import korlibs.io.serialization.json.Json
+import korlibs.io.*
 import korlibs.io.stream.AsyncInputStream
 import korlibs.io.stream.AsyncInputStreamWithLength
 import korlibs.io.stream.AsyncStream

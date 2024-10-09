@@ -7,7 +7,7 @@ import korlibs.image.font.*
 import korlibs.image.paint.*
 import korlibs.image.text.*
 import korlibs.image.vector.format.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.math.geom.*
 import korlibs.math.geom.bezier.*
 import korlibs.math.geom.vector.*

@@ -14,7 +14,7 @@ import com.soywiz.korgw.*
 import korlibs.image.color.*
 import korlibs.io.async.*
 import korlibs.io.file.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.math.geom.*
 import korlibs.math.geom.vector.*
 import kotlin.math.*

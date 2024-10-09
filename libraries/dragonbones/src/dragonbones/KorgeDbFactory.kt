@@ -36,7 +36,7 @@ import korlibs.image.format.*
 import korlibs.io.async.*
 import korlibs.io.dynamic.*
 import korlibs.io.file.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 import kotlin.native.concurrent.ThreadLocal

@@ -1,6 +1,6 @@
 package korlibs.template
 
-import korlibs.io.serialization.yaml.*
+import korlibs.io.*
 import korlibs.template.dynamic.*
 import korlibs.template.internal.*
 import korlibs.template.util.*

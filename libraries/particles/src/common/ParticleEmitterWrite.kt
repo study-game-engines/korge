@@ -2,7 +2,7 @@ package korlibs.korge.particle
 
 import korlibs.image.color.RGBAf
 import korlibs.io.file.VfsFile
-import korlibs.io.serialization.xml.buildXml
+import korlibs.io.*
 import korlibs.math.geom.Angle
 import korlibs.math.geom.Point
 

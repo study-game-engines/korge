@@ -4,7 +4,7 @@ package korlibs.wasm
 import korlibs.ffi.*
 import korlibs.io.file.sync.*
 import korlibs.io.lang.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import korlibs.io.stream.*
 import korlibs.memory.*
 

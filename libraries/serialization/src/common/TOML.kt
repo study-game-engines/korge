@@ -1,6 +1,5 @@
 @file:Suppress("PackageDirectoryMismatch")
-
-package korlibs.io.serialization.toml
+package korlibs.io
 
 //import org.intellij.lang.annotations.Language
 import kotlin.math.min

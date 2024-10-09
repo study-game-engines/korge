@@ -1,6 +1,5 @@
 @file:Suppress("PackageDirectoryMismatch")
-
-package korlibs.io.serialization.xml
+package korlibs.io
 
 import korlibs.io.stream.*
 import korlibs.io.util.*

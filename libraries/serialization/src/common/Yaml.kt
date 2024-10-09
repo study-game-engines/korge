@@ -1,4 +1,4 @@
-package korlibs.io.serialization.yaml
+package korlibs.io
 
 import kotlin.collections.set
 

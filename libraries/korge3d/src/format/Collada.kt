@@ -9,7 +9,7 @@ import korlibs.korge3d.animation.*
 import korlibs.korge3d.internal.*
 import korlibs.image.color.*
 import korlibs.io.file.*
-import korlibs.io.serialization.xml.*
+import korlibs.io.*
 import korlibs.io.util.*
 import korlibs.korge3d.material.*
 import korlibs.math.geom.*

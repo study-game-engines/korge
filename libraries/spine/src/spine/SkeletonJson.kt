@@ -39,7 +39,7 @@ import korlibs.datastructure.*
 import korlibs.image.atlas.*
 import korlibs.image.color.*
 import korlibs.io.file.*
-import korlibs.io.serialization.json.*
+import korlibs.io.*
 import kotlin.math.*
 
 /** Loads skeleton data in the Spine JSON format.
