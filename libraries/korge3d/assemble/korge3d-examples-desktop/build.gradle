@@ -1,5 +1,5 @@
 artifact "korge:korge3d-examples-desktop"
-mainCall "korlibs.korge3d.main()"
+//mainCall "korlibs.korge3d.main()"
 
 source {
     include project(":korge:korge3d-examples")
