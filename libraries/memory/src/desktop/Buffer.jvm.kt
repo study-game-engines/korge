@@ -77,14 +77,17 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
     }
 
     actual companion object {
-        actual fun equals(src: Buffer, srcPosBytes: Int, dst: Buffer, dstPosBytes: Int, sizeInBytes: Int): Boolean =
-            src.slicedBuffer(srcPosBytes, sizeInBytes) == dst.slicedBuffer(dstPosBytes, sizeInBytes)
+
+        actual fun equals(src: Buffer, srcPosBytes: Int, dst: Buffer, dstPosBytes: Int, sizeInBytes: Int): Boolean {
+            return src.slicedBuffer(srcPosBytes, sizeInBytes) == dst.slicedBuffer(dstPosBytes, sizeInBytes)
+        }
+
         actual fun copy(src: Buffer, srcPosBytes: Int, dst: Buffer, dstPosBytes: Int, sizeInBytes: Int) {
-            val srcBuf = src.buffer
-            val dstBuf = dst.buffer
-            val srcPos = srcPosBytes
-            val dstPos = dstPosBytes
-            val size = sizeInBytes
+            val srcBuf: ByteBuffer = src.buffer
+            val dstBuf: ByteBuffer = dst.buffer
+            val srcPos: Int = srcPosBytes
+            val dstPos: Int = dstPosBytes
+            val size: Int = sizeInBytes
             if (!srcBuf.isDirect && !dstBuf.isDirect) {
                 System.arraycopy(srcBuf.array(), srcBuf.position() + srcPos, dstBuf.array(), dstBuf.position() + dstPos, size)
                 return
@@ -97,8 +100,8 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
         }
 
         actual fun mmap(path: String, position: Long, size: Long, mode: BufferMapMode): Buffer {
-            val fc = FileChannel.open(Path.of(path), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE)
-            val bb = fc.map(when (mode) {
+            val fc: FileChannel = FileChannel.open(Path.of(path), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE)
+            val bb: MappedByteBuffer = fc.map(when (mode) {
                 BufferMapMode.READ_ONLY -> FileChannel.MapMode.READ_ONLY
                 BufferMapMode.READ_WRITE -> FileChannel.MapMode.READ_WRITE
                 BufferMapMode.PRIVATE -> FileChannel.MapMode.PRIVATE
@@ -107,6 +110,7 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
                 it.file = fc
             }
         }
+
     }
 }
 
