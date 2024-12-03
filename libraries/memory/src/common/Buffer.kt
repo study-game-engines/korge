@@ -218,7 +218,9 @@ fun Buffer.set16BEClamped(byteOffset: Int, value: Int): Unit = set16BE(byteOffse
 fun Buffer.set16Clamped(byteOffset: Int, value: Int, littleEndian: Boolean = true): Unit = if (littleEndian) set16LEClamped(byteOffset, value) else set16BEClamped(byteOffset, value)
 
 private inline fun <T> _getArray(byteOffset: Int, out: T, start: Int, size: Int, elementBytes: Int, set: (Int, Int) -> Unit): T {
-    for (n in 0 until size) set(start + n, byteOffset + n * elementBytes)
+    for (n in 0 until size) {
+        set(start + n, byteOffset + n * elementBytes)
+    }
     return out
 }
 
@@ -505,8 +507,12 @@ fun BaseFloatBuffer.toFloatArray(): FloatArray = FloatArray(size) { this[it] }
 
 @JvmInline
 value class IntArrayBuffer(val array: IntArray) : BaseIntBuffer {
-    override val size: Int get() = array.size
-    override operator fun get(index: Int): Int = array[index]
+    override val size: Int get() {
+        return array.size
+    }
+    override operator fun get(index: Int): Int {
+        return array[index]
+    }
     override operator fun set(index: Int, value: Int) {
         array[index] = value
     }
@@ -514,8 +520,12 @@ value class IntArrayBuffer(val array: IntArray) : BaseIntBuffer {
 
 @JvmInline
 value class FloatArrayBuffer(val array: FloatArray) : BaseFloatBuffer {
-    override val size: Int get() = array.size
-    override operator fun get(index: Int): Float = array[index]
+    override val size: Int get() {
+        return array.size
+    }
+    override operator fun get(index: Int): Float {
+        return array[index]
+    }
     override operator fun set(index: Int, value: Float) {
         array[index] = value
     }
@@ -568,8 +578,8 @@ value class Uint8Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffe
 
     companion object {
         const val ELEMENT_SIZE_IN_BYTES: Int = 1
-        operator fun invoke(data: ByteArray) = Uint8Buffer(UByteArrayInt(data))
-        operator fun invoke(data: UByteArray) = Uint8Buffer(UByteArrayInt(data.toByteArray()))
+        operator fun invoke(data: ByteArray): Uint8Buffer = Uint8Buffer(UByteArrayInt(data))
+        operator fun invoke(data: UByteArray): Uint8Buffer = Uint8Buffer(UByteArrayInt(data.toByteArray()))
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -591,7 +601,7 @@ value class Uint8ClampedBuffer(override val buffer: Buffer) : TypedBuffer, BaseI
 
     companion object {
         const val ELEMENT_SIZE_IN_BYTES: Int = 1
-        operator fun invoke(data: ByteArray) = Uint8ClampedBuffer(UByteArrayInt(data))
+        operator fun invoke(data: ByteArray): Uint8ClampedBuffer = Uint8ClampedBuffer(UByteArrayInt(data))
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -610,7 +620,7 @@ value class Uint16Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuff
 
     companion object {
         const val ELEMENT_SIZE_IN_BYTES: Int = 2
-        operator fun invoke(data: ByteArray) = Uint8ClampedBuffer(UByteArrayInt(data))
+        operator fun invoke(data: ByteArray): Uint8ClampedBuffer = Uint8ClampedBuffer(UByteArrayInt(data))
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
