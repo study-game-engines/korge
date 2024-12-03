@@ -57,12 +57,12 @@ enum class BufferMapMode {
 }
 
 internal fun Buffer.Companion.hashCodeCommon(buffer: Buffer): Int {
-    var h = 1
-    val len = buffer.sizeInBytes
+    var h: Int = 1
+    val len: Int = buffer.sizeInBytes
     for (n in 0 until (len / 4)) {
         h = 31 * h + buffer.getS32LE(n * 4)
     }
-    val offset = (len / 4) * 4
+    val offset: Int = (len / 4) * 4
     for (n in 0 until len % 4) {
         h = 31 * h + buffer.getS8(offset + n)
     }
@@ -81,16 +81,16 @@ internal fun Buffer.Companion.equalsCommon(src: Buffer, srcPosBytes: Int, dst: B
     //    if (src.getUnalignedInt8(srcPosBytes + n) != dst.getUnalignedInt8(dstPosBytes + n)) return false
     //}
     //return true
-    var offset = 0
-    var remaining = sizeInBytes
+    var offset: Int = 0
+    var remaining: Int = sizeInBytes
 
     if (use64) {
-        val WORD = 8
-        val words = remaining / WORD
+        val WORD: Int = 8
+        val words: Int = remaining / WORD
         remaining %= WORD
         for (n in 0 until words) {
-            val v0 = src.getS64LE(srcPosBytes + offset + n * WORD)
-            val v1 = dst.getS64LE(dstPosBytes + offset + n * WORD)
+            val v0: Long = src.getS64LE(srcPosBytes + offset + n * WORD)
+            val v1: Long = dst.getS64LE(dstPosBytes + offset + n * WORD)
             if (v0 != v1) {
                 return false
             }
@@ -98,12 +98,12 @@ internal fun Buffer.Companion.equalsCommon(src: Buffer, srcPosBytes: Int, dst: B
         offset += words * WORD
     }
     if (true) {
-        val WORD = 4
-        val words = remaining / WORD
+        val WORD: Int = 4
+        val words: Int = remaining / WORD
         remaining %= WORD
         for (n in 0 until words) {
-            val v0 = src.getS32LE(srcPosBytes + offset + n * WORD)
-            val v1 = dst.getS32LE(dstPosBytes + offset + n * WORD)
+            val v0: Int = src.getS32LE(srcPosBytes + offset + n * WORD)
+            val v1: Int = dst.getS32LE(dstPosBytes + offset + n * WORD)
             if (v0 != v1) {
                 return false
             }
@@ -113,8 +113,8 @@ internal fun Buffer.Companion.equalsCommon(src: Buffer, srcPosBytes: Int, dst: B
 
     if (true) {
         for (n in 0 until remaining) {
-            val v0 = src.getS8(srcPosBytes + offset + n)
-            val v1 = dst.getS8(dstPosBytes + offset + n)
+            val v0: Byte = src.getS8(srcPosBytes + offset + n)
+            val v1: Byte = dst.getS8(dstPosBytes + offset + n)
             if (v0 != v1) {
                 return false
             }
@@ -133,7 +133,7 @@ internal fun checkNBufferSize(size: Int): Int {
 }
 
 internal fun checkNBufferWrap(array: ByteArray, offset: Int, size: Int): ByteArray {
-    val end = offset + size
+    val end: Int = offset + size
     if (size < 0 || offset !in 0..array.size || end !in 0..array.size) {
         throw IllegalArgumentException("invalid arguments offset=$offset, size=$size for array.size=${array.size}")
     }
@@ -152,13 +152,13 @@ fun Buffer.Companion.allocNoDirect(size: Int): Buffer {
 }
 
 fun Buffer.copyOf(newSize: Int): Buffer {
-    val out = Buffer(newSize)
+    val out: Buffer = Buffer(newSize)
     arraycopy(this, 0, out, 0, kotlin.math.min(this.sizeInBytes, newSize))
     return out
 }
 
 fun Buffer.clone(direct: Boolean = false): Buffer {
-    val out = Buffer(this.size, direct)
+    val out: Buffer = Buffer(this.size, direct)
     arraycopy(this, 0, out, 0, size)
     return out
 }
@@ -171,7 +171,7 @@ private fun Int.hexChar(): Char = when (this) {
 
 fun Buffer.hex(): String = buildString(sizeInBytes * 2) {
     for (n in 0 until this@hex.sizeInBytes) {
-        val value = this@hex.getUInt8(n)
+        val value: Int = this@hex.getUInt8(n)
         append(value.extract4(4).hexChar())
         append(value.extract4(0).hexChar())
     }
@@ -196,28 +196,28 @@ fun Buffer.getU32LE(byteOffset: Int): Long = getS32LE(byteOffset).unsigned
 fun Buffer.getU16BE(byteOffset: Int): Int = getS16BE(byteOffset).unsigned
 fun Buffer.getU32BE(byteOffset: Int): Long = getS32BE(byteOffset).unsigned
 
-inline fun Buffer.getU8(byteOffset: Int, littleEndian: Boolean = true): Int = getU8(byteOffset)
-inline fun Buffer.getU16(byteOffset: Int, littleEndian: Boolean = true): Int = if (littleEndian) getU16LE(byteOffset) else getU16BE(byteOffset)
-inline fun Buffer.getU32(byteOffset: Int, littleEndian: Boolean = true): Long = if (littleEndian) getU32LE(byteOffset) else getU32BE(byteOffset)
+fun Buffer.getU8(byteOffset: Int, littleEndian: Boolean = true): Int = getU8(byteOffset)
+fun Buffer.getU16(byteOffset: Int, littleEndian: Boolean = true): Int = if (littleEndian) getU16LE(byteOffset) else getU16BE(byteOffset)
+fun Buffer.getU32(byteOffset: Int, littleEndian: Boolean = true): Long = if (littleEndian) getU32LE(byteOffset) else getU32BE(byteOffset)
 
-inline fun Buffer.getS16(byteOffset: Int, littleEndian: Boolean = true): Short = if (littleEndian) getS16LE(byteOffset) else getS16BE(byteOffset)
-inline fun Buffer.getS32(byteOffset: Int, littleEndian: Boolean = true): Int = if (littleEndian) getS32LE(byteOffset) else getS32BE(byteOffset)
-inline fun Buffer.getS64(byteOffset: Int, littleEndian: Boolean = true): Long = if (littleEndian) getS64LE(byteOffset) else getS64BE(byteOffset)
-inline fun Buffer.getF32(byteOffset: Int, littleEndian: Boolean = true): Float = if (littleEndian) getF32LE(byteOffset) else getF32BE(byteOffset)
-inline fun Buffer.getF64(byteOffset: Int, littleEndian: Boolean = true): Double = if (littleEndian) getF64LE(byteOffset) else getF64BE(byteOffset)
+fun Buffer.getS16(byteOffset: Int, littleEndian: Boolean = true): Short = if (littleEndian) getS16LE(byteOffset) else getS16BE(byteOffset)
+fun Buffer.getS32(byteOffset: Int, littleEndian: Boolean = true): Int = if (littleEndian) getS32LE(byteOffset) else getS32BE(byteOffset)
+fun Buffer.getS64(byteOffset: Int, littleEndian: Boolean = true): Long = if (littleEndian) getS64LE(byteOffset) else getS64BE(byteOffset)
+fun Buffer.getF32(byteOffset: Int, littleEndian: Boolean = true): Float = if (littleEndian) getF32LE(byteOffset) else getF32BE(byteOffset)
+fun Buffer.getF64(byteOffset: Int, littleEndian: Boolean = true): Double = if (littleEndian) getF64LE(byteOffset) else getF64BE(byteOffset)
 
-inline fun Buffer.set16(byteOffset: Int, value: Short, littleEndian: Boolean = true): Unit = if (littleEndian) set16LE(byteOffset, value) else set16BE(byteOffset, value)
-inline fun Buffer.set32(byteOffset: Int, value: Int, littleEndian: Boolean = true): Unit = if (littleEndian) set32LE(byteOffset, value) else set32BE(byteOffset, value)
-inline fun Buffer.set64(byteOffset: Int, value: Long, littleEndian: Boolean = true): Unit = if (littleEndian) set64LE(byteOffset, value) else set64BE(byteOffset, value)
-inline fun Buffer.setF32(byteOffset: Int, value: Float, littleEndian: Boolean = true): Unit = if (littleEndian) setF32LE(byteOffset, value) else setF32BE(byteOffset, value)
-inline fun Buffer.setF64(byteOffset: Int, value: Double, littleEndian: Boolean = true): Unit = if (littleEndian) setF64LE(byteOffset, value) else setF64BE(byteOffset, value)
+fun Buffer.set16(byteOffset: Int, value: Short, littleEndian: Boolean = true): Unit = if (littleEndian) set16LE(byteOffset, value) else set16BE(byteOffset, value)
+fun Buffer.set32(byteOffset: Int, value: Int, littleEndian: Boolean = true): Unit = if (littleEndian) set32LE(byteOffset, value) else set32BE(byteOffset, value)
+fun Buffer.set64(byteOffset: Int, value: Long, littleEndian: Boolean = true): Unit = if (littleEndian) set64LE(byteOffset, value) else set64BE(byteOffset, value)
+fun Buffer.setF32(byteOffset: Int, value: Float, littleEndian: Boolean = true): Unit = if (littleEndian) setF32LE(byteOffset, value) else setF32BE(byteOffset, value)
+fun Buffer.setF64(byteOffset: Int, value: Double, littleEndian: Boolean = true): Unit = if (littleEndian) setF64LE(byteOffset, value) else setF64BE(byteOffset, value)
 
 fun Buffer.set8Clamped(byteOffset: Int, value: Int): Unit = set8(byteOffset, value.clampUByte().toByte())
 fun Buffer.set16LEClamped(byteOffset: Int, value: Int): Unit = set16LE(byteOffset, value.clampUShort().toShort())
 fun Buffer.set16BEClamped(byteOffset: Int, value: Int): Unit = set16BE(byteOffset, value.clampUShort().toShort())
-inline fun Buffer.set16Clamped(byteOffset: Int, value: Int, littleEndian: Boolean = true): Unit = if (littleEndian) set16LEClamped(byteOffset, value) else set16BEClamped(byteOffset, value)
+fun Buffer.set16Clamped(byteOffset: Int, value: Int, littleEndian: Boolean = true): Unit = if (littleEndian) set16LEClamped(byteOffset, value) else set16BEClamped(byteOffset, value)
 
-inline private fun <T> _getArray(byteOffset: Int, out: T, start: Int, size: Int, elementBytes: Int, set: (Int, Int) -> Unit): T {
+private inline fun <T> _getArray(byteOffset: Int, out: T, start: Int, size: Int, elementBytes: Int, set: (Int, Int) -> Unit): T {
     for (n in 0 until size) set(start + n, byteOffset + n * elementBytes)
     return out
 }
@@ -523,8 +523,9 @@ value class FloatArrayBuffer(val array: FloatArray) : BaseFloatBuffer {
 
 @JvmInline
 value class Int8Buffer(override val buffer: Buffer) : TypedBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 1
+        const val ELEMENT_SIZE_IN_BYTES: Int = 1
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -536,15 +537,16 @@ value class Int8Buffer(override val buffer: Buffer) : TypedBuffer {
     fun getArray(index: Int, out: ByteArray, offset: Int = 0, size: Int = out.size - offset): ByteArray = buffer.getS8Array(index * ELEMENT_SIZE_IN_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): ByteArray = getArray(index, ByteArray(size))
     fun setArray(index: Int, inp: ByteArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Int8Buffer = Int8Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Int8Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Int16Buffer(override val buffer: Buffer) : TypedBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 2
+        const val ELEMENT_SIZE_IN_BYTES: Int = 2
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -556,15 +558,16 @@ value class Int16Buffer(override val buffer: Buffer) : TypedBuffer {
     fun getArray(index: Int, out: ShortArray, offset: Int = 0, size: Int = out.size - offset): ShortArray = buffer.getS16Array(index * Short.SIZE_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): ShortArray = getArray(index, ShortArray(size))
     fun setArray(index: Int, inp: ShortArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * Short.SIZE_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Int16Buffer = Int16Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Int16Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Uint8Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 1
+        const val ELEMENT_SIZE_IN_BYTES: Int = 1
         operator fun invoke(data: ByteArray) = Uint8Buffer(UByteArrayInt(data))
         operator fun invoke(data: UByteArray) = Uint8Buffer(UByteArrayInt(data.toByteArray()))
     }
@@ -578,15 +581,16 @@ value class Uint8Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffe
     fun getArray(index: Int, out: UByteArrayInt, offset: Int = 0, size: Int = out.size - offset): UByteArrayInt = UByteArrayInt(buffer.getS8Array(index * ELEMENT_SIZE_IN_BYTES, out.data, offset, size))
     fun getArray(index: Int = 0, size: Int = this.size - index): UByteArrayInt = getArray(index, UByteArrayInt(size))
     fun setArray(index: Int, inp: UByteArrayInt, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp.data, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Uint8Buffer = Uint8Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Uint8Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Uint8ClampedBuffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 1
+        const val ELEMENT_SIZE_IN_BYTES: Int = 1
         operator fun invoke(data: ByteArray) = Uint8ClampedBuffer(UByteArrayInt(data))
     }
 
@@ -596,15 +600,16 @@ value class Uint8ClampedBuffer(override val buffer: Buffer) : TypedBuffer, BaseI
     override val elementSizeInBytes: Int get() = ELEMENT_SIZE_IN_BYTES
     override operator fun get(index: Int): Int = buffer.getU8(index)
     override operator fun set(index: Int, value: Int) = buffer.set8Clamped(index, value)
-
     fun slice(start: Int = 0, end: Int = this.size): Uint8ClampedBuffer = Uint8ClampedBuffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Uint8ClampedBuffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Uint16Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 2
+        const val ELEMENT_SIZE_IN_BYTES: Int = 2
         operator fun invoke(data: ByteArray) = Uint8ClampedBuffer(UByteArrayInt(data))
     }
 
@@ -617,15 +622,16 @@ value class Uint16Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuff
     fun getArray(index: Int, out: UShortArrayInt, offset: Int = 0, size: Int = out.size - offset): UShortArrayInt = UShortArrayInt(buffer.getS16Array(index * ELEMENT_SIZE_IN_BYTES, out.data, offset, size))
     fun getArray(index: Int = 0, size: Int = this.size - index): UShortArrayInt = getArray(index, UShortArrayInt(size))
     fun setArray(index: Int, inp: UShortArrayInt, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp.data, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Uint16Buffer = Uint16Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Uint16Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Int32Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 4
+        const val ELEMENT_SIZE_IN_BYTES: Int = 4
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -637,15 +643,16 @@ value class Int32Buffer(override val buffer: Buffer) : TypedBuffer, BaseIntBuffe
     fun getArray(index: Int, out: IntArray, offset: Int = 0, size: Int = out.size - offset): IntArray = buffer.getS32Array(index * ELEMENT_SIZE_IN_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): IntArray = getArray(index, IntArray(size))
     fun setArray(index: Int, inp: IntArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Int32Buffer = Int32Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Int32Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Uint32Buffer(override val buffer: Buffer) : TypedBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 4
+        const val ELEMENT_SIZE_IN_BYTES: Int = 4
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -658,15 +665,16 @@ value class Uint32Buffer(override val buffer: Buffer) : TypedBuffer {
     fun getArray(index: Int, out: UIntArray, offset: Int = 0, size: Int = out.size - offset): UIntArray = buffer.getS32Array(index * ELEMENT_SIZE_IN_BYTES, out.asIntArray(), offset, size).asUIntArray()
     fun getArray(index: Int = 0, size: Int = this.size - index): UIntArray = getArray(index, UIntArray(size))
     fun setArray(index: Int, inp: UIntArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp.asIntArray(), offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Uint32Buffer = Uint32Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Uint32Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Int64Buffer(override val buffer: Buffer) : TypedBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 8
+        const val ELEMENT_SIZE_IN_BYTES: Int = 8
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -678,15 +686,16 @@ value class Int64Buffer(override val buffer: Buffer) : TypedBuffer {
     fun getArray(index: Int, out: LongArray, offset: Int = 0, size: Int = out.size - offset): LongArray = buffer.getS64Array(index * ELEMENT_SIZE_IN_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): LongArray = getArray(index, LongArray(size))
     fun setArray(index: Int, inp: LongArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Int64Buffer = Int64Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Int64Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Float32Buffer(override val buffer: Buffer) : TypedBuffer, BaseFloatBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 4
+        const val ELEMENT_SIZE_IN_BYTES: Int = 4
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -698,15 +707,16 @@ value class Float32Buffer(override val buffer: Buffer) : TypedBuffer, BaseFloatB
     fun getArray(index: Int, out: FloatArray, offset: Int = 0, size: Int = out.size - offset): FloatArray = buffer.getF32Array(index * ELEMENT_SIZE_IN_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): FloatArray = getArray(index, FloatArray(size))
     fun setArray(index: Int, inp: FloatArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Float32Buffer = Float32Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Float32Buffer = slice(start, start + size)
+
 }
 
 @JvmInline
 value class Float64Buffer(override val buffer: Buffer) : TypedBuffer {
+
     companion object {
-        const val ELEMENT_SIZE_IN_BYTES = 8
+        const val ELEMENT_SIZE_IN_BYTES: Int = 8
     }
 
     constructor(size: Int, direct: Boolean = false) : this(Buffer(size * ELEMENT_SIZE_IN_BYTES, direct))
@@ -718,9 +728,9 @@ value class Float64Buffer(override val buffer: Buffer) : TypedBuffer {
     fun getArray(index: Int, out: DoubleArray, offset: Int = 0, size: Int = out.size - offset): DoubleArray = buffer.getF64Array(index * ELEMENT_SIZE_IN_BYTES, out, offset, size)
     fun getArray(index: Int = 0, size: Int = this.size - index): DoubleArray = getArray(index, DoubleArray(size))
     fun setArray(index: Int, inp: DoubleArray, offset: Int = 0, size: Int = inp.size - offset): Unit = buffer.setArray(index * ELEMENT_SIZE_IN_BYTES, inp, offset, size)
-
     fun slice(start: Int = 0, end: Int = this.size): Float64Buffer = Float64Buffer(buffer.sliceBuffer(start * ELEMENT_SIZE_IN_BYTES, end * ELEMENT_SIZE_IN_BYTES))
     fun sliceWithSize(start: Int = 0, size: Int = this.size - start): Float64Buffer = slice(start, start + size)
+
 }
 
 @Deprecated("", ReplaceWith("asUInt8()"))
