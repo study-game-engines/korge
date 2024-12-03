@@ -5,8 +5,9 @@ import java.nio.channels.FileChannel
 import java.nio.file.*
 
 actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
-    val bufferLE = buffer.duplicate().order(ByteOrder.LITTLE_ENDIAN)
-    val bufferBE = buffer.duplicate().order(ByteOrder.BIG_ENDIAN)
+
+    val bufferLE: ByteBuffer = buffer.duplicate().order(ByteOrder.LITTLE_ENDIAN)
+    val bufferBE: ByteBuffer = buffer.duplicate().order(ByteOrder.BIG_ENDIAN)
     actual val byteOffset: Int = buffer.position()
     actual val sizeInBytes: Int = buffer.limit() - buffer.position()
 
@@ -18,7 +19,10 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
             .also { it.positionSafe(offset); it.limitSafe(offset + size) }
     )
 
-    actual fun sliceInternal(start: Int, end: Int): Buffer = Buffer(slicedBuffer(start, end - start))
+    actual fun sliceInternal(start: Int, end: Int): Buffer {
+        return Buffer(slicedBuffer(start, end - start))
+    }
+
     actual fun transferBytes(bufferOffset: Int, array: ByteArray, arrayOffset: Int, len: Int, toArray: Boolean): Unit {
         val temp = slicedBuffer(bufferOffset)
         if (toArray) {
@@ -49,7 +53,6 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
     actual fun getF32BE(byteOffset: Int): Float = bufferBE.getFloat(this.byteOffset + byteOffset)
     actual fun getF64BE(byteOffset: Int): Double = bufferBE.getDouble(this.byteOffset + byteOffset)
 
-
     actual fun set8(byteOffset: Int, value: Byte) { bufferLE.put(this.byteOffset + byteOffset, value) }
     actual fun set16LE(byteOffset: Int, value: Short) { bufferLE.putShort(this.byteOffset + byteOffset, value) }
     actual fun set32LE(byteOffset: Int, value: Int) { bufferLE.putInt(this.byteOffset + byteOffset, value) }
@@ -68,7 +71,7 @@ actual class Buffer(val buffer: ByteBuffer) : AutoCloseable {
 
     private var file: FileChannel? = null
 
-    override actual fun close() {
+    actual override fun close() {
         file?.close()
         file = null
     }

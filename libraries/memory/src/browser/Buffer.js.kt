@@ -5,17 +5,20 @@ import org.khronos.webgl.*
 private val isLittleEndian: Boolean = Uint8Array(Uint32Array(1).also { it[0] = 0x11223344 }.buffer)[0].toInt() == 0x44
 
 actual class Buffer(val dataView: org.khronos.webgl.DataView) : AutoCloseable {
-    actual constructor(size: Int, direct: Boolean) : this(DataView(ArrayBuffer(checkNBufferSize(size))))
-    actual constructor(array: ByteArray, offset: Int, size: Int) : this(DataView(checkNBufferWrap(array, offset, size).unsafeCast<Int8Array>().buffer, offset, size))
 
     actual val byteOffset: Int get() = this.dataView.byteOffset
     actual val sizeInBytes: Int get() = this.dataView.byteLength
 
-    actual fun sliceInternal(start: Int, end: Int): Buffer =
-        Buffer(DataView(buffer, byteOffset + start, end - start))
+    actual constructor(size: Int, direct: Boolean) : this(DataView(ArrayBuffer(checkNBufferSize(size))))
+    actual constructor(array: ByteArray, offset: Int, size: Int) : this(DataView(checkNBufferWrap(array, offset, size).unsafeCast<Int8Array>().buffer, offset, size))
 
-    fun sliceUint8Array(offset: Int = 0, size: Int = dataView.byteLength - offset): Uint8Array =
-        Uint8Array(buffer, dataView.byteOffset + offset, size)
+    actual fun sliceInternal(start: Int, end: Int): Buffer {
+        return Buffer(DataView(buffer, byteOffset + start, end - start))
+    }
+
+    fun sliceUint8Array(offset: Int = 0, size: Int = dataView.byteLength - offset): Uint8Array {
+        return Uint8Array(buffer, dataView.byteOffset + offset, size)
+    }
 
     actual fun transferBytes(bufferOffset: Int, array: ByteArray, arrayOffset: Int, len: Int, toArray: Boolean) {
         val bufferSlice = Int8Array(this.dataView.buffer, this.dataView.byteOffset + bufferOffset, len)
