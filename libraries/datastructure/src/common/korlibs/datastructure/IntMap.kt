@@ -2,8 +2,8 @@
 
 package korlibs.datastructure
 
-import korlibs.datastructure.internal.*
-import korlibs.datastructure.iterators.*
+/*import korlibs.datastructure.internal.**/
+/*import korlibs.datastructure.iterators.**/
 import korlibs.math.*
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -618,14 +618,3 @@ class IntIntMap internal constructor(private var nbits: Int, private val loadFac
 
 fun <T> IntMap<T>.toMap(): Map<Int, T> = keys.associateWith { this[it].fastCastTo<T>() }
 
-fun <T> intMapOf(vararg pairs: Pair<Int, T>) = IntMap<T>(pairs.size).also { map ->
-    pairs.fastForEach {
-        map[it.first] = it.second
-    }
-}
-
-fun intIntMapOf(vararg pairs: Pair<Int, Int>): IntIntMap = IntIntMap(pairs.size).also { map ->
-    pairs.fastForEach {
-        map[it.first] = it.second
-    }
-}

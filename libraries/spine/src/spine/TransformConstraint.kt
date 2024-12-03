@@ -255,8 +255,8 @@ class TransformConstraint : Updatable {
                 if (r > PI)
                     r -= PI2
                 else if (r < -PI) r += PI2
-                val b = bone.b
-                val d = bone.d
+                val b: Float = bone.b
+                val d: Float = bone.d
                 r = atan2(d, b) + (r - PI / 2 + offsetShearY) * shearMix
                 val s = kotlin.math.sqrt((b * b + d * d).toDouble()).toFloat()
                 bone.b = cos(r) * s

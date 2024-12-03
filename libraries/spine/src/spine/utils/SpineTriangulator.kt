@@ -156,7 +156,7 @@ internal class SpineTriangulator {
         var polygonIndices = polygonIndicesPool.alloc()
         polygonIndices.clear()
 
-        var polygon = polygonPool.alloc()
+        var polygon: FloatArrayList = polygonPool.alloc()
         polygon.clear()
 
         // Merge subsequent triangles if they form a triangle fan.

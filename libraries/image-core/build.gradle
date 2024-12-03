@@ -10,7 +10,7 @@ source {
         include "net.java.dev.jna:jna:5.14.0"
         include "net.java.dev.jna:jna-platform:5.14.0"
     }
-    js {
+    browser {
         include project(":korge:wasm")
         include project(":korge:compression")
     }

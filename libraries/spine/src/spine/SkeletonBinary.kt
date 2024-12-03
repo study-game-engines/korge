@@ -931,6 +931,7 @@ class SkeletonBinary {
     }
 
     internal class SkeletonInput(val data: ByteArray) {
+
         private var n = 0
 
         fun read(): Int {
@@ -1022,7 +1023,7 @@ class SkeletonBinary {
             var charCount = 0
             var i = 0
             while (i < byteCount) {
-                val b = read()
+                val b: Int = read()
                 when (b shr 4) {
                     -1 -> error("EOF")
                     12, 13 -> {
