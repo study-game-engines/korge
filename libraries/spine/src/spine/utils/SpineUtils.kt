@@ -32,6 +32,7 @@ package com.esotericsoftware.spine.utils
 import korlibs.datastructure.*
 
 object SpineUtils {
+
     const val PI = 3.1415927f
     const val PI2 = PI * 2
     const val radiansToDegrees = 180f / PI
@@ -39,11 +40,11 @@ object SpineUtils {
     const val degreesToRadians = PI / 180
     const val degRad = degreesToRadians
 
-    inline fun cosDeg(angle: Float): Float = kotlin.math.cos(angle * degRad)
-    inline fun sinDeg(angle: Float): Float = kotlin.math.sin(angle * degRad)
-    inline fun cos(angle: Float): Float = kotlin.math.cos(angle)
-    inline fun sin(angle: Float): Float = kotlin.math.sin(angle)
-    inline fun atan2(y: Float, x: Float): Float = kotlin.math.atan2(y, x)
+    fun cosDeg(angle: Float): Float = kotlin.math.cos(angle * degRad)
+    fun sinDeg(angle: Float): Float = kotlin.math.sin(angle * degRad)
+    fun cos(angle: Float): Float = kotlin.math.cos(angle)
+    fun sin(angle: Float): Float = kotlin.math.sin(angle)
+    fun atan2(y: Float, x: Float): Float = kotlin.math.atan2(y, x)
 
     /*
     private const val SIN_BITS = 14 // 16KB. Adjust for accuracy.
@@ -102,27 +103,27 @@ object SpineUtils {
     }
      */
 
-    inline fun arraycopy(src: ByteArray, srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
+    fun arraycopy(src: ByteArray, srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    inline fun arraycopy(src: ShortArray, srcPos: Int, dest: ShortArray, destPos: Int, length: Int) {
+    fun arraycopy(src: ShortArray, srcPos: Int, dest: ShortArray, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    inline fun arraycopy(src: IntArray, srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
+    fun arraycopy(src: IntArray, srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    inline fun arraycopy(src: FloatArray, srcPos: Int, dest: FloatArray, destPos: Int, length: Int) {
+    fun arraycopy(src: FloatArray, srcPos: Int, dest: FloatArray, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    inline fun <T> arraycopy(src: Array<T>, srcPos: Int, dest: Array<T>, destPos: Int, length: Int) {
+    fun <T> arraycopy(src: Array<T>, srcPos: Int, dest: Array<T>, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 
-    inline fun <T> arraycopy(src: FastArrayList<T>, srcPos: Int, dest: FastArrayList<T>, destPos: Int, length: Int) {
+    fun <T> arraycopy(src: FastArrayList<T>, srcPos: Int, dest: FastArrayList<T>, destPos: Int, length: Int) {
         korlibs.memory.arraycopy(src, srcPos, dest, destPos, length)
     }
 }
